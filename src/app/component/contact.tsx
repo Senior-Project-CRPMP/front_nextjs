@@ -21,21 +21,18 @@ function Contact() {
                 ADDRESS
               </h2>
               <p className="mt-1">
-                Photo booth tattooed prism, portland taiyaki hoodie neutra
-                typewriter
+                Addis Ababa Science and Technology University
               </p>
             </div>
             <div className="lg:w-1/2 px-6 mt-4 lg:mt-0">
               <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">
                 EMAIL
               </h2>
-              <a className="text-indigo-500 leading-relaxed">
-                example@email.com
-              </a>
+              <a className="text-indigo-500 leading-relaxed">aastu@email.com</a>
               <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">
                 PHONE
               </h2>
-              <p className="leading-relaxed">123-456-7890</p>
+              <p className="leading-relaxed">0911-12-13-14</p>
             </div>
           </div>
         </div>
@@ -43,9 +40,7 @@ function Contact() {
           <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
             Feedback
           </h2>
-          <p className="leading-relaxed mb-5 text-gray-600">
-            Post-ironic portland shabby chic echo park, banjo fashion axe
-          </p>
+          <p className="leading-relaxed mb-5 text-gray-600">Contact Us here</p>
           <div className="relative mb-4">
             <label className="leading-7 text-sm text-gray-600">Name</label>
             <input
@@ -73,12 +68,12 @@ function Contact() {
             ></textarea>
           </div>
           <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-            Button
+            Submit
           </button>
-          <p className="text-xs text-gray-500 mt-3">
+          {/* <p className="text-xs text-gray-500 mt-3">
             Chicharrones blog helvetica normcore iceland tousled brook viral
             artisan.
-          </p>
+          </p> */}
         </div>
       </div>
     </section>
