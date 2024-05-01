@@ -43,27 +43,27 @@ const Task = () => {
     <div className="container mx-auto">
       <div className="flex justify-center">
         <div className="max-w-md w-full bg-white shadow-md rounded-md p-6 mt-10">
-          <h1 className="text-2xl font-bold mb-4">Task Assignment</h1>
+          <h1 className="mb-4 font-medium text-gray-700 dark:text-gray-400">Task Assignment</h1>
           <div className="mb-4">
-            <label htmlFor="task" className="block font-medium mb-2">
+            <label htmlFor="task" className="block  text-sm font-medium leading-6 text-gray-900">
               Task
             </label>
             <input
               type="text"
               id="task"
-              className={`border-b ${newTask ? 'border-blue-500' : 'border-gray-300'} focus:border-blue-500 outline-none transition-colors duration-300`}
+              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               placeholder="Enter task"
               value={newTask}
               onChange={handleTaskChange}
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="priority" className="block font-medium mb-2">
+            <label htmlFor="priority" className="block text-sm font-medium leading-6 text-gray-900">
               Priority
             </label>
             <select
               id="priority"
-              className="border-b border-gray-300 rounded-md px-4 py-2 w-full"
+              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               value={priority}
               onChange={handlePriorityChange}
             >
@@ -73,32 +73,32 @@ const Task = () => {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="dueDate" className="block font-medium mb-2">
+            <label htmlFor="dueDate" className="block  text-sm font-medium leading-6 text-gray-900">
               Due Date
             </label>
             <input
               type="date"
               id="dueDate"
-              className={`border-b ${dueDate ? 'border-blue-700' : 'border-gray-300'} focus:border-blue-500 outline-none transition-colors duration-300`}
+              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               value={dueDate}
               onChange={handleDueDateChange}
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="assignee" className="block font-medium mb-2">
+            <label htmlFor="assignee" className="block  text-sm font-medium leading-6 text-gray-900" >
               Assignee
             </label>
             <input
               type="text"
               id="assignee"
-              className={`border-b ${assignee ? 'border-blue-700' : 'border-gray-300'} focus:border-blue-500 outline-none transition-colors duration-300`}
+              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               placeholder="Enter assignee"
               value={assignee}
               onChange={handleAssigneeChange}
             />
           </div>
           <button
-            className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleAddTask}
           >
             Add Task

@@ -52,7 +52,7 @@ const FormBuilder = () => {
         return (
           <input
             type={field.type}
-            className="border rounded p-2 w-full mb-2"
+            className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder={field.placeholder}
             value={field.value}
             onChange={(e) => handleInputChange(index, e.target.value)}
@@ -61,7 +61,7 @@ const FormBuilder = () => {
       case "textarea":
         return (
           <textarea
-            className="border rounded p-2 w-full mb-2"
+          className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder={field.placeholder}
             value={field.value}
             onChange={(e) => handleInputChange(index, e.target.value)}
@@ -79,14 +79,13 @@ const FormBuilder = () => {
           <label className="block mb-2">Field Label</label>
           <input
             type="text"
-            className="border rounded p-2 w-full mb-2"
             value={field.label}
             onChange={(e) => handleFieldChange(index, "label", e.target.value)}
           />
 
           <label className="block mb-2">Field Type</label>
           <select
-            className="border rounded p-2 w-full mb-2"
+           className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             value={field.type}
             onChange={(e) => handleFieldChange(index, "type", e.target.value)}
           >
@@ -103,7 +102,7 @@ const FormBuilder = () => {
           <label className="block mb-2">Placeholder</label>
           <input
             type="text"
-            className="border rounded p-2 w-full mb-4"
+            className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             value={field.placeholder}
             onChange={(e) =>
               handleFieldChange(index, "placeholder", e.target.value)
