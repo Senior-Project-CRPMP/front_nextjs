@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 const Task = () => {
   return (
     <div className="container mx-auto">
       <div className="flex justify-center">
-        <div className="max-w-md w-full bg-white shadow-md rounded-md p-6">
+        <div className="max-w-md w-full bg-white shadow-md rounded-md mt-10 p-6">
           <h1 className="text-2xl font-bold mb-4">Task Assignment</h1>
           <div className="mb-4">
             <label htmlFor="task" className="block font-medium mb-2">
-              Task 
+              Task
             </label>
             <input
               type="text"
