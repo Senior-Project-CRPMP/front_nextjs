@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
+//import { useRouter } from 'next/router';
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
 function CreateProjectForm() {
+  //const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     objective: "",
-    startDate: Date(),
+    startDate: "2024-05-01",
     endDate: "",
+    status: "pending",
+    managerId: "melat"
   });
 
   const handleChange = (
@@ -16,23 +20,36 @@ function CreateProjectForm() {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    console.log(formData)
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  async function addProject(){
+    try {
+      const response = await fetch('https://localhost:7174/api/Project/CreateProject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log('Item created successfully');
+        // Optionally, you can redirect the user or update the UI here
+      } else {
+        console.error('Failed to create item:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error creating item:', error);
+    }
+  }
+  
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    const updatedFormData = {} as any; // Define a new object to store updated form data
-
-    // Iterate over each form field and update the form data object
-    formData.forEach((value, name) => {
-      updatedFormData[name] = value;
-    });
-
-    // Update the state with the new form data
-    setFormData(updatedFormData);
-
-    console.log(updatedFormData);
+    addProject()
+    //router.push('/dashbord/projects');
+    console.log(formData);
   };
 
   return (
@@ -223,15 +240,12 @@ function CreateProjectForm() {
               Cancel
             </button>
           </Link>
-
-          <Link href="/dashboard/projects">
             <button
               type="submit"
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Save
             </button>
-          </Link>
         </div>
       </div>
     </form>
