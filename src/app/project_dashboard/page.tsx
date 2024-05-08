@@ -1,7 +1,9 @@
 'use client'
 import React from 'react';
+import Image from 'next/image';
 import { useState } from 'react';
 import Navigation from './nav_button';
+import images from '../../assets/exportimages';
 
 const ProjectPage: React.FC = () => {
   // Define state for lastUpdated
@@ -83,40 +85,42 @@ const Formbuilder = () => {
             <h1 className=" text-neutral-900 text-2xl font-bold pr-96 ">Project One</h1>
             <div className="relative ">
                 <div className="absolute left-0">
-                  <div className="bg-black rounded-full h-8 w-8 flex items-center justify-center"> 
-                  <img src="your-image-url.jpg" className="h-full w-full rounded-full object-cover" alt="profile" />
-                  </div>
-                </div>
-                 <div className="absolute left-5">
-                  <div className="bg-blue-500 rounded-full h-8 w-8 flex items-center justify-center">
-                    <img src="your-image-url.jpg" className="h-full w-full rounded-full object-cover" alt="profile" /> 
+                  <div className=" rounded-full h-8 w-8 items-center justify-center">
+                    <Image src={images.avatar3} className="h-full w-full rounded-full object-cover" alt="profile" /> 
                     </div>
                 </div>
-                <div className="absolute left-10">
-                  <div className="bg-red-500 rounded-full h-8 w-8 flex items-center justify-center">
-                    <img src="your-image-url.jpg" className="h-full w-full rounded-full object-cover" alt="profile" /> 
+                 <div className="absolute left-5">
+                  <div className=" rounded-full h-8 w-8 items-center justify-center">
+                    <Image src={images.avatar2} className="h-full w-full rounded-full object-cover" alt="profile" /> 
+                    </div>
+                </div>
+                 <div className="absolute left-10">
+                  <div className=" rounded-full h-8 w-8 items-center justify-center">
+                    <Image src={images.avatar1} className="h-full w-full rounded-full object-cover" alt="profile" /> 
                     </div>
                 </div>
                 <div className="absolute left-14">
-                  <div className="bg-green-500 rounded-full h-8 w-8 items-center justify-center">
-                   <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="black"
-      className="h-10 w-5"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-    </svg> 
-                    </div>
+                 <div className="bg-blue-500 rounded-full h-8 w-8 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm ">+7</span>
                 </div>
-                <div className="absolute left-24">
-                  <div className=" rounded-full h-8 w-8 items-center justify-center">
-                    <img src="https://github.com/Senior-Project-CRPMP/front_nextjs/blob/main/public/avatar2.jpg" className="h-full w-full rounded-full object-cover" alt="profile" /> 
-                    </div>
                 </div>
-              
-
+                
+                <div className="absolute left-24 top-1">
+                {/* <a href="#" onClick={handleClick}> */}
+                  <div className="rounded-full h-6 w-6 flex items-center justify-center border-dotted border-2 border-gray-500">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="black"
+                      className="h-4 w-4"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                {/* </a> */}
+              </div>
+           
           </div>
             </div>
             {lastUpdated && (
