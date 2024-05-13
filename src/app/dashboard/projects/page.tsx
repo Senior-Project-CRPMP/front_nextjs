@@ -1,5 +1,5 @@
-'use client'
-import React, {useState, useEffect} from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 interface Project {
   id: number;
@@ -48,17 +48,18 @@ export default function Projects() {
 
   useEffect(() => {
     const fetchCard = async () => {
-    const res = await fetch(`https://localhost:7174/api/Project/EveryProject`)
-    const data = await res.json()
-      setProjects(data) 
-      console.log("Did it work?")
-      
-    }
+      const res = await fetch(
+        `https://localhost:7174/api/Project/EveryProject`
+      );
+      const data = await res.json();
+      setProjects(data);
+      console.log("Did it work?");
+    };
     fetchCard().catch((error) => console.error(error));
   }, []);
 
   return (
-    <div className="bg-white">
+    <div className="h-full bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
           My Projects
@@ -81,8 +82,8 @@ export default function Projects() {
                 <div>
                   <h3 className="text-sm text-white">
                     {/* <a href={project.href}> */}
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {p.title}
+                    <span aria-hidden="true" className="absolute inset-0" />
+                    {p.title}
                     {/* </a> */}
                   </h3>
                   <p className="mt-1 text-sm text-gray-200">{p.status}</p>
