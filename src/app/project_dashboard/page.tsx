@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import Navigation from './nav_button';
 import images from '../../assets/exportimages';
+import Calendar from './Calendar/page'
 
 const ProjectPage: React.FC = () => {
   // Define state for lastUpdated
@@ -57,9 +58,9 @@ const Timeline = () => {
   return <h1 className='text-black'>Timeline Page Content</h1>;
 };
 
-const Calendar = () => {
-  return <h1 className='text-black'>Calendar Page Content</h1>;
-};
+// const Calendar = () => {
+//   return <Calendar/>;
+// };
 
 const Workflow = () => {
   return <h1 className='text-black'>Workflow Page Content</h1>;
@@ -76,10 +77,10 @@ const Formbuilder = () => {
   return (
     <div>
       <div className="flex space-x-2">
-        <div className="w-1/5 h-screen bg-white rounded-md my-2 "> </div>
+        <div className="w-1/5 h-screen bg-white rounded-md my-2 "> Dashboard </div>
         
-        <div className=" h-screen bg-white rounded-md my-2 mr-2 w-4/5">
-          <div className="p-4 flex-col h-screen space-x-0">
+        <div className=" h-full bg-white rounded-md my-2 mr-2 w-4/5">
+          <div className="p-4 flex-col h-full space-x-0">
            <div className='h-1/6 '>
             <div className='flex space-x-96 '>
             <h1 className=" text-neutral-900 text-2xl font-bold pr-96 ">Project One</h1>
@@ -126,21 +127,23 @@ const Formbuilder = () => {
             {lastUpdated && (
               <p className=" text-sm text-gray-600 ">Last Update: {lastUpdated}</p>
             )}
-            <div className='space-y-11.5'>""</div>
-            <div className=' space-y-1.5 '>
+            <div className='space-y-11.5'></div>
+            <div className=' space-y-1.5'>
             <Navigation setCurrentPage={setCurrentPage} />
             
             
             <div className="border-t border-grey"></div></div>
-            <div className='space-y-10'>""</div>
+            <div className='space-y-10'></div>
            
             </div>
             <div className="h-5/6">
-            <div className='flex h-full space-x-2  mx-10 '>
-              <div className="  w-72 grow   bg-white rounded-md shadow-2xl p-10 ">
+            <div className='flex h-full space-x-2  mx-2 '>
+              <div className="  w-72 grow   bg-white rounded-md shadow-2xl p-6">
                  <PageContent currentPage={currentPage} />
               </div>
-              <div className=" w-72  bg-white rounded-md shadow-2xl"></div>
+              <div className=" w-72  bg-white rounded-md shadow-2xl">
+                Hello World!
+              </div>
 
             </div>
             </div>

@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-//import { useRouter } from 'next/router';
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from 'next/navigation';
+import React, { useState, ChangeEvent, FormEvent, MouseEventHandler } from "react";
 
 function CreateProjectForm() {
-  //const router = useRouter();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -46,17 +46,16 @@ function CreateProjectForm() {
       console.error("Error creating item:", error);
     }
   }
+  
+  const handleSubmit: MouseEventHandler<HTMLButtonElement> = (e) => {
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    addProject();
-    //router.push('/dashbord/projects');
+    addProject()
+    router.push('/dashboard/projects');
     console.log(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form >
       <div className="flex flex-col justify-center px-20  lg:px-28 py-12">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
@@ -243,15 +242,14 @@ function CreateProjectForm() {
               Cancel
             </button>
           </Link>
-
-          <Link href="dashboard/projects">
-            <button
-              type="submit"
+                     
+            <button onClick={handleSubmit}
+              type="button"
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Save
             </button>
-          </Link>
+        
         </div>
       </div>
     </form>
