@@ -5,6 +5,7 @@ import { useState } from "react";
 import Navigation from "./nav_button";
 import images from "../../assets/exportimages";
 import Calendar from "./Calendar/page";
+import SideCalendar from "./Calendar/sideCalendar";
 import Timeline from "./timeline";
 import NavBar from "./nav_bar";
 
@@ -167,7 +168,7 @@ const ProjectPage: React.FC = () => {
                   <PageContent currentPage={currentPage} />
                 </div>
                 <div className=" w-72  bg-white rounded-md shadow-2xl">
-                  {/* <CalendarSidebar/> */}
+                {currentPage === "calendar" && <SideCalendar />}
                 </div>
               </div>
             </div>

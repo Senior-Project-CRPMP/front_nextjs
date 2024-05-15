@@ -18,15 +18,15 @@ export default function NavBar() {
           <nav className="grid items-start px-4 text-sm font-medium">
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="/dashboard/projects"
+              href="#"
             >
-              <ProjectsIcon className="h-4 w-4" />
+              <InboxIcon className="h-4 w-4" />
               My Tasks
             </Link>
 
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="/dashboard/account"
+              href="#"
             >
               <UsersIcon className="h-4 w-4" />
               Inbox
@@ -34,31 +34,31 @@ export default function NavBar() {
 
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="/dashboard/inbox"
+              href="#"
             >
-              <InboxIcon className="h-4 w-4" />
+              <ProjectsIcon className="h-4 w-4" />
               Files
             </Link>
 
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="/dashboard/notification"
+              href="#"
             >
-              <NotificationIcon className="h-4 w-4" />
+              <BrowseIcon className="h-4 w-4" />
               Form Builder
             </Link>
 
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="/dashboard/browse"
+              href="#"
             >
-              <BrowseIcon className="h-4 w-4" />
+              <PieChartIcon className="h-4 w-4" />
               Analyze
             </Link>
 
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="/dashboard/settings"
+              href="#"
             >
               <SettingsIcon className="h-4 w-4" />
               Settings

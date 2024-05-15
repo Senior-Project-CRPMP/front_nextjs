@@ -30,7 +30,7 @@ function Navigation({ setCurrentPage }: NavigationProps) {
         setCurrentPage={setCurrentPage}
       />
       <NavButton text="Board" page="board" setCurrentPage={setCurrentPage} />
-      <NavButton text="List" page="list" setCurrentPage={setCurrentPage} />
+      {/* <NavButton text="List" page="list" setCurrentPage={setCurrentPage} /> */}
       <NavButton
         text="Timeline"
         page="timeline"
@@ -41,7 +41,7 @@ function Navigation({ setCurrentPage }: NavigationProps) {
         page="calendar"
         setCurrentPage={setCurrentPage}
       />
-      <NavButton
+      {/* <NavButton
         text="Workflow"
         page="workflow"
         setCurrentPage={setCurrentPage}
@@ -51,7 +51,7 @@ function Navigation({ setCurrentPage }: NavigationProps) {
         text="Form builder"
         page="form_builder"
         setCurrentPage={setCurrentPage}
-      />
+      /> */}
     </nav>
   );
 }
