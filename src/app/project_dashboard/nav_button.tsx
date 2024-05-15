@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface NavButtonProps {
   text: string;
@@ -24,14 +24,34 @@ interface NavigationProps {
 function Navigation({ setCurrentPage }: NavigationProps) {
   return (
     <nav className="space-x-6">
-      <NavButton text="Overview" page="overview" setCurrentPage={setCurrentPage} />
+      <NavButton
+        text="Overview"
+        page="overview"
+        setCurrentPage={setCurrentPage}
+      />
       <NavButton text="Board" page="board" setCurrentPage={setCurrentPage} />
       <NavButton text="List" page="list" setCurrentPage={setCurrentPage} />
-      <NavButton text="Timeline" page="timeline" setCurrentPage={setCurrentPage} />
-      <NavButton text="Calendar" page="calendar" setCurrentPage={setCurrentPage} />
-      <NavButton text="Workflow" page="workflow" setCurrentPage={setCurrentPage} />
+      <NavButton
+        text="Timeline"
+        page="timeline"
+        setCurrentPage={setCurrentPage}
+      />
+      <NavButton
+        text="Calendar"
+        page="calendar"
+        setCurrentPage={setCurrentPage}
+      />
+      <NavButton
+        text="Workflow"
+        page="workflow"
+        setCurrentPage={setCurrentPage}
+      />
       <NavButton text="Files" page="files" setCurrentPage={setCurrentPage} />
-      <NavButton text="Form builder" page="form_builder" setCurrentPage={setCurrentPage} />
+      <NavButton
+        text="Form builder"
+        page="form_builder"
+        setCurrentPage={setCurrentPage}
+      />
     </nav>
   );
 }

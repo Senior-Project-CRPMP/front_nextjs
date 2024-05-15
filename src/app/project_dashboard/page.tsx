@@ -1,17 +1,17 @@
-'use client'
-import React from 'react';
-import Image from 'next/image';
-import { useState } from 'react';
-import Navigation from './nav_button';
-import images from '../../assets/exportimages';
-import Calendar from './Calendar/page'
+"use client";
+import React from "react";
+import Image from "next/image";
+import { useState } from "react";
+import Navigation from "./nav_button";
+import images from "../../assets/exportimages";
+import Calendar from "./Calendar/page";
 import Timeline from "./timeline";
-import NavBar from './nav_bar';
+import NavBar from "./nav_bar";
 
 const ProjectPage: React.FC = () => {
   // Define state for lastUpdated
   const [lastUpdated, setLastUpdated] = React.useState<string>();
-  const [currentPage, setCurrentPage] = useState('overview');
+  const [currentPage, setCurrentPage] = useState("overview");
 
   React.useEffect(() => {
     // Run this effect only on the client side
@@ -81,19 +81,25 @@ const ProjectPage: React.FC = () => {
   return (
     <div>
       <div className="flex space-x-2">
-        <div className="w-1/5 h-screen bg-white rounded-md my-2 "> 
-        <NavBar/>
-         </div>
-        
+        <div className="w-1/5 h-screen bg-white rounded-md my-2 ">
+          <NavBar />
+        </div>
+
         <div className=" h-full bg-white rounded-md my-2 mr-2 w-4/5">
           <div className="p-4 flex-col h-full space-x-0">
-           <div className='h-1/6 '>
-            <div className='flex space-x-96 '>
-            <h1 className=" text-neutral-900 text-2xl font-bold pr-96 ">Project One</h1>
-            <div className="relative ">
-                <div className="absolute left-0">
-                  <div className=" rounded-full h-8 w-8 items-center justify-center">
-                    <Image src={images.avatar3} className="h-full w-full rounded-full object-cover" alt="profile" /> 
+            <div className="h-1/6 ">
+              <div className="flex space-x-96 ">
+                <h1 className=" text-neutral-900 text-2xl font-bold pr-96 ">
+                  Project One
+                </h1>
+                <div className="relative ">
+                  <div className="absolute left-0">
+                    <div className=" rounded-full h-8 w-8 items-center justify-center">
+                      <Image
+                        src={images.avatar3}
+                        className="h-full w-full rounded-full object-cover"
+                        alt="profile"
+                      />
                     </div>
                   </div>
                   <div className="absolute left-5">
@@ -156,7 +162,7 @@ const ProjectPage: React.FC = () => {
               <div className="space-y-10"></div>
             </div>
             <div className="h-5/6">
-              <div className="flex h-full space-x-2  mx-10 ">
+              <div className="flex h-full space-x-2  mx-2 ">
                 <div className="  w-72 grow   bg-white rounded-md shadow-2xl p-10 ">
                   <PageContent currentPage={currentPage} />
                 </div>
