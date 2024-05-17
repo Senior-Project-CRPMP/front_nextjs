@@ -8,6 +8,7 @@ import Calendar from "./Calendar/page";
 import SideCalendar from "./Calendar/sideCalendar";
 import Timeline from "./timeline";
 import NavBar from "./nav_bar";
+import Board from "./board";
 
 const ProjectPage: React.FC = () => {
   // Define state for lastUpdated
@@ -47,9 +48,9 @@ const ProjectPage: React.FC = () => {
     return <h1 className="text-black">Overview Page Content</h1>;
   };
 
-  const Board = () => {
-    return <h1 className="text-black">Board Page Content</h1>;
-  };
+  // const Board = () => {
+  //   return <h1 className="text-black">Board Page Content</h1>;
+  // };
 
   const List = () => {
     return <h1 className="text-black">List Page Content</h1>;
