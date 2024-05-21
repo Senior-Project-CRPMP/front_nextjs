@@ -1,26 +1,33 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
+
+interface Task {
+  task: string;
+  priority: string;
+  dueDate: string;
+  assignee: string;
+}
 
 const Task = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState('');
   const [priority, setPriority] = useState('low');
   const [dueDate, setDueDate] = useState('');
   const [assignee, setAssignee] = useState('');
 
-  const handleTaskChange = (event) => {
+  const handleTaskChange = (event : ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     setNewTask(event.target.value);
   };
 
-  const handlePriorityChange = (event) => {
+  const handlePriorityChange = (event : ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     setPriority(event.target.value);
   };
 
-  const handleDueDateChange = (event) => {
+  const handleDueDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDueDate(event.target.value);
   };
 
-  const handleAssigneeChange = (event) => {
+  const handleAssigneeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAssignee(event.target.value);
   };
 

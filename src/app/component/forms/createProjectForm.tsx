@@ -12,7 +12,7 @@ function CreateProjectForm() {
     startDate: "2024-05-01",
     endDate: "",
     status: "pending",
-    managerId: "melat",
+    managerId: 1,
   });
 
   const handleChange = (

@@ -163,39 +163,7 @@ const ProjectPage: React.FC = () => {
               </div>
               <div className="space-y-10"></div>
                 </div>
-                <div className="absolute left-14">
-                 <div className="bg-blue-500 rounded-full h-8 w-8 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm ">+7</span>
-                </div>
-                </div>
                 
-                <div className="absolute left-24 top-1">
-                {/* <a href="#" onClick={handleClick}> */}
-                  <div className="rounded-full h-6 w-6 flex items-center justify-center border-dotted border-2 border-gray-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="black"
-                      className="h-4 w-4"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </div>
-                {/* </a> */}
-              </div>
-           
-          </div>
-            </div>
-            <div className='mb-5'>
-            {lastUpdated && (
-              <p className=" text-sm text-gray-600 ">Last Update: {lastUpdated}</p>
-            )}
-            </div>
-            <div className=' space-y-1.5 '>
-            <Navigation setCurrentPage={setCurrentPage} />
-            <div className="border-t border-grey"></div></div>
-            </div>
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2  mx-2 ">
                 <div className="  w-72 grow   bg-white rounded-md shadow-2xl p-10 ">
@@ -208,9 +176,10 @@ const ProjectPage: React.FC = () => {
             </div>
             <div></div>
           </div>
-        </div>
-      </div>
-    </div>
+          </div>
+          </div>
+          </div>
+        
   );
 };
 

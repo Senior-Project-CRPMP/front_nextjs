@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, {useState, useEffect} from "react";
 
 export default function Calendar() {
@@ -225,12 +226,14 @@ export default function Calendar() {
               )}
             </div>
             <div className="ml-6 h-6 w-px bg-gray-300"></div>
+            <Link href="/addtask">
             <button
               type="button"
               className="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
               Add Task
             </button>
+            </Link>
           </div>
           <div className="relative ml-6 md:hidden">
             <button
