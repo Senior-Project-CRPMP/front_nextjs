@@ -76,7 +76,7 @@ const Formbuilder = () => {
   return (
     <div>
       <div className="flex space-x-2">
-        <div className="w-1/5 h-screen bg-white rounded-md my-2 "> </div>
+        <div className="w-1/5 h-screen bg-white rounded-md my-2 shadow-2xl"> </div>
         
         <div className=" h-screen bg-white rounded-md my-2 mr-2 w-4/5">
           <div className="p-4 flex-col h-screen space-x-0">
@@ -123,19 +123,16 @@ const Formbuilder = () => {
            
           </div>
             </div>
+            <div className='mb-5'>
             {lastUpdated && (
               <p className=" text-sm text-gray-600 ">Last Update: {lastUpdated}</p>
             )}
-            <div className='space-y-11.5'>""</div>
+            </div>
             <div className=' space-y-1.5 '>
             <Navigation setCurrentPage={setCurrentPage} />
-            
-            
             <div className="border-t border-grey"></div></div>
-            <div className='space-y-10'>""</div>
-           
             </div>
-            <div className="h-5/6">
+            <div className="h-5/6 m-3">
             <div className='flex h-full space-x-2  mx-10 '>
               <div className="  w-72 grow   bg-white rounded-md shadow-2xl p-10 ">
                  <PageContent currentPage={currentPage} />
