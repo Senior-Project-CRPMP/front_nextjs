@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { IdentificationIcon } from '@heroicons/react/24/outline';
 
 type Document = {
     id: string;
@@ -30,8 +31,11 @@ const DocumentList: React.FC = () => {
     }, []);
 
     const createNewDocument = async () => {
+        console.log("createNewDocument called");
         try {
             const uniqueTitle = `Untitled_${Date.now()}`;
+            console.log("Creating document with title:", uniqueTitle);
+    
             const response = await fetch('https://localhost:44316/api/Document/CreateDocument', {
                 method: 'POST',
                 headers: {
@@ -39,31 +43,44 @@ const DocumentList: React.FC = () => {
                 },
                 body: JSON.stringify({ title: uniqueTitle, data: '' }),
             });
-
+    
+            console.log("API response received");
+    
             if (!response.ok) {
                 const errorText = await response.text();
+                console.error("Error response from API:", errorText);
                 throw new Error(`Failed to create document: ${errorText}`);
             }
-
-            const responseData = await response.text();
-            let newDocument: Document;
-
-            try {
-                newDocument = JSON.parse(responseData);
-            } catch {
+    
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+    
+            const documentId = responseData.id;
+            if (documentId) {
+                console.log("New document ID:", documentId);
+                router.push(`/project_dashboard/Document/Document/${documentId}`);
+            } else {
+                console.error("Failed to extract document ID from response:", responseData);
                 await fetchDocuments();
                 return;
             }
-
-            router.push(`/project_dashboard/Document/Document/${newDocument.id}`);
         } catch (error) {
             console.error('Failed to create document', error);
         }
     };
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     const openDocument = (id: string) => {
         router.push(`/project_dashboard/Document/Document/${id}`);
-    };
+    };    
 
     return (
         <div>

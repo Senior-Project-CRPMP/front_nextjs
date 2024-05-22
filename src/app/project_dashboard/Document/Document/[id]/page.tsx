@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter, usePathname, useParams } from 'next/navigation'
 
 const TOOLBAR_OPTIONS = [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -17,15 +17,15 @@ const TOOLBAR_OPTIONS = [
 ];
 
 const Document: React.FC = () => {
-    const searchParams = useSearchParams();
-    const id = searchParams.get('id');
+    const params = useParams();
+    const id = params.id;
     const [editor, setEditor] = useState<Quill | null>(null);
     const [title, setTitle] = useState<string>('');
 
     useEffect(() => {
         const fetchDocument = async () => {
             try {
-                const response = await fetch(`/api/Document/SingleDocument/${id}`);
+                const response = await fetch(`https://localhost:44316/api/Document/SingleDocument/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch document');
                 }
@@ -38,6 +38,8 @@ const Document: React.FC = () => {
                 console.error('Failed to fetch document', error);
             }
         };
+
+            console.log("here it is", id)
 
         if (editor && id) {
             fetchDocument();
@@ -57,7 +59,7 @@ const Document: React.FC = () => {
     const handleSave = async () => {
         try {
             if (!id || !editor) return;
-            const response = await fetch(`/api/Document/UpdateDocument/${id}`, {
+            const response = await fetch(`https://localhost:44316/api/Document/UpdateDocument/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
