@@ -9,6 +9,7 @@ import SideCalendar from "./Calendar/sideCalendar";
 import Timeline from "./timeline";
 import NavBar from "./nav_bar";
 import Board from "./board";
+import Overview from "./overview/page";
 
 const ProjectPage: React.FC = () => {
   // Define state for lastUpdated
@@ -44,9 +45,9 @@ const ProjectPage: React.FC = () => {
     );
   };
 
-  const Overview = () => {
-    return <h1 className="text-black">Overview Page Content</h1>;
-  };
+  // const Overview = () => {
+  //   return <h1 className="text-black">Overview Page Content</h1>;
+  // };
 
   // const Board = () => {
   //   return <h1 className="text-black">Board Page Content</h1>;
@@ -162,24 +163,23 @@ const ProjectPage: React.FC = () => {
                 <div className="border-t border-grey"></div>
               </div>
               <div className="space-y-10"></div>
-                </div>
-                
+            </div>
+
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2  mx-2 ">
                 <div className="  w-72 grow   bg-white rounded-md shadow-2xl p-10 ">
                   <PageContent currentPage={currentPage} />
                 </div>
                 <div className=" w-72  bg-white rounded-md shadow-2xl">
-                {currentPage === "calendar" && <SideCalendar />}
+                  {currentPage === "calendar" && <SideCalendar />}
                 </div>
               </div>
             </div>
             <div></div>
           </div>
-          </div>
-          </div>
-          </div>
-        
+        </div>
+      </div>
+    </div>
   );
 };
 
