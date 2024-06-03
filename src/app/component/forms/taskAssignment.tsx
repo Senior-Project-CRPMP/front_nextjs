@@ -1,50 +1,56 @@
 'use client'
 import React, { useState, ChangeEvent } from 'react';
 
-interface Task {
-  task: string;
-  priority: string;
-  dueDate: string;
-  assignee: string;
-}
-
 const Task = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTask, setNewTask] = useState('');
-  const [priority, setPriority] = useState('low');
-  const [dueDate, setDueDate] = useState('');
-  const [assignee, setAssignee] = useState('');
+  const projectIdStr = localStorage.getItem('projectId');
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+  const [formData, setFormData] = useState({
+    projectId: projectId,
+    title: "",
+    description: "",
+    assignedTo: "",
+    deadline: "",
+    status: ""
+  });
 
-  const handleTaskChange = (event : ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-    setNewTask(event.target.value);
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    console.log(formData);
   };
 
-  const handlePriorityChange = (event : ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-    setPriority(event.target.value);
+  async function addTask() {
+    try {
+      const response = await fetch(
+        "https://localhost:7174/api/Task/CreateTask",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Item created successfully");
+        // Optionally, you can redirect the user or update the UI here
+      } else {
+        console.error("Failed to create item:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating item:", error);
+    }
+  }
+  
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+
+    addTask()
+    console.log(formData);
   };
 
-  const handleDueDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDueDate(event.target.value);
-  };
-
-  const handleAssigneeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setAssignee(event.target.value);
-  };
-
-  const handleAddTask = () => {
-    const newTaskObject = {
-      task: newTask,
-      priority: priority,
-      dueDate: dueDate,
-      assignee: assignee,
-    };
-
-    setTasks([...tasks, newTaskObject]);
-    setNewTask('');
-    setPriority('low');
-    setDueDate('');
-    setAssignee('');
-  };
 
   return (
     <div className="container mx-auto">
@@ -52,67 +58,75 @@ const Task = () => {
         <div className="max-w-md w-full bg-white shadow-md rounded-md p-6 mt-10">
           <h1 className="text-2xl font-bold mb-4">Task Assignment</h1>
           <div className="mb-4">
-            <label htmlFor="task" className="block font-medium mb-2">
-              Task
+            <label htmlFor="title" className="block font-medium mb-2">
+              Task Title
             </label>
             <input
               type="text"
-              id="task"
+              name="title"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              placeholder="Enter task"
-              value={newTask}
-              onChange={handleTaskChange}
+              placeholder="Enter task title"
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="priority" className="block font-medium mb-2">
-              Priority
+            <label htmlFor="description" className="block font-medium mb-2">
+              Description
+            </label>
+            <input
+              type="text"
+              name="description"
+              className="border border-gray-300 rounded-md px-4 py-2 w-full"
+              placeholder="Enter task description"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="status" className="block font-medium mb-2">
+              Status
             </label>
             <select
-              id="priority"
+              name="status"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              value={priority}
-              onChange={handlePriorityChange}
+              onChange={handleChange}
             >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="TODO">TODO</option>
+              <option value="In progress">In progress</option>
+              <option value="Done">Done</option>
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="dueDate" className="block font-medium mb-2">
-              Due Date
+            <label htmlFor="deadline" className="block font-medium mb-2">
+              Deadline
             </label>
             <input
               type="date"
-              id="dueDate"
+              name="deadline"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              value={dueDate}
-              onChange={handleDueDateChange}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="assignee" className="block font-medium mb-2">
-              Assignee
+            <label htmlFor="assignedTo" className="block font-medium mb-2">
+              Assigned To
             </label>
             <input
               type="text"
-              id="assignee"
+              name="assignedTo"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
               placeholder="Enter assignee"
-              value={assignee}
-              onChange={handleAssigneeChange}
+              onChange={handleChange}
             />
           </div>
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleAddTask}
+            onClick={handleSubmit}
           >
             Add Task
           </button>
         </div>
         <div className="flex flex-wrap justify-center mt-10">
-          {tasks.map((task, index) => (
+          {/* {tasks.map((task, index) => (
             <div
               key={index}
               className="max-w-md w-full bg-white shadow-md rounded-md p-6 m-4"
@@ -122,7 +136,7 @@ const Task = () => {
               <p className="mb-2">Due Date: {task.dueDate}</p>
               <p>Assignee: {task.assignee}</p>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>

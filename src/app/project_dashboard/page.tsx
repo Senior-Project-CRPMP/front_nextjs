@@ -10,12 +10,39 @@ import Timeline from "./timeline";
 import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
-
+import { type } from "os";
+type Project = {
+  id: number,
+  title: string,
+  description: string,
+  objective: string,
+  startDate: string,
+  endDate: string,
+  status: string,
+  managerId: number
+};
 const ProjectPage: React.FC = () => {
   // Define state for lastUpdated
+  const [project, setProject] = useState<Project | null>(null);
   const [lastUpdated, setLastUpdated] = React.useState<string>();
   const [currentPage, setCurrentPage] = useState("overview");
+  const projectIdStr = localStorage.getItem('projectId');
+const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
+
+  React.useEffect(()=>{
+    const fetchCard = async () => {
+      const res = await fetch(
+        `https://localhost:7174/api/Project/SingleProjectById/${projectId}`
+      );
+      const data = await res.json();
+      setProject(data);
+      console.log(data);
+      console.log(project);
+      
+    };
+    fetchCard().catch((error) => console.error(error));
+  }, []);
   React.useEffect(() => {
     // Run this effect only on the client side
     if (typeof window !== "undefined") {
@@ -27,13 +54,14 @@ const ProjectPage: React.FC = () => {
       });
       setLastUpdated(currentDate);
     }
+    
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const PageContent = ({ currentPage }: { currentPage: string }) => {
     return (
       <div>
         {/* Conditional rendering based on currentPage state */}
-        {currentPage === "overview" && <Overview />}
+        {currentPage === "overview" && <Overview project={project}/>}
         {currentPage === "board" && <Board />}
         {currentPage === "list" && <List />}
         {currentPage === "timeline" && <Timeline />}
@@ -93,7 +121,7 @@ const ProjectPage: React.FC = () => {
             <div className="h-1/6 ">
               <div className="flex space-x-96 ">
                 <h1 className=" text-neutral-900 text-2xl font-bold pr-96 ">
-                  Project One
+                  {project?.title}
                 </h1>
                 <div className="relative ">
                   <div className="absolute left-0">
@@ -177,9 +205,7 @@ const ProjectPage: React.FC = () => {
             </div>
             <div></div>
           </div>
-        </div>
-      </div>
-    </div>
+        
   );
 };
 
