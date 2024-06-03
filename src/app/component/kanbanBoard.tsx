@@ -3,7 +3,7 @@ import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
 
-export const CustomKanban = () => {
+export default function CustomKanban(){
   return (
     <div className="h-screen w-full bg-neutral-900 text-neutral-50">
       <Board />
@@ -241,15 +241,13 @@ const Card = ({ title, id, column, handleDragStart }: CardProps) => {
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
-      <motion.div
-        layout
-        layoutId={id}
+      <div
         draggable="true"
-        onDragStart={(e) => handleDragStart(e, { title, id, column })}
+        onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, { title, id, column })}
         className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
       >
         <p className="text-sm text-neutral-100">{title}</p>
-      </motion.div>
+      </div>
     </>
   );
 };
