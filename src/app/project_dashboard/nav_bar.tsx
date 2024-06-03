@@ -1,85 +1,79 @@
+import React from "react";
 import Link from "next/link";
 
-export default function DashboardLayout({
-  children,
-}: {
-  readonly children: React.ReactNode;
-}) {
+export default function NavBar() {
   return (
-    <div className="h-screen grid grid-cols-[240px_1fr]">
-      <nav className="border-r bg-white shadow-xl dark:bg-gray-800/40">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-[60px] items-center border-b px-6">
-            <Link
-              className="flex items-center gap-2 font-semibold"
-              href="/dashboard"
-            >
-              <LayoutDashboardIcon className="h-6 w-6" />
-              <span className="">Dashboard</span>
-            </Link>
-          </div>
-          <div className="flex-1 overflow-auto py-2">
-            <nav className="grid items-start px-4 text-sm font-medium">
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/projects"
-              >
-                <ProjectsIcon className="h-4 w-4" />
-                Projects
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/account"
-              >
-                <UsersIcon className="h-4 w-4" />
-                Account
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/inbox"
-              >
-                <InboxIcon className="h-4 w-4" />
-                Inbox
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/notification"
-              >
-                <NotificationIcon className="h-4 w-4" />
-                Notification
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/browse"
-              >
-                <BrowseIcon className="h-4 w-4" />
-                Browse
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/settings"
-              >
-                <SettingsIcon className="h-4 w-4" />
-                Settings
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/help"
-              >
-                <HelpIcon className="h-4 w-4" />
-                Help
-              </Link>
-            </nav>
-          </div>
+    <nav className="border-r bg-white shadow-xl dark:bg-gray-800/40">
+      <div className="flex h-full max-h-screen flex-col gap-2">
+        <div className="flex h-[60px] items-center border-b px-6">
+          <Link
+            className="flex items-center gap-2 font-semibold"
+            href="/project_dashboard"
+          >
+            <LayoutDashboardIcon className="h-6 w-6" />
+            <span className="">Dashboard</span>
+          </Link>
         </div>
-      </nav>
-      <main className="flex flex-col overflow-scroll">{children}</main>
-    </div>
+        <div className="flex-1 overflow-auto py-2">
+          <nav className="grid items-start px-4 text-sm font-medium">
+            <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="/project_dashboard/MyTasks"
+            >
+              <InboxIcon className="h-4 w-4" />
+              My Tasks
+            </Link>
+
+            <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+            >
+              <UsersIcon className="h-4 w-4" />
+              Inbox
+            </Link>
+
+            <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+            >
+              <ProjectsIcon className="h-4 w-4" />
+              Files
+            </Link>
+
+            <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+            >
+              <BrowseIcon className="h-4 w-4" />
+              Form Builder
+            </Link>
+
+            <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+            >
+              <PieChartIcon className="h-4 w-4" />
+              Analyze
+            </Link>
+
+            <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+            >
+              <SettingsIcon className="h-4 w-4" />
+              Settings
+            </Link>
+            {/* <Link
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="/dashboard/help"
+            >
+              <HelpIcon className="h-4 w-4" />
+              Help
+            </Link> */}
+          </nav>
+        </div>
+      </div>
+    </nav>
   );
 }
 

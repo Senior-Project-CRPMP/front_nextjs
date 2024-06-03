@@ -1,8 +1,8 @@
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 
-export default function Example() {
+export default function Account() {
   return (
-    <div className="bg-white">
+    <div className="h-full bg-white p-5">
       <div className="px-4 sm:px-0">
         <h3 className="text-base font-semibold leading-7 text-gray-900">
           Account Information

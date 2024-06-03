@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-//import { useRouter } from 'next/router';
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from 'next/navigation';
+import React, { useState, ChangeEvent, FormEvent, MouseEventHandler } from "react";
 
 function CreateProjectForm() {
-  //const router = useRouter();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -12,7 +12,7 @@ function CreateProjectForm() {
     startDate: "2024-05-01",
     endDate: "",
     status: "pending",
-    managerId: "melat"
+    managerId: "melat",
   });
 
   const handleChange = (
@@ -20,40 +20,42 @@ function CreateProjectForm() {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(formData)
+    console.log(formData);
   };
 
-  async function addProject(){
+  async function addProject() {
     try {
-      const response = await fetch('https://localhost:7174/api/Project/CreateProject', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://localhost:7174/api/Project/CreateProject",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
-        console.log('Item created successfully');
+        console.log("Item created successfully");
         // Optionally, you can redirect the user or update the UI here
       } else {
-        console.error('Failed to create item:', response.statusText);
+        console.error("Failed to create item:", response.statusText);
       }
     } catch (error) {
-      console.error('Error creating item:', error);
+      console.error("Error creating item:", error);
     }
   }
   
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit: MouseEventHandler<HTMLButtonElement> = (e) => {
 
     addProject()
-    //router.push('/dashbord/projects');
+    router.push('/dashboard/projects');
     console.log(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form >
       <div className="flex flex-col justify-center px-20  lg:px-28 py-12">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
@@ -240,12 +242,14 @@ function CreateProjectForm() {
               Cancel
             </button>
           </Link>
-            <button
-              type="submit"
+                     
+            <button onClick={handleSubmit}
+              type="button"
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Save
             </button>
+        
         </div>
       </div>
     </form>

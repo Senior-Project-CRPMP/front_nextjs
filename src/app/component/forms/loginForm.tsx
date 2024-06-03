@@ -1,11 +1,10 @@
-'use client'
-import React, { useState } from 'react';
-import Link from 'next/link';
-
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -26,7 +25,6 @@ export default function LoginForm() {
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Log in
         </h2>
-        
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -93,7 +91,7 @@ export default function LoginForm() {
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
-          Don't have an account?{' '}
+          Do not have an account?{" "}
           <Link
             href="/signup"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"

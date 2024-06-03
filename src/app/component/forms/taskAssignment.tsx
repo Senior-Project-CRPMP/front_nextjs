@@ -43,27 +43,27 @@ const Task = () => {
     <div className="container mx-auto">
       <div className="flex justify-center">
         <div className="max-w-md w-full bg-white shadow-md rounded-md p-6 mt-10">
-          <h1 className="mb-4 font-medium text-gray-700 dark:text-gray-400">Task Assignment</h1>
+          <h1 className="text-2xl font-bold mb-4">Task Assignment</h1>
           <div className="mb-4">
-            <label htmlFor="task" className="block  text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="task" className="block font-medium mb-2">
               Task
             </label>
             <input
               type="text"
               id="task"
-              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="border border-gray-300 rounded-md px-4 py-2 w-full"
               placeholder="Enter task"
               value={newTask}
               onChange={handleTaskChange}
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="priority" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="priority" className="block font-medium mb-2">
               Priority
             </label>
             <select
               id="priority"
-              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="border border-gray-300 rounded-md px-4 py-2 w-full"
               value={priority}
               onChange={handlePriorityChange}
             >
@@ -73,25 +73,25 @@ const Task = () => {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="dueDate" className="block  text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="dueDate" className="block font-medium mb-2">
               Due Date
             </label>
             <input
               type="date"
               id="dueDate"
-              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="border border-gray-300 rounded-md px-4 py-2 w-full"
               value={dueDate}
               onChange={handleDueDateChange}
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="assignee" className="block  text-sm font-medium leading-6 text-gray-900" >
+            <label htmlFor="assignee" className="block font-medium mb-2">
               Assignee
             </label>
             <input
               type="text"
               id="assignee"
-              className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="border border-gray-300 rounded-md px-4 py-2 w-full"
               placeholder="Enter assignee"
               value={assignee}
               onChange={handleAssigneeChange}
