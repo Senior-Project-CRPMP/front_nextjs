@@ -10,9 +10,10 @@ const Browse: React.FC = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10">
-      <div className="bg-white shadow-md rounded-lg p-10">
+    <div className="bg-white min-h-screen">
+      <div className="max-w-lg mx-auto pt-10">
         <h1 className="text-xl font-bold mb-4 text-center">Browse</h1>
+
         <form>
           <div className="flex">
             <div>
