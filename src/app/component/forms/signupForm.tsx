@@ -31,7 +31,7 @@ export default function SignupForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch('http://localhost:44316/api/Account/register', {
+    const response = await fetch('https://localhost:44316/api/Account/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,6 +44,8 @@ export default function SignupForm() {
         confirmPassword,
       }),
     });
+
+    console.log("")
 
     if (response.ok) {
       // Handle successful registration
