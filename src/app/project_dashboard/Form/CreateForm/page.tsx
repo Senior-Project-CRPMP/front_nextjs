@@ -100,7 +100,7 @@ const AddForm: React.FC = () => {
         event.preventDefault();
 
         try {
-            const formResponse = await fetch("https://localhost:44316/api/Form/CreateForm", {
+            const formResponse = await fetch("https://localhost:7174/api/Form/CreateForm", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const AddForm: React.FC = () => {
                 if (field.maxUploadSize !== null) payload.maxUploadSize = field.maxUploadSize;
                 if (field.allowedTypes.length > 0) payload.allowedTypes = field.allowedTypes;
 
-                const questionResponse = await fetch("https://localhost:44316/api/FormQuestion/CreateQuestion", {
+                const questionResponse = await fetch("https://localhost:7174/api/FormQuestion/CreateQuestion", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ const AddForm: React.FC = () => {
 
                 if (field.type === "select" || field.type === "checkbox") {
                     const createOptionPromises = field.options.map(async (option) => {
-                        await fetch("https://localhost:44316/api/FormOption/CreateOption", {
+                        await fetch("https://localhost:7174/api/FormOption/CreateOption", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

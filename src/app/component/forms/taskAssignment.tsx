@@ -1,7 +1,9 @@
 'use client'
 import React, { useState, ChangeEvent } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Task = () => {
+  const router = useRouter();
   const projectIdStr = localStorage.getItem('projectId');
   const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
   const [formData, setFormData] = useState({
@@ -48,6 +50,7 @@ const Task = () => {
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
 
     addTask()
+    router.push('/project_dashboard');
     console.log(formData);
   };
 
@@ -91,7 +94,7 @@ const Task = () => {
               onChange={handleChange}
             >
               <option value="TODO">TODO</option>
-              <option value="In progress">In progress</option>
+              <option value="inProgress">In progress</option>
               <option value="Done">Done</option>
             </select>
           </div>

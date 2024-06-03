@@ -12,7 +12,7 @@ const FormList: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://localhost:44316/api/Form/EveryForm");
+      const response = await fetch("https://localhost:7174/api/Form/EveryForm");
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
