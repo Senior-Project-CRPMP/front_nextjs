@@ -4,9 +4,25 @@ import React, { useState } from "react";
 
 const Browse: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const categories = [
+    "Researches",
+    "Projects",
+    "Templates",
+    "Related Articles",
+  ];
+
+  const filteredCategories = categories.filter((category) =>
+    category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -15,15 +31,7 @@ const Browse: React.FC = () => {
         <h1 className="text-xl font-bold mb-4 text-center">Browse</h1>
 
         <form>
-          <div className="flex">
-            <div>
-              <label
-                htmlFor="search-dropdown"
-                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >
-                Your Email
-              </label>
-            </div>
+          <div className="flex relative">
             <button
               id="dropdown-button"
               onClick={toggleDropdown}
@@ -56,38 +64,28 @@ const Browse: React.FC = () => {
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdown-button"
                 >
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Researches
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Projects
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Templates
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Related Articles
-                    </button>
-                  </li>
+                  {filteredCategories.length > 0 ? (
+                    filteredCategories.map((category) => (
+                      <li key={category}>
+                        <button
+                          type="button"
+                          className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          {category}
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <li>
+                      <button
+                        type="button"
+                        className="inline-flex w-full px-4 py-2 text-gray-500 dark:text-gray-400"
+                        disabled
+                      >
+                        No results found
+                      </button>
+                    </li>
+                  )}
                 </ul>
               </div>
             )}
@@ -95,6 +93,8 @@ const Browse: React.FC = () => {
               <input
                 type="search"
                 id="search-dropdown"
+                value={searchQuery}
+                onChange={handleSearchChange}
                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                 placeholder="Search related researches, projects..."
                 required

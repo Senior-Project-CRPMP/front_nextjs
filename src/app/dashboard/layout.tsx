@@ -1,84 +1,89 @@
 import Link from "next/link";
-
+import Project_Header from "../component/project_header";
 export default function DashboardLayout({
   children,
 }: {
   readonly children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen grid grid-cols-[240px_1fr]">
-      <nav className="border-r bg-white shadow-xl dark:bg-gray-800/40">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-[60px] items-center border-b px-6">
-            <Link
-              className="flex items-center gap-2 font-semibold"
-              href="/dashboard"
-            >
-              <LayoutDashboardIcon className="h-6 w-6" />
-              <span className="">Dashboard</span>
-            </Link>
+    <div className="h-screen grid grid-rows-[auto_1fr]">
+      <div className="border-b bg-white shadow-xl dark:bg-gray-800/40">
+        <Project_Header />
+      </div>
+      <div className="grid grid-cols-[240px_1fr] h-full">
+        <nav className="border-r bg-white shadow-xl dark:bg-gray-800/40">
+          <div className="flex h-full max-h-screen flex-col gap-2">
+            <div className="flex h-[60px] items-center border-b px-6">
+              <Link
+                className="flex items-center gap-2 font-semibold"
+                href="/dashboard"
+              >
+                <LayoutDashboardIcon className="h-6 w-6" />
+                <span className="">Dashboard</span>
+              </Link>
+            </div>
+            <div className="flex-1 overflow-auto py-2">
+              <nav className="grid items-start px-4 text-sm font-medium">
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/projects"
+                >
+                  <ProjectsIcon className="h-4 w-4" />
+                  Projects
+                </Link>
+
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/account"
+                >
+                  <UsersIcon className="h-4 w-4" />
+                  Account
+                </Link>
+
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/chat"
+                >
+                  <InboxIcon className="h-4 w-4" />
+                  Inbox
+                </Link>
+
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/Notification"
+                >
+                  <NotificationIcon className="h-4 w-4" />
+                  Notification
+                </Link>
+
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/browse"
+                >
+                  <BrowseIcon className="h-4 w-4" />
+                  Browse
+                </Link>
+
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/Setting"
+                >
+                  <SettingsIcon className="h-4 w-4" />
+                  Settings
+                </Link>
+                <Link
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  href="/dashboard/help"
+                >
+                  <HelpIcon className="h-4 w-4" />
+                  Help
+                </Link>
+              </nav>
+            </div>
           </div>
-          <div className="flex-1 overflow-auto py-2">
-            <nav className="grid items-start px-4 text-sm font-medium">
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/projects"
-              >
-                <ProjectsIcon className="h-4 w-4" />
-                Projects
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/account"
-              >
-                <UsersIcon className="h-4 w-4" />
-                Account
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/chat"
-              >
-                <InboxIcon className="h-4 w-4" />
-                Inbox
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/Notification"
-              >
-                <NotificationIcon className="h-4 w-4" />
-                Notification
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/browse"
-              >
-                <BrowseIcon className="h-4 w-4" />
-                Browse
-              </Link>
-
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/Setting"
-              >
-                <SettingsIcon className="h-4 w-4" />
-                Settings
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/help"
-              >
-                <HelpIcon className="h-4 w-4" />
-                Help
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </nav>
-      <main className="flex flex-col overflow-scroll">{children}</main>
+        </nav>
+        <main className="flex flex-col overflow-scroll">{children}</main>
+      </div>
     </div>
   );
 }
@@ -195,11 +200,12 @@ function NotificationIcon(props: any) {
     >
       <path
         fill="#626060"
-        d="M4 8a8 8 0 1 1 16 0v4.697l2 3V20h-5.611a4.502 4.502 0 0 1-8.777 0H2v-4.303l2-3zm5.708 12a2.5 2.5 0 0 0 4.584 0zM12 2a6 6 0 0 0-6 6v5.303l-2 3V18h16v-1.697l-2-3V8a6 6 0 0 0-6-6"
+        d="M4 8a8 8 0 0 1 16 0v6h1v1h-3v1H6v-1H3v-1h1V8zm2.5 7h11V8a5.5 5.5 0 0 0-11 0v7zm5.5 5c-.825 0-1.413-.587-1.413-1.413h2.825C13.413 19.587 12.825 20 12 20zm-.5-4h1v.5h-1V16zm-6 0h1v.5h-1V16zm12 0h1v.5h-1V16z"
       />
     </svg>
   );
 }
+
 function BrowseIcon(props: any) {
   return (
     <svg
@@ -207,23 +213,12 @@ function BrowseIcon(props: any) {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 50 50"
+      viewBox="0 0 24 24"
     >
-      <g
-        fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-      >
-        <path
-          stroke="#58595a"
-          d="M43.75 25H6.25zm-10.417 0c0-10.417-3.729-18.75-8.333-18.75S16.667 14.583 16.667 25S20.396 43.75 25 43.75s8.333-8.333 8.333-18.75"
-        />
-        <path
-          stroke="#4d4c4c"
-          d="M25 43.75c10.355 0 18.75-8.395 18.75-18.75S35.355 6.25 25 6.25S6.25 14.645 6.25 25S14.645 43.75 25 43.75"
-        />
-      </g>
+      <path
+        fill="#626060"
+        d="M5 18.414 18.414 5 19 5.586 5.586 19 5 18.414zm0-4 9.414-9.414.586.586L5.586 15 5 14.414zm0-4L9.414 6l.586.586L5.586 11 5 10.414zm0-4L6.586 3 7 3.414 5.414 5 5 4.414zM4 19q-.825 0-1.413-.587T2 17V7q0-.825.588-1.413T4 5h10q.825 0 1.413.588T16 7v10q0 .825-.587 1.413T14 19H4zm0-2h10V7H4v10zm14 2q-.425 0-.713-.288T17 18V4q0-.425.288-.713T18 3h3q.425 0 .713.288T22 4v14q0 .425-.288.713T21 19h-3z"
+      />
     </svg>
   );
 }
@@ -238,23 +233,24 @@ function SettingsIcon(props: any) {
     >
       <path
         fill="#626060"
-        d="m9.25 22l-.4-3.2q-.325-.125-.612-.3t-.563-.375L4.7 19.375l-2.75-4.75l2.575-1.95Q4.5 12.5 4.5 12.338v-.675q0-.163.025-.338L1.95 9.375l2.75-4.75l2.975 1.25q.275-.2.575-.375t.6-.3l.4-3.2h5.5l.4 3.2q.325.125.613.3t.562.375l2.975-1.25l2.75 4.75l-2.575 1.95q.025.175.025.338v.674q0 .163-.05.338l2.575 1.95l-2.75 4.75l-2.95-1.25q-.275.2-.575.375t-.6.3l-.4 3.2zM11 20h1.975l.35-2.65q.775-.2 1.438-.587t1.212-.938l2.475 1.025l.975-1.7l-2.15-1.625q.125-.35.175-.737T17.5 12t-.05-.787t-.175-.738l2.15-1.625l-.975-1.7l-2.475 1.05q-.55-.575-1.212-.962t-1.438-.588L13 4h-1.975l-.35 2.65q-.775.2-1.437.588t-1.213.937L5.55 7.15l-.975 1.7l2.15 1.6q-.125.375-.175.75t-.05.8q0 .4.05.775t.175.75l-2.15 1.625l.975 1.7l2.475-1.05q.55.575 1.213.963t1.437.587zm1.05-4.5q1.45 0 2.475-1.025T15.55 12t-1.025-2.475T12.05 8.5q-1.475 0-2.488 1.025T8.55 12t1.013 2.475T12.05 15.5M12 12"
+        d="M6 21q-.825 0-1.412-.588T4 19v-3h2v3h12V8h-3V6h3q.825 0 1.413.588T20 8v11q0 .825-.587 1.413T18 21H6zm0-7q-.825 0-1.412-.588T4 12V8q0-.825.588-1.413T6 6h4V5q0-.825.588-1.413T12 3h6q.825 0 1.413.588T20 5v6q0 .825-.587 1.413T18 13h-1v-2h1V5h-6v1h-2v1h-5v4h3v2H6zm0 4v-2h2v2H6zm0-5v-2h2v2H6zm8-3v-1h1v1h-1zm0-2v-1h1v1h-1zM7 10q-.425 0-.713-.288T6 9q0-.425.288-.713T7 8h1v2H7zm-2 1H4V9q0-.425.288-.713T5 8h1v3zm-2 2q-.425 0-.713-.288T2 11q0-.425.288-.713T3 10h1v3H3zm6 1H7v-1h2v1zm2-2H9V8h2v3zm1-5q-.425 0-.713-.288T10 3q0-.425.288-.713T11 2h2v1h-2zm6 5q-.425 0-.713-.288T16 8q0-.425.288-.713T17 7h1v3h-1zm2 3q-.425 0-.713-.288T18 12q0-.425.288-.713T19 11h1v3h-1zM8 3H7v1h1V3zm-2 2H5V4h1v1zm-2 3H3V6h1v1zm6 8q-.425 0-.713-.288T7 17q0-.425.288-.713T8 16h1v2H8zM6 4q-.425 0-.713-.288T5 3q0-.425.288-.713T6 2h2v1H6v1zM4 5V3h1v2H4zm0 4V7h1v2H4z"
       />
     </svg>
   );
 }
+
 function HelpIcon(props: any) {
   return (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      width="1.2rem"
-      height="1.2rem"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
     >
       <path
         fill="#626060"
-        d="M11.95 18q.525 0 .888-.363t.362-.887t-.362-.888t-.888-.362t-.887.363t-.363.887t.363.888t.887.362m-.9-3.85h1.85q0-.825.188-1.3t1.062-1.3q.65-.65 1.025-1.238T15.55 8.9q0-1.4-1.025-2.15T12.1 6q-1.425 0-2.312.75T8.55 8.55l1.65.65q.125-.45.563-.975T12.1 7.7q.8 0 1.2.438t.4.962q0 .5-.3.938t-.75.812q-1.1.975-1.35 1.475t-.25 1.825M12 22q-2.075 0-3.9-.787t-3.175-2.138T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"
+        d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7v-1c0-.82.448-1.528 1.112-1.946C12.416 9.434 13 8.762 13 8c0-.82-.673-1.5-1.5-1.5S10 7.18 10 8H9c0-1.327 1.074-2.4 2.4-2.4S14 6.673 14 8c0 1.124-.818 1.974-1.799 2.477-.458.25-.701.748-.701 1.274v1h-1zm0 4v-2h1v2h-1z"
       />
     </svg>
   );

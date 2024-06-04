@@ -3,6 +3,8 @@ import Hero from "./component/hero";
 import Content from "./component/content";
 import Feature from "./component/feature";
 import Contact from "./component/contact";
+import Header from "./component/header";
+import Footer from "./component/footer";
 // import Map from "./component/Map";
 
 export default function Home() {
@@ -10,11 +12,13 @@ export default function Home() {
 
   return (
     <main>
+      <Header />
       <Hero />
       <Content />
       <Feature />
       <Contact />
       {/* <Map position={position} /> */}
+      <Footer />
     </main>
   );
 }
