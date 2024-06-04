@@ -70,7 +70,7 @@ export default function Projects() {
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 " >
           {projects.map((p) => (
-            <div key={p.id} onClick={() => router.push('/project_dashboard')} className="group relative bg-blue-300 rounded-md">
+            <div key={p.id} onClick={() => {router.push('/project_dashboard'); localStorage.setItem('projectId', p.id.toString());}} className="group relative bg-blue-300 rounded-md">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md  lg:aspect-none group-hover:opacity-75 lg:h-80">
                 {/* <Image
                   src={project.imageSrc}

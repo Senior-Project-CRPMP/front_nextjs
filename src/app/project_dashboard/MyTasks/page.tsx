@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import KanbanBoard from '@/app/component/kanbanBoard';
 import NavBar from '../nav_bar';

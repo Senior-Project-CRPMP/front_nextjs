@@ -60,10 +60,10 @@ const Navigation: React.FC<NavigationProps> = ({ onNavItemSelect }) => {
           </button>
         ))}
         {dropdownItems.length > 0 && (
-          <div>
-            <button 
+          <div className="relative">
+            <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="block px-4 py-2 text-black"
+              className="block px-4 py-2"
             >
               More
             </button>
@@ -73,7 +73,7 @@ const Navigation: React.FC<NavigationProps> = ({ onNavItemSelect }) => {
                   <button
                     key={index}
                     onClick={() => onNavItemSelect(item.label)}
-                    className="block px-4 py-2 text-black"
+                    className="block px-4 py-2"
                   >
                     {item.label}
                   </button>

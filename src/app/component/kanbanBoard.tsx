@@ -1,205 +1,373 @@
-'use client'
-import React, {useState,useEffect} from 'react';
+import React, { DragEvent, useState } from "react";
+import { FiPlus, FiTrash } from "react-icons/fi";
+import { motion } from "framer-motion";
+import { FaFire } from "react-icons/fa";
 
-
-function KanbanBoard(){
-    const [tasks, setTasks] = useState([])
-    //get usertask and then divide using the status
-    useEffect(() => {
-        const fetchCard = async () => {
-          const res = await fetch(
-            `https://localhost:7174/api/Task/EveryTask`
-          );
-          const data = await res.json();
-          setTasks(data);
-          console.log("Did it work?");
-        };
-        fetchCard().catch((error) => console.error(error));
-      }, []);
-    return (
-
-        <div className="w-screen h-full p-2">
-  <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-5">
-    
-    <div className="bg-white rounded px-2 py-2">
-      
-      <div className="flex flex-row justify-between items-center mb-2 mx-1">
-        <div className="flex items-center">
-          <h2 className="bg-red-100 text-sm w-max px-1 rounded mr-2 text-gray-700">To-do</h2>
-          <p className="text-gray-400 text-sm">3</p>
-        </div>
-        <div className="flex items-center text-gray-300">
-          <p className="mr-2 text-2xl">---</p>
-          <p className="text-2xl">+</p>
-        </div>
-      </div>
-      
-      <div className="grid grid-rows-2 gap-2">
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">TaskName</h3>
-          <p className="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">Status</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Assignee</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">2?</p>
-        </div>
-
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Review survey results</h3>
-          <p className="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">To-do</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">1</p>
-        </div>
-
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Research video marketing</h3>
-          <p className="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">To-do</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">3</p>
-        </div>
-      </div>
-      <div className="flex flex-row items-center text-gray-300 mt-2 px-1">
-        <p className="rounded mr-2 text-2xl">+</p>
-        <p className="pt-1 rounded text-sm">New</p>
-      </div>
+export default function CustomKanban(){
+  return (
+    <div className="h-screen w-full bg-neutral-900 text-neutral-50">
+      <Board />
     </div>
+  );
+};
 
-    
-    <div className="bg-white rounded px-2 py-2">
-      
-      <div className="flex flex-row justify-between items-center mb-2 mx-1">
-        <div className="flex items-center">
-          <h2 className="bg-yellow-100 text-sm w-max px-1 rounded mr-2 text-gray-700">WIP</h2>
-          <p className="text-gray-400 text-sm">2</p>
-        </div>
-        <div className="flex items-center text-gray-300">
-          <p className="mr-2 text-2xl">---</p>
-          <p className="text-2xl">+</p>
-        </div>
-      </div>
-      
-      <div className="grid grid-rows-2 gap-2">
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Blog post live</h3>
-          <p className="bg-yellow-100 text-xs w-max p-1 rounded mr-2 text-gray-700">WIP</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">Jun 21, 2019</p>
-          <p className="text-xs text-gray-500 mt-2">2</p>
-        </div>
+const DEFAULT_CARDS: Card[] = [
+  // BACKLOG
+  { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
+  { title: "SOX compliance checklist", id: "2", column: "backlog" },
+  { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
+  { title: "Document Notifications service", id: "4", column: "backlog" },
+  // TODO
+  {
+    title: "Research DB options for new microservice",
+    id: "5",
+    column: "todo",
+  },
+  { title: "Postmortem for outage", id: "6", column: "todo" },
+  { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
 
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Email campaign</h3>
-          <p className="bg-yellow-100 text-xs w-max p-1 rounded mr-2 text-gray-700">WIP</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">Jun 21, 2019 &#10141; Jun 21, 2019</p>
-          <p className="text-xs text-gray-500 mt-2">1</p>
-        </div>
-      </div>
-      <div className="flex flex-row items-center text-gray-300 mt-2 px-1">
-        <p className="rounded mr-2 text-2xl">+</p>
-        <p className="pt-1 rounded text-sm">New</p>
-      </div>
+  // DOING
+  {
+    title: "Refactor context providers to use Zustand",
+    id: "8",
+    column: "doing",
+  },
+  { title: "Add logging to daily CRON", id: "9", column: "doing" },
+  // DONE
+  {
+    title: "Set up DD dashboards for Lambda listener",
+    id: "10",
+    column: "done",
+  },
+];
+
+type Card = {
+  title: string;
+  id: string;
+  column: string;
+};
+
+const Board = () => {
+  const [cards, setCards] = useState<Card[]>(DEFAULT_CARDS);
+
+  return (
+    <div className="flex h-full w-full gap-3 overflow-scroll p-12">
+      <Column
+        title="Backlog"
+        column="backlog"
+        headingColor="text-neutral-500"
+        cards={cards}
+        setCards={setCards}
+      />
+      <Column
+        title="TODO"
+        column="todo"
+        headingColor="text-yellow-200"
+        cards={cards}
+        setCards={setCards}
+      />
+      <Column
+        title="In progress"
+        column="doing"
+        headingColor="text-blue-200"
+        cards={cards}
+        setCards={setCards}
+      />
+      <Column
+        title="Complete"
+        column="done"
+        headingColor="text-emerald-200"
+        cards={cards}
+        setCards={setCards}
+      />
+      <BurnBarrel setCards={setCards} />
     </div>
+  );
+};
 
-    
-    <div className="bg-white rounded px-2 py-2">
-      
-      <div className="flex flex-row justify-between items-center mb-2 mx-1">
-        <div className="flex items-center">
-          <h2 className="bg-green-100 text-sm w-max px-1 rounded mr-2 text-gray-700">Complete</h2>
-          <p className="text-gray-400 text-sm">4</p>
-        </div>
-        <div className="flex items-center">
-          <p className="text-gray-300 mr-2 text-2xl">---</p>
-          <p className="text-gray-300 text-2xl">+</p>
-        </div>
-      </div>
-      
-      <div className="grid grid-rows-2 gap-2">
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Morning emails and to-do list</h3>
-          <p className="bg-green-100 text-xs w-max p-1 rounded mr-2 text-gray-700">Complete</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">Jun 21, 2019</p>
-          <p className="text-xs text-gray-500 mt-2">1</p>
-        </div>
+type ColumnProps = {
+  title: string;
+  headingColor: string;
+  cards: Card[];
+  column: string;
+  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+};
 
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Blog post</h3>
-          <p className="bg-green-100 text-xs w-max p-1 rounded mr-2 text-gray-700">Complete</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">Jun 20, 2019</p>
-          <p className="text-xs text-gray-500 mt-2">5</p>
-        </div>
+const Column = ({
+  title,
+  headingColor,
+  cards,
+  column,
+  setCards,
+}: ColumnProps) => {
+  const [active, setActive] = useState(false);
 
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Reconcile accounts</h3>
-          <p className="bg-green-100 text-xs w-max p-1 rounded mr-2 text-gray-700">Complete</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">Jun 19, 2019</p>
-          <p className="text-xs text-gray-600 mt-2">4</p>
-        </div>
+  const handleDragStart = (e: React.DragEvent, card: Card) => {
+    e.dataTransfer.setData("cardId", card.id);
+  };
 
-        <div className="p-2 rounded shadow-sm border-gray-100 border-2">
-          <h3 className="text-sm mb-3 text-gray-700">Website AB test</h3>
-          <p className="bg-green-100 text-xs w-max p-1 rounded mr-2 text-gray-700">Complete</p>
-          <div className="flex flex-row items-center mt-2">
-            <div className="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-            <a href="#" className="text-xs text-gray-500">Sophie Worso</a>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">Jun 18, 2019</p>
-          <p className="text-xs text-gray-600 mt-2">3</p>
-        </div>
-      </div>
-      <div className="flex flex-row items-center text-gray-300 mt-2 px-1">
-        <p className="rounded mr-2 text-2xl">+</p>
-        <p className="pt-1 rounded text-sm">New</p>
-      </div>
-    </div>
+  const handleDragEnd = (e: React.DragEvent) => {
+    const cardId = e.dataTransfer.getData("cardId");
 
-    {/* <div className="bg-white rounded px-2 py-2">
-      
-      <div className="flex flex-row justify-between items-center mb-2 mx-1">
-        <div className="flex items-center">
-          <h2 className="bg-gray-200 w-4 px-1 rounded mr-2 text-sm text-center">.</h2>
-          <p className="text-gray-400 text-sm">0</p>
-        </div>
-        <div className="flex items-center text-gray-300">
-          <p className="mr-2 text-2xl">---</p>
-          <p className="text-2xl">+</p>
-        </div>
-      </div>
-      <div className="flex flex-row items-center text-gray-300 mt-2 px-1">
-        <p className="rounded mr-2 text-2xl">+</p>
-        <p className="pt-1 rounded text-sm">New</p>
-      </div>
-    </div> */}
-  </div>
-</div>
+    setActive(false);
+    clearHighlights();
 
+    const indicators = getIndicators() as HTMLElement[];
+    const { element } = getNearestIndicator(e, indicators);
+
+    const before = element.dataset.before || "-1";
+
+    if (before !== cardId) {
+      let copy = [...cards];
+
+      let cardToTransfer = copy.find((c) => c.id === cardId);
+      if (!cardToTransfer) return;
+      cardToTransfer = { ...cardToTransfer, column };
+
+      copy = copy.filter((c) => c.id !== cardId);
+
+      const moveToBack = before === "-1";
+
+      if (moveToBack) {
+        copy.push(cardToTransfer);
+      } else {
+        const insertAtIndex = copy.findIndex((el) => el.id === before);
+        if (insertAtIndex === undefined) return;
+
+        copy.splice(insertAtIndex, 0, cardToTransfer);
+      }
+
+      setCards(copy);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    highlightIndicator(e);
+
+    setActive(true);
+  };
+
+  const clearHighlights = (els?: HTMLElement[]) => {
+    const indicators = els || (getIndicators() as HTMLElement[]);
+
+    indicators.forEach((i) => {
+      i.style.opacity = "0";
+    });
+  };
+
+  const highlightIndicator = (e: React.DragEvent) => {
+    const indicators = getIndicators() as HTMLElement[];
+
+    clearHighlights(indicators);
+
+    const el = getNearestIndicator(e, indicators);
+
+    el.element.style.opacity = "1";
+  };
+
+  const getNearestIndicator = (
+    e: React.DragEvent,
+    indicators: HTMLElement[]
+  ) => {
+    const DISTANCE_OFFSET = 50;
+
+    const el = indicators.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+
+        const offset = e.clientY - (box.top + DISTANCE_OFFSET);
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      {
+        offset: Number.NEGATIVE_INFINITY,
+        element: indicators[indicators.length - 1],
+      }
     );
-}
 
-export default KanbanBoard;
+    return el;
+  };
+
+  const getIndicators = () => {
+    return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
+  };
+
+  const handleDragLeave = () => {
+    clearHighlights();
+    setActive(false);
+  };
+
+  const filteredCards = cards.filter((c) => c.column === column);
+
+  return (
+    <div className="w-56 shrink-0">
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
+        <span className="rounded text-sm text-neutral-400">
+          {filteredCards.length}
+        </span>
+      </div>
+      <div
+        onDrop={handleDragEnd}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        className={`h-full w-full transition-colors ${
+          active ? "bg-neutral-800/50" : "bg-neutral-800/0"
+        }`}
+      >
+        {filteredCards.map((c) => {
+          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
+        })}
+        <DropIndicator beforeId={null} column={column} />
+        <AddCard column={column} setCards={setCards} />
+      </div>
+    </div>
+  );
+};
+
+type CardProps = {
+  title: string;
+  id: string;
+  column: string;
+  handleDragStart: (e: React.DragEvent, card: Card) => void;
+};
+
+const Card = ({ title, id, column, handleDragStart }: CardProps) => {
+  return (
+    <>
+      <DropIndicator beforeId={id} column={column} />
+      <div
+        draggable="true"
+        onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, { title, id, column })}
+        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
+      >
+        <p className="text-sm text-neutral-100">{title}</p>
+      </div>
+    </>
+  );
+};
+
+type DropIndicatorProps = {
+  beforeId: string | null;
+  column: string;
+};
+
+const DropIndicator = ({ beforeId, column }: DropIndicatorProps) => {
+  return (
+    <div
+      data-before={beforeId || "-1"}
+      data-column={column}
+      className="my-0.5 h-0.5 w-full bg-violet-400 opacity-0"
+    />
+  );
+};
+
+type BurnBarrelProps = {
+  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+};
+
+const BurnBarrel = ({ setCards }: BurnBarrelProps) => {
+  const [active, setActive] = useState(false);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setActive(true);
+  };
+
+  const handleDragLeave = () => {
+    setActive(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    const cardId = e.dataTransfer.getData("cardId");
+
+    setCards((pv) => pv.filter((c) => c.id !== cardId));
+
+    setActive(false);
+  };
+
+  return (
+    <div
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
+        active
+          ? "border-red-800 bg-red-800/20 text-red-500"
+          : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
+      }`}
+    >
+      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
+    </div>
+  );
+};
+
+type AddCardProps = {
+  column: string;
+  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+};
+
+const AddCard = ({ column, setCards }: AddCardProps) => {
+  const [text, setText] = useState("");
+  const [adding, setAdding] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!text.trim().length) return;
+
+    const newCard: Card = {
+      column,
+      title: text.trim(),
+      id: Math.random().toString(),
+    };
+
+    setCards((pv) => [...pv, newCard]);
+
+    setAdding(false);
+  };
+
+  return (
+    <>
+      {adding ? (
+        <motion.form layout onSubmit={handleSubmit}>
+          <textarea
+            onChange={(e) => setText(e.target.value)}
+            autoFocus
+            placeholder="Add new task..."
+            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
+          />
+          <div className="mt-1.5 flex items-center justify-end gap-1.5">
+            <button
+              onClick={() => setAdding(false)}
+              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+            >
+              <span>Add</span>
+              <FiPlus />
+            </button>
+          </div>
+        </motion.form>
+      ) : (
+        <motion.button
+          layout
+          onClick={() => setAdding(true)}
+          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+        >
+          <span>Add card</span>
+          <FiPlus />
+        </motion.button>
+      )}
+    </>
+  );
+};

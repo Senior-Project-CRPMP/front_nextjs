@@ -38,7 +38,7 @@ export default function DashboardLayout({
 
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/inbox"
+                href="/dashboard/chat"
               >
                 <InboxIcon className="h-4 w-4" />
                 Inbox
@@ -46,7 +46,7 @@ export default function DashboardLayout({
 
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/notification"
+                href="/dashboard/Notification"
               >
                 <NotificationIcon className="h-4 w-4" />
                 Notification
@@ -62,7 +62,7 @@ export default function DashboardLayout({
 
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="/dashboard/settings"
+                href="/dashboard/Setting"
               >
                 <SettingsIcon className="h-4 w-4" />
                 Settings
