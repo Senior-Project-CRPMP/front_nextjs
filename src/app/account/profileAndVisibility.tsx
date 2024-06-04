@@ -4,13 +4,13 @@ import React from 'react';
 
 const ProfilePage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div>
        {/* ProfileDetails  */}
-      <div className="container mx-auto p-4 mt-4 bg-white shadow-md rounded-md">
-        <h1 className="text-2xl font-bold mb-4">Profile and Visibility</h1>
+      <div className="container mx-auto p-1 mt-1">
+        <h1 className="text-2xl font-semibold mb-4 text-black">Profile and Visibility</h1>
         <div className="flex flex-col md:flex-row gap-4">
          <div className="w-full md:w-1/2 bg-white p-4 rounded-md shadow-md">
-      <h2 className="text-xl font-bold mb-4">Profile Information</h2>
+      <h2 className="text-xl font-semibold mb-4 text-black">Profile Information</h2>
       <form>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">

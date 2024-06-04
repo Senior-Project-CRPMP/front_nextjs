@@ -2,6 +2,10 @@
 import React, { useState } from 'react';
 import Navigation from './navigation';
 import ProfilePage from './profileAndVisibility';
+import EmailPage from './email' ;
+import SecurityPage from './SecurityContent' ;
+import AccountPreferencesPage from './accountPreferences' ;
+
 
 const AccountPage: React.FC = () => {
   const [selectedNavItem, setSelectedNavItem] = useState('Profile and visibility');
@@ -11,11 +15,11 @@ const AccountPage: React.FC = () => {
       case 'Profile and visibility':
         return <ProfilePage/>;
       case 'Email':
-        return <div>Email content</div>;
+        return <EmailPage/>
       case 'Security':
-        return <div>Security content</div>;
+        return <SecurityPage />
       case 'Account preferences':
-        return <div>Account preferences content</div>;
+        return <AccountPreferencesPage />
       case 'Connected APPS':
         return <div>Connected APPS content</div>;
       case 'Link preferences':

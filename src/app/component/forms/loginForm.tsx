@@ -14,9 +14,28 @@ export default function LoginForm() {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Perform login logic
+    const response = await fetch('https://localhost:7174/api/Account/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      // Handle successful login and store tokens
+      console.log('Login successful:', data);
+    } else {
+      // Handle login errors
+      const errorData = await response.json();
+      console.error('Login failed:', errorData);
+    }
   };
 
   return (
