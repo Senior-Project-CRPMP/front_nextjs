@@ -205,7 +205,9 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
             </div>
             <div></div>
           </div>
-        
+        </div>
+        </div>
+        </div>
   );
 };
 

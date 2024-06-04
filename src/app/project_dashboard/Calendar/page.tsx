@@ -90,16 +90,16 @@ export default function Calendar() {
     }
 
     for (let i = 1; i <= numDays; i++) {
-      const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i+1);
       const currentDayStr = currentDayDate.toISOString().split('T')[0];
 
       const tasksForDay = tasks.filter((task) => task.deadline.startsWith(currentDayStr));
       if (currentDate.getMonth() === today.getMonth() && i === today.getDate()) {
         days.push(
-          <div className="flex h-14 flex-col bg-blue-300 px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10" key={i} onClick={() => handleDayClick(i)}>
+          <div className="flex h-full flex-col bg-blue-300 px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10" key={i} onClick={() => handleDayClick(i)}>
             <span>{i}</span>
-            {tasksForDay.map((task, index) => (
-              <div key={index} className="text-sm">
+            {tasksForDay.map((task) => (
+              <div key={task.id} className="text-sm">
                 <div>{task.title}</div>
                 <div>{task.status}</div>
               </div>
@@ -108,12 +108,12 @@ export default function Calendar() {
         );
       } else {
         days.push(
-          <div className="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10" key={i} onClick={() => handleDayClick(i)}>
+          <div className="flex h-full flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10" key={i} onClick={() => handleDayClick(i)}>
             <span>{i}</span>
-            {tasksForDay.map((task, index) => (
-              <div key={index} className="text-sm">
-                <div>{task.title}</div>
-                <div>{task.status}</div>
+            {tasksForDay.map((task) => (
+              <div key={task.id} className="text-sm">
+                <div className="text-gray-900">{task.title}</div>
+                <div className="text-gray-300">{task.status}</div>
               </div>
             ))}
           </div>

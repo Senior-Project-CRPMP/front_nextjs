@@ -1,85 +1,80 @@
-import React, { DragEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
 
-export default function CustomKanban(){
+type Task = {
+  id: number;
+  projectId: number;
+  title: string;
+  description: string;
+  assignedTo: string;
+  deadline: string;
+  status: string;
+};
+
+export default function CustomKanban() {
   return (
-    <div className="h-screen w-full bg-neutral-900 text-neutral-50">
+    <div className="h-screen w-screen bg-gray-200 text-neutral-50">
       <Board />
     </div>
   );
 };
-
-const DEFAULT_CARDS: Card[] = [
-  // BACKLOG
-  { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
-  { title: "SOX compliance checklist", id: "2", column: "backlog" },
-  { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
-  { title: "Document Notifications service", id: "4", column: "backlog" },
-  // TODO
-  {
-    title: "Research DB options for new microservice",
-    id: "5",
-    column: "todo",
-  },
-  { title: "Postmortem for outage", id: "6", column: "todo" },
-  { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
-
-  // DOING
-  {
-    title: "Refactor context providers to use Zustand",
-    id: "8",
-    column: "doing",
-  },
-  { title: "Add logging to daily CRON", id: "9", column: "doing" },
-  // DONE
-  {
-    title: "Set up DD dashboards for Lambda listener",
-    id: "10",
-    column: "done",
-  },
-];
 
 type Card = {
   title: string;
   id: string;
   column: string;
 };
+const DEFAULT_CARDS: Card[] = [];
 
 const Board = () => {
   const [cards, setCards] = useState<Card[]>(DEFAULT_CARDS);
+  const projectIdStr = typeof window !== 'undefined' ? localStorage.getItem('projectId') : null;
+const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const data: Task[] = await res.json();
+        console.log(data)
+        const mappedCards: Card[] = data.map(task => ({
+          title: task.title,
+          id: task.id.toString(),
+          column: mapStatusToColumn(task.status)
+        }));
+
+        setCards(mappedCards);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchCards();
+  }, []);
+  
+
+  const mapStatusToColumn = (status: string): string => {
+    switch (status.toLowerCase()) {
+      case "todo":
+        return "todo";
+      case "inprogress":
+        return "inprogress";
+      case "done":
+        return "done";
+      default:
+        return "backlog";
+    }
+  };
 
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12">
-      <Column
-        title="Backlog"
-        column="backlog"
-        headingColor="text-neutral-500"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="TODO"
-        column="todo"
-        headingColor="text-yellow-200"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="In progress"
-        column="doing"
-        headingColor="text-blue-200"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="Complete"
-        column="done"
-        headingColor="text-emerald-200"
-        cards={cards}
-        setCards={setCards}
-      />
+      <Column title="Backlog" column="backlog" headingColor="text-neutral-900" cards={cards} setCards={setCards} />
+      <Column title="TODO" column="todo" headingColor="text-yellow-500" cards={cards} setCards={setCards} />
+      <Column title="In progress" column="inprogress" headingColor="text-blue-500" cards={cards} setCards={setCards} />
+      <Column title="Complete" column="done" headingColor="text-emerald-500" cards={cards} setCards={setCards} />
       <BurnBarrel setCards={setCards} />
     </div>
   );
@@ -93,51 +88,88 @@ type ColumnProps = {
   setCards: React.Dispatch<React.SetStateAction<Card[]>>;
 };
 
-const Column = ({
-  title,
-  headingColor,
-  cards,
-  column,
-  setCards,
-}: ColumnProps) => {
+const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) => {
   const [active, setActive] = useState(false);
 
+  const updateTaskStatus = async (task: Task) => {
+    try {
+      console.log(task)
+      const res = await fetch(`https://localhost:7174/api/Task/UpdateTask/${task.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      });
+  
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        throw new Error(`Failed to update task status: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error('Error updating task status:', error);
+    }
+  };
   const handleDragStart = (e: React.DragEvent, card: Card) => {
     e.dataTransfer.setData("cardId", card.id);
   };
 
-  const handleDragEnd = (e: React.DragEvent) => {
-    const cardId = e.dataTransfer.getData("cardId");
+  const fetchTaskDetails = async (cardId: string): Promise<Task> => {
+    try {
+      const res = await fetch(`https://localhost:7174/api/Task/SingleTask/${parseInt(cardId)}`);
+      if (!res.ok) {
+        throw new Error(`Failed to fetch task details for cardId: ${cardId}`);
+      }
+      const taskDetails: Task = await res.json();
+      console.log(taskDetails)
+      return taskDetails;
+    } catch (error) {
+      console.error('Error fetching task details:', error);
+      throw error;
+    }
+  };
 
+  const handleDragEnd = async (e: React.DragEvent) => {
+    const cardId = e.dataTransfer.getData("cardId");
+  
     setActive(false);
     clearHighlights();
-
+  
     const indicators = getIndicators() as HTMLElement[];
     const { element } = getNearestIndicator(e, indicators);
-
+  
     const before = element.dataset.before || "-1";
-
+  
     if (before !== cardId) {
       let copy = [...cards];
-
+  
       let cardToTransfer = copy.find((c) => c.id === cardId);
       if (!cardToTransfer) return;
-      cardToTransfer = { ...cardToTransfer, column };
-
+      
+      const newColumn = column;  // Store new column before updating state
+      cardToTransfer = { ...cardToTransfer, column: newColumn };
+  
       copy = copy.filter((c) => c.id !== cardId);
-
+  
       const moveToBack = before === "-1";
-
+  
       if (moveToBack) {
         copy.push(cardToTransfer);
       } else {
         const insertAtIndex = copy.findIndex((el) => el.id === before);
         if (insertAtIndex === undefined) return;
-
+  
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
-
+  
       setCards(copy);
+      
+      // Fetch the original task details and update the column (status)
+      const taskDetails = await fetchTaskDetails(cardId);
+      const updatedTask = { ...taskDetails, status: newColumn };
+  
+      // Update task in backend
+      await updateTaskStatus(updatedTask);
     }
   };
 
@@ -166,10 +198,7 @@ const Column = ({
     el.element.style.opacity = "1";
   };
 
-  const getNearestIndicator = (
-    e: React.DragEvent,
-    indicators: HTMLElement[]
-  ) => {
+  const getNearestIndicator = (e: React.DragEvent, indicators: HTMLElement[]) => {
     const DISTANCE_OFFSET = 50;
 
     const el = indicators.reduce(
@@ -243,7 +272,7 @@ const Card = ({ title, id, column, handleDragStart }: CardProps) => {
       <DropIndicator beforeId={id} column={column} />
       <div
         draggable="true"
-        onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, { title, id, column })}
+        onDragStart={(e) => handleDragStart(e, { title, id, column })}
         className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
       >
         <p className="text-sm text-neutral-100">{title}</p>
