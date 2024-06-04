@@ -1,4 +1,5 @@
 'use client'
+<<<<<<< HEAD
 import React, { useState } from 'react';
 
 const Task = () => {
@@ -7,13 +8,62 @@ const Task = () => {
   const [priority, setPriority] = useState('low');
   const [dueDate, setDueDate] = useState('');
   const [assignee, setAssignee] = useState('');
+=======
+import React, { useState, ChangeEvent } from 'react';
+import { useRouter } from 'next/navigation';
+
+const Task = () => {
+  const router = useRouter();
+  const projectIdStr = localStorage.getItem('projectId');
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+  const [formData, setFormData] = useState({
+    projectId: projectId,
+    title: "",
+    description: "",
+    assignedTo: "",
+    deadline: "",
+    status: ""
+  });
+>>>>>>> b132b201f7bab152ac8cae4552413c05f197f66f
 
   const handleTaskChange = (event) => {
     setNewTask(event.target.value);
   };
 
+<<<<<<< HEAD
   const handlePriorityChange = (event) => {
     setPriority(event.target.value);
+=======
+  async function addTask() {
+    try {
+      const response = await fetch(
+        "https://localhost:7174/api/Task/CreateTask",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Item created successfully");
+        // Optionally, you can redirect the user or update the UI here
+      } else {
+        console.error("Failed to create item:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating item:", error);
+    }
+  }
+  
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+
+    addTask()
+    router.push('/project_dashboard');
+    console.log(formData);
+>>>>>>> b132b201f7bab152ac8cae4552413c05f197f66f
   };
 
   const handleDueDateChange = (event) => {
@@ -67,9 +117,15 @@ const Task = () => {
               value={priority}
               onChange={handlePriorityChange}
             >
+<<<<<<< HEAD
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
+=======
+              <option value="TODO">TODO</option>
+              <option value="inProgress">In progress</option>
+              <option value="Done">Done</option>
+>>>>>>> b132b201f7bab152ac8cae4552413c05f197f66f
             </select>
           </div>
           <div className="mb-4">

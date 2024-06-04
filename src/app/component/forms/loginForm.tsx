@@ -16,7 +16,7 @@ export default function LoginForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch('https://localhost:44316/api/Account/login', {
+    const response = await fetch('https://localhost:7174/api/Account/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
