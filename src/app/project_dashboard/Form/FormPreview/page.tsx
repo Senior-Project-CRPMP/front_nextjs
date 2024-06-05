@@ -25,19 +25,20 @@ type Form = {
 const FormPreview: React.FC<{ formId: string }> = ({ formId }) => {
     const [form, setForm] = useState<Form | null>(null);
     const [loading, setLoading] = useState(true);
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
         const fetchForm = async () => {
             try {
                 // Fetch form details
-                const formResponse = await fetch(`https://localhost:44316/api/Form/GetForm/${formId}`);
+                const formResponse = await fetch(`${apiBaseUrl}/api/Form/GetForm/${formId}`);
                 if (!formResponse.ok) {
                     throw new Error('Failed to fetch form data');
                 }
                 const formData = await formResponse.json();
 
                 // Fetch form questions
-                const questionsResponse = await fetch(`https://localhost:44316/api/FormQuestion/GetQuestionsByForm/${formId}`);
+                const questionsResponse = await fetch(`${apiBaseUrl}/api/FormQuestion/GetQuestionsByForm/${formId}`);
                 if (!questionsResponse.ok) {
                     throw new Error('Failed to fetch form questions');
                 }
@@ -47,7 +48,7 @@ const FormPreview: React.FC<{ formId: string }> = ({ formId }) => {
                 const questionsWithOptions = await Promise.all(
                     questionsData.map(async (question: any) => {
                         if (question.type === 'select' || question.type === 'checkbox') {
-                            const optionsResponse = await fetch(`https://localhost:44316/api/FormOption/GetOptionsByQuestion/${question.id}`);
+                            const optionsResponse = await fetch(`${apiBaseUrl}/api/FormOption/GetOptionsByQuestion/${question.id}`);
                             if (!optionsResponse.ok) {
                                 throw new Error('Failed to fetch form options');
                             }

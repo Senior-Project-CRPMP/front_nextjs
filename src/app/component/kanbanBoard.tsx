@@ -32,12 +32,13 @@ const Board = () => {
   const [cards, setCards] = useState<Card[]>(DEFAULT_CARDS);
   const projectIdStr = typeof window !== 'undefined' ? localStorage.getItem('projectId') : null;
 const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(`${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`);
         const data: Task[] = await res.json();
         console.log(data)
         const mappedCards: Card[] = data.map(task => ({
@@ -90,11 +91,12 @@ type ColumnProps = {
 
 const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) => {
   const [active, setActive] = useState(false);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const updateTaskStatus = async (task: Task) => {
     try {
       console.log(task)
-      const res = await fetch(`https://localhost:7174/api/Task/UpdateTask/${task.id}`, {
+      const res = await fetch(`${apiBaseUrl}/api/Task/UpdateTask/${task.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +118,7 @@ const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) =
 
   const fetchTaskDetails = async (cardId: string): Promise<Task> => {
     try {
-      const res = await fetch(`https://localhost:7174/api/Task/SingleTask/${parseInt(cardId)}`);
+      const res = await fetch(`${apiBaseUrl}/api/Task/SingleTask/${parseInt(cardId)}`);
       if (!res.ok) {
         throw new Error(`Failed to fetch task details for cardId: ${cardId}`);
       }

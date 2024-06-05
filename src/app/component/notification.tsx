@@ -11,16 +11,17 @@ type Notification = {
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
         // Fetch initial notifications
-        fetch('https://localhost:7174/api/Notification')
+        fetch(`${apiBaseUrl}/api/Notification`)
             .then(response => response.json())
             .then(data => setNotifications(data));
 
         // Setup SignalR connection
         const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7174/notification')
+            .withUrl(`${apiBaseUrl}/notification`)
             .build();
 
         connection.on('ReceiveNotification', notification => {

@@ -8,11 +8,13 @@ export default function CreateChatRoom() {
   const [message, setMessage] = useState('');
   const participants = ['Participant 1', 'Participant 2', 'Participant 3']; // Example participants
 
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const handleSubmit = async (event : FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:7174/api/Chat/rooms', {
+      const response = await fetch(`${apiBaseUrl}/api/Chat/rooms`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

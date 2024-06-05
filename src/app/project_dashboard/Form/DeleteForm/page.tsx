@@ -6,6 +6,7 @@ const DeleteForm: React.FC = () => {
     const router = useRouter();
     const params = useParams();
     const id = params.id;
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
         if (!id) {
@@ -15,7 +16,7 @@ const DeleteForm: React.FC = () => {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`https://localhost:44316/api/Form/DeleteForm/${id}`, {
+            const response = await fetch(`${apiBaseUrl}/api/Form/DeleteForm/${id}`, {
                 method: 'DELETE'
             });
 

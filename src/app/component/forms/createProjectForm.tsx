@@ -15,6 +15,8 @@ function CreateProjectForm() {
     managerId: 1,
   });
 
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -26,7 +28,7 @@ function CreateProjectForm() {
   async function addProject() {
     try {
       const response = await fetch(
-        "https://localhost:7174/api/Project/CreateProject",
+        `${apiBaseUrl}/api/Project/CreateProject`,
         {
           method: "POST",
           headers: {

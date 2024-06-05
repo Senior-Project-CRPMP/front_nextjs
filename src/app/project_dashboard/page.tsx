@@ -35,6 +35,7 @@ const ProjectPage: React.FC = () => {
   const [isMemberListOpen, setIsMemberListOpen] = useState(false);
   const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const projectIdStr =
     typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
@@ -82,7 +83,7 @@ const ProjectPage: React.FC = () => {
   useEffect(() => {
     const fetchCard = async () => {
       const res = await fetch(
-        `https://localhost:7174/api/Project/SingleProjectById/${projectId}`
+        `${apiBaseUrl}/api/Project/SingleProjectById/${projectId}`
       );
       const data = await res.json();
       setProject(data);

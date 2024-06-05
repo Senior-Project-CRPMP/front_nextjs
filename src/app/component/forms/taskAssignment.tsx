@@ -1,16 +1,14 @@
 'use client'
-<<<<<<< HEAD
-import React, { useState } from 'react';
-
-const Task = () => {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
-  const [priority, setPriority] = useState('low');
-  const [dueDate, setDueDate] = useState('');
-  const [assignee, setAssignee] = useState('');
-=======
 import React, { useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
+
+// Define the type for a task
+interface TaskType {
+  task: string;
+  priority: string;
+  dueDate: string;
+  assignee: string;
+}
 
 const Task = () => {
   const router = useRouter();
@@ -24,20 +22,34 @@ const Task = () => {
     deadline: "",
     status: ""
   });
->>>>>>> b132b201f7bab152ac8cae4552413c05f197f66f
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [newTask, setNewTask] = useState('');
+  const [priority, setPriority] = useState('low');
+  const [dueDate, setDueDate] = useState('');
+  const [assignee, setAssignee] = useState('');
 
-  const handleTaskChange = (event) => {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  const handleTaskChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTask(event.target.value);
   };
 
-<<<<<<< HEAD
-  const handlePriorityChange = (event) => {
+  const handlePriorityChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setPriority(event.target.value);
-=======
+  };
+
+  const handleDueDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDueDate(event.target.value);
+  };
+
+  const handleAssigneeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setAssignee(event.target.value);
+  };
+
   async function addTask() {
     try {
       const response = await fetch(
-        "https://localhost:7174/api/Task/CreateTask",
+        `${apiBaseUrl}/api/Task/CreateTask`,
         {
           method: "POST",
           headers: {
@@ -57,25 +69,16 @@ const Task = () => {
       console.error("Error creating item:", error);
     }
   }
-  
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
 
-    addTask()
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    addTask();
     router.push('/project_dashboard');
     console.log(formData);
->>>>>>> b132b201f7bab152ac8cae4552413c05f197f66f
-  };
-
-  const handleDueDateChange = (event) => {
-    setDueDate(event.target.value);
-  };
-
-  const handleAssigneeChange = (event) => {
-    setAssignee(event.target.value);
   };
 
   const handleAddTask = () => {
-    const newTaskObject = {
+    const newTaskObject: TaskType = {
       task: newTask,
       priority: priority,
       dueDate: dueDate,
@@ -117,15 +120,9 @@ const Task = () => {
               value={priority}
               onChange={handlePriorityChange}
             >
-<<<<<<< HEAD
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
-=======
-              <option value="TODO">TODO</option>
-              <option value="inProgress">In progress</option>
-              <option value="Done">Done</option>
->>>>>>> b132b201f7bab152ac8cae4552413c05f197f66f
             </select>
           </div>
           <div className="mb-4">
@@ -158,6 +155,12 @@ const Task = () => {
             onClick={handleAddTask}
           >
             Add Task
+          </button>
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4"
+            onClick={handleSubmit}
+          >
+            Submit Task
           </button>
         </div>
         <div className="flex flex-wrap justify-center mt-10">

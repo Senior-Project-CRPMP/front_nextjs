@@ -47,11 +47,12 @@ interface Project {
 export default function Projects() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchCard = async () => {
       const res = await fetch(
-        `https://localhost:7174/api/Project/EveryProject`
+        `${apiBaseUrl}/api/Project/EveryProject`
       );
       const data = await res.json();
       setProjects(data);

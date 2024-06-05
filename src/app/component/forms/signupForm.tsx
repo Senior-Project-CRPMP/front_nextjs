@@ -8,6 +8,7 @@ export default function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -31,7 +32,7 @@ export default function SignupForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch('https://localhost:7174/api/Account/register', {
+    const response = await fetch(`${apiBaseUrl}/api/Account/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

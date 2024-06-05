@@ -13,9 +13,11 @@ const DocumentList: React.FC = () => {
     const [documents, setDocuments] = useState<Document[]>([]);
     const router = useRouter();
 
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const fetchDocuments = async () => {
         try {
-            const response = await fetch('http://localhost:5110/api/Document/EveryDocument');
+            const response = await fetch(`${apiBaseUrl}/api/Document/EveryDocument`);
             if (!response.ok) {
                 throw new Error('Failed to fetch documents');
             }
@@ -36,7 +38,7 @@ const DocumentList: React.FC = () => {
             const uniqueTitle = `Untitled_${Date.now()}`;
             console.log("Creating document with title:", uniqueTitle);
     
-            const response = await fetch('http://localhost:5110/api/Document/CreateDocument', {
+            const response = await fetch(`${apiBaseUrl}/api/Document/CreateDocument`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

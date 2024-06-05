@@ -29,13 +29,14 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [currentRoom, setCurrentRoom] = useState<string | null>(null);
   const [newRoomName, setNewRoomName] = useState("");
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     fetchChatRooms();
   }, []);
 
   const fetchChatRooms = async () => {
-    const response = await fetch("https://localhost:7174/api/Chat/rooms");
+    const response = await fetch(`${apiBaseUrl}/api/Chat/rooms`);
     const data: ChatRoom[] = await response.json();
     setChatRooms(data);
     console.log(chatRooms);
@@ -48,7 +49,7 @@ const Chat = () => {
       }
 
       const newConnection = new HubConnectionBuilder()
-        .withUrl("https://localhost:7174/Chat", { withCredentials: true })
+        .withUrl(`${apiBaseUrl}/Chat`, { withCredentials: true })
         .configureLogging(LogLevel.Information)
         .withAutomaticReconnect()
         .build();
@@ -70,7 +71,7 @@ const Chat = () => {
 
   const fetchMessages = async (roomId: string) => {
     const response = await fetch(
-      `https://localhost:7174/api/Chat/rooms/${roomId}/messages`
+      `${apiBaseUrl}/api/Chat/rooms/${roomId}/messages`
     );
     const data: ChatMessage[] = await response.json();
     setMessages(data);
