@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React,{useState, useEffect} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import images from "../../../public/assets/exportimages";
@@ -25,8 +26,7 @@ const Header: React.FC = () => {
           <a className="mr-5 hover:text-gray-900">About Us</a>
           <a className="mr-5 hover:text-gray-900">Services</a>
         </nav>
-        <Link href="/login" legacyBehavior>
-          <a>
+        <Link href="/login">
             <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-blue-900 rounded text-base text-black mt-4 md:mt-0">
               Login
               <svg
@@ -41,7 +41,6 @@ const Header: React.FC = () => {
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
             </button>
-          </a>
         </Link>
       </div>
     </header>

@@ -14,7 +14,18 @@ const ProfilePage: React.FC = () => {
       <form>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-            Username
+            First Name
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            Last Name
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -69,20 +80,6 @@ const ProfilePage: React.FC = () => {
           >
             <option>Public</option>
             <option>Private</option>
-            <option>Only me</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="activityVisibility">
-            Activity Visibility
-          </label>
-          <select
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="activityVisibility"
-          >
-            <option>Everyone</option>
-            <option>Only connections</option>
-            <option>Only me</option>
           </select>
         </div>
         <div className="flex items-center justify-between">

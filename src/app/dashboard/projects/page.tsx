@@ -46,17 +46,18 @@ interface Project {
 
 export default function Projects() {
   const router = useRouter();
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
   const [projects, setProjects] = useState<Project[]>([]);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchCard = async () => {
       const res = await fetch(
-        `${apiBaseUrl}/api/Project/EveryProject`
+        `${apiBaseUrl}/api/UserProject/projectsByUserId/${userId}`
       );
       const data = await res.json();
       setProjects(data);
-      console.log("Did it work?");
+      console.log(data);
     };
     fetchCard().catch((error) => console.error(error));
   }, []);
