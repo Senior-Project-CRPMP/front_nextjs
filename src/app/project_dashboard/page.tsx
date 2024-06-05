@@ -1,7 +1,4 @@
 "use client";
-import React from "react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
 import React, { useState, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
 import Navigation from "./nav_button";
@@ -13,16 +10,7 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 
-
 type Project = {
-  id: number;
-  title: string;
-  description: string;
-  objective: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  managerId: number;
   id: number;
   title: string;
   description: string;
@@ -40,27 +28,37 @@ type Member = {
   avatar: string | StaticImageData;
 };
 
-
 const ProjectPage: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
-  const [lastUpdated, setLastUpdated] = useState<string>();
   const [currentPage, setCurrentPage] = useState("overview");
-  const projectIdStr = localStorage.getItem("projectId");
-  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
-
-  useEffect(() => {
-  const projectIdStr = localStorage.getItem('projectId');
-  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
   const [isMemberListOpen, setIsMemberListOpen] = useState(false);
   const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const projectIdStr =
+    typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+
   const members: Member[] = [
-    { name: 'Member One', role: 'Role One', email: 'member1@example.com', avatar: images.avatar1 },
-    { name: 'Member Two', role: 'Role Two', email: 'member2@example.com', avatar: images.avatar2 },
-    { name: 'Member Three', role: 'Role Three', email: 'member3@example.com', avatar: images.avatar3 },
-    // Add more members as needed
+    {
+      name: "Member One",
+      role: "Role One",
+      email: "member1@example.com",
+      avatar: images.avatar1,
+    },
+    {
+      name: "Member Two",
+      role: "Role Two",
+      email: "member2@example.com",
+      avatar: images.avatar2,
+    },
+    {
+      name: "Member Three",
+      role: "Role Three",
+      email: "member3@example.com",
+      avatar: images.avatar3,
+    },
   ];
 
   const handleToggleMemberList = () => {
@@ -76,7 +74,7 @@ const ProjectPage: React.FC = () => {
   };
 
   const filteredMembers = members.filter(
-    member =>
+    (member) =>
       member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -103,14 +101,11 @@ const ProjectPage: React.FC = () => {
       });
       setLastUpdated(currentDate);
     }
-  }, []); // Empty dependency array ensures this effect runs only once on mount
   }, []);
 
   const PageContent = ({ currentPage }: { currentPage: string }) => {
     return (
       <div>
-        {/* Conditional rendering based on currentPage state */}
-        {currentPage === "overview" && <Overview project={project} />}
         {currentPage === "overview" && <Overview project={project} />}
         {currentPage === "board" && <Board />}
         {currentPage === "list" && <List />}
@@ -146,12 +141,7 @@ const ProjectPage: React.FC = () => {
           <NavBar />
         </div>
         <div className="h-full bg-white rounded-md my-2 mr-2 w-4/5">
-
-        <div className="h-full bg-white rounded-md my-2 mr-2 w-4/5">
           <div className="p-4 flex-col h-full space-x-0">
-            <div className="h-1/6">
-              <div className="flex space-x-96">
-                <h1 className="text-neutral-900 text-2xl font-bold pr-96">
             <div className="h-1/6">
               <div className="flex space-x-96">
                 <h1 className="text-neutral-900 text-2xl font-bold pr-96">
@@ -217,7 +207,9 @@ const ProjectPage: React.FC = () => {
                 </div>
               </div>
               {lastUpdated && (
-                <p className="text-sm text-gray-600">Last Update: {lastUpdated}</p>
+                <p className="text-sm text-gray-600">
+                  Last Update: {lastUpdated}
+                </p>
               )}
               <div className="space-y-1.5 mt-5">
                 <Navigation setCurrentPage={setCurrentPage} />
