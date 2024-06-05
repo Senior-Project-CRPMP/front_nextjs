@@ -1,10 +1,15 @@
 import Link from "next/link";
 import Project_Header from "../component/project_header";
+import NotificationBell from "../component/notificationBell";
+
+
 export default function DashboardLayout({
   children,
 }: {
   readonly children: React.ReactNode;
 }) {
+
+  const unreadCount = 5;
   return (
     <div className="h-screen grid grid-rows-[auto_1fr]">
       <div className="border-b bg-white shadow-xl dark:bg-gray-800/40">
@@ -48,13 +53,7 @@ export default function DashboardLayout({
                   Inbox
                 </Link>
 
-                <Link
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                  href="/dashboard/Notification"
-                >
-                  <NotificationIcon className="h-4 w-4" />
-                  Notification
-                </Link>
+                <NotificationBell unreadCount={unreadCount} />
 
                 <Link
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
