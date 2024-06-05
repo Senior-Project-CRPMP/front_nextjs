@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
+
 type Form = {
   id: string;
   title: string;
@@ -10,9 +11,12 @@ type Form = {
 const FormList: React.FC = () => {
   const [forms, setForms] = useState<Form[]>([]);
 
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const fetchData = async () => {
     try {
-      const response = await fetch("https://localhost:7174/api/Form/EveryForm");
+      const response = await fetch(`${apiBaseUrl}/api/Form/EveryForm`);
+
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }

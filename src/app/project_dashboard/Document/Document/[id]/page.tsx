@@ -25,7 +25,7 @@ const Document: React.FC = () => {
     useEffect(() => {
         const fetchDocument = async () => {
             try {
-                const response = await fetch(`https://localhost:44316/api/Document/SingleDocument/${id}`);
+                const response = await fetch(`http://localhost:5110/api/Document/SingleDocument/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch document');
                 }
@@ -59,7 +59,7 @@ const Document: React.FC = () => {
     const handleSave = async () => {
         try {
             if (!id || !editor) return;
-            const response = await fetch(`https://localhost:44316/api/Document/UpdateDocument/${id}`, {
+            const response = await fetch(`http://localhost:5110/api/Document/UpdateDocument/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ const DocumentList: React.FC = () => {
 
     const fetchDocuments = async () => {
         try {
-            const response = await fetch('https://localhost:44316/api/Document/EveryDocument');
+            const response = await fetch('http://localhost:5110/api/Document/EveryDocument');
             if (!response.ok) {
                 throw new Error('Failed to fetch documents');
             }
@@ -36,7 +36,7 @@ const DocumentList: React.FC = () => {
             const uniqueTitle = `Untitled_${Date.now()}`;
             console.log("Creating document with title:", uniqueTitle);
     
-            const response = await fetch('https://localhost:44316/api/Document/CreateDocument', {
+            const response = await fetch('http://localhost:5110/api/Document/CreateDocument', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
