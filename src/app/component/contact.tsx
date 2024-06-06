@@ -8,6 +8,8 @@ function Contact() {
     message: ""
   });
 
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -19,7 +21,7 @@ function Contact() {
   async function addFeedback() {
     try {
       const response = await fetch(
-        "https://localhost:7174/api/Feedback/feedbacks",
+        `${apiBaseUrl}/api/Feedback/feedbacks`,
         {
           method: "POST",
           headers: {

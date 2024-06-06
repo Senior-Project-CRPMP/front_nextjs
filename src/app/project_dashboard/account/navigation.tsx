@@ -14,7 +14,10 @@ const Navigation: React.FC<NavigationProps> = ({ onNavItemSelect }) => {
     { label: 'Profile and visibility' },
     { label: 'Email'},
     { label: 'Security'},
-    { label: 'Account preferences'}
+    { label: 'Account preferences'},
+    { label: 'Connected APPS'},
+    { label: 'Link preferences'},
+    { label: 'Product settings'},
   ];
 
   useEffect(() => {
@@ -56,7 +59,29 @@ const Navigation: React.FC<NavigationProps> = ({ onNavItemSelect }) => {
             {item.label}
           </button>
         ))}
-      
+        {dropdownItems.length > 0 && (
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="block px-4 py-2"
+            >
+              More
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 bg-white rounded-md shadow-md">
+                {dropdownItems.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => onNavItemSelect(item.label)}
+                    className="block px-4 py-2"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

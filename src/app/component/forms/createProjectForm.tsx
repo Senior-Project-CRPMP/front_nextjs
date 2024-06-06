@@ -5,6 +5,7 @@ import React, { useState, ChangeEvent, FormEvent, MouseEventHandler } from "reac
 
 function CreateProjectForm() {
   const router = useRouter();
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -12,8 +13,10 @@ function CreateProjectForm() {
     startDate: "2024-05-01",
     endDate: "",
     status: "pending",
-    managerId: 1,
+    userId: userId,
   });
+
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -26,7 +29,7 @@ function CreateProjectForm() {
   async function addProject() {
     try {
       const response = await fetch(
-        "https://localhost:7174/api/Project/CreateProject",
+        `${apiBaseUrl}/api/Project/CreateProject`,
         {
           method: "POST",
           headers: {

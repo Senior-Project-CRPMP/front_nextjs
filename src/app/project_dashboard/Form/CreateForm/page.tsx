@@ -34,6 +34,7 @@ const AddForm: React.FC = () => {
   });
 
   const router = useRouter();
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleAddField = () => {
     setFormFields([
@@ -113,7 +114,7 @@ const AddForm: React.FC = () => {
 
     try {
       const formResponse = await fetch(
-        "https://localhost:7174/api/Form/CreateForm",
+        `${apiBaseUrl}/api/Form/CreateForm`,
         {
           method: "POST",
           headers: {
@@ -151,7 +152,7 @@ const AddForm: React.FC = () => {
           payload.allowedTypes = field.allowedTypes;
 
         const questionResponse = await fetch(
-          "https://localhost:7174/api/FormQuestion/CreateQuestion",
+          `${apiBaseUrl}/api/FormQuestion/CreateQuestion`,
           {
             method: "POST",
             headers: {
@@ -170,7 +171,7 @@ const AddForm: React.FC = () => {
 
         if (field.type === "select" || field.type === "checkbox") {
           const createOptionPromises = field.options.map(async (option) => {
-            await fetch("https://localhost:7174/api/FormOption/CreateOption", {
+            await fetch(`${apiBaseUrl}/api/FormOption/CreateOption`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

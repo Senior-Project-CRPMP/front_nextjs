@@ -13,6 +13,8 @@ const UpdateForm: React.FC = () => {
     const params = useParams();
     const id = params.id;
 
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const [formData, setFormData] = useState<FormData>({
         id: id as string,
         name: '',
@@ -27,7 +29,7 @@ const UpdateForm: React.FC = () => {
 
     const fetchData = async (formId: string) => {
         try {
-            const response = await fetch(`https://localhost:44316/api/Form/SingleForm/${id}`);
+            const response = await fetch(`${apiBaseUrl}/api/Form/SingleForm/${id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch data')
             }
@@ -42,7 +44,7 @@ const UpdateForm: React.FC = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch(`https://localhost:44316/api/Form/UpdateForm/${id}`, {
+            const response = await fetch(`${apiBaseUrl}/api/Form/UpdateForm/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

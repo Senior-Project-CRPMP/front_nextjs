@@ -5,17 +5,47 @@ import Image from "next/image";
 import images from "../../../public/assets/exportimages";
 import { useRouter } from "next/router";
 
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
+
 const ProfileDropdown: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const userEmail =
+    typeof window !== "undefined" ? localStorage.getItem("loggedinfo") : null;
+  //const router = useRouter();
 
   function logout() {
     if (isClient) {
       localStorage.setItem("loggedin", "false");
+      //router.push("/dashboard");
     }
   }
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(
+          `https://localhost:7174/api/Account/user/email/${userEmail}`
+        );
+        const data = await res.json();
+        console.log(data);
+
+        setUser(data);
+        localStorage.setItem("loggeduserid", data.id);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    // Set isClient to true to ensure we're in a client-side context
     setIsClient(true);
   }, []);
 
@@ -42,8 +72,10 @@ const ProfileDropdown: React.FC = () => {
                 className="object-cover"
               />
             </div>
-            <div className="font-semibold dark:text-white text-white text-sm">
-              <div>Meron Kedir</div>
+            <div className="font-semibold dark:text-white text-white text-lg">
+              <div>
+                {user?.firstName} {user?.lastName}
+              </div>
             </div>
           </div>
           {open && (

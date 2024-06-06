@@ -1,13 +1,16 @@
 'use client'
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function SignupForm() {
+  const router = useRouter()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -31,7 +34,7 @@ export default function SignupForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch('https://localhost:7174/api/Account/register', {
+    const response = await fetch(`${apiBaseUrl}/api/Account/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,6 +53,7 @@ export default function SignupForm() {
     if (response.ok) {
       // Handle successful registration
       console.log('Registration successful');
+      router.push('/login');
     } else {
       // Handle registration errors
       const data = await response.json();

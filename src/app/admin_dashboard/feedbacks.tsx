@@ -8,10 +8,11 @@ interface Feedback {
   }
 function Feedback(){
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     useEffect(() => {
         const fetchCard = async () => {
           const res = await fetch(
-            `https://localhost:7174/api/Feedback/feedbacks`
+            `${apiBaseUrl}/api/Feedback/feedbacks`
           );
           const data = await res.json();
           setFeedbacks(data);

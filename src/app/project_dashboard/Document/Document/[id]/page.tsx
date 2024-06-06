@@ -21,11 +21,12 @@ const Document: React.FC = () => {
     const id = params.id;
     const [editor, setEditor] = useState<Quill | null>(null);
     const [title, setTitle] = useState<string>('');
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
         const fetchDocument = async () => {
             try {
-                const response = await fetch(`http://localhost:5110/api/Document/SingleDocument/${id}`);
+                const response = await fetch(`${apiBaseUrl}/api/Document/SingleDocument/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch document');
                 }
@@ -59,7 +60,7 @@ const Document: React.FC = () => {
     const handleSave = async () => {
         try {
             if (!id || !editor) return;
-            const response = await fetch(`http://localhost:5110/api/Document/UpdateDocument/${id}`, {
+            const response = await fetch(`${apiBaseUrl}/api/Document/UpdateDocument/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
