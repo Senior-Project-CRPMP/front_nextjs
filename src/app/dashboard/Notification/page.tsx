@@ -19,6 +19,7 @@ type Notification = {
   isRead: boolean;
 
 }
+
 const NotificationPage: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [notification, setNotification] = useState<Notification[]>([])
@@ -54,7 +55,7 @@ const NotificationPage: React.FC = () => {
             <span className="ml-2">Settings</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
           {notification.map(notification => (
             <div key={notification.id} className="bg-white p-4 rounded shadow-md flex flex-col justify-between">
               <div className="flex justify-between items-start">
