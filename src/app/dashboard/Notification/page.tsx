@@ -1,14 +1,9 @@
 // components/NotificationPage.tsx
 'use client'
 import React, { useState } from 'react';
-import { FiBell, FiSettings, FiX } from 'react-icons/fi';
+import { FiSettings, FiX } from 'react-icons/fi';
+import NotificationSettings from './NotificatonSettings';
 
-const members = [
-  { name: 'Member One', role: 'Role One', email: 'member1@example.com', avatar: '/avatar1.jpg' },
-  { name: 'Member Two', role: 'Role Two', email: 'member2@example.com', avatar: '/avatar2.jpg' },
-  { name: 'Member Three', role: 'Role Three', email: 'member3@example.com', avatar: '/avatar3.jpg' },
-  // Add more members as needed
-];
 
 const notifications = [
   { id: 1, type: 'task', message: 'Task "Literature Review" has been assigned to you. Due date: July 15, 2024.', timestamp: '2 hours ago' },
@@ -36,30 +31,22 @@ const NotificationPage: React.FC = () => {
             <span className="ml-2">Settings</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
           {notifications.map(notification => (
-            <div key={notification.id} className="bg-white p-4 rounded shadow-md flex flex-col">
-              <div className="flex justify-between items-center">
+            <div key={notification.id} className="bg-white p-4 rounded shadow-md flex flex-col justify-between">
+              <div className="flex justify-between items-start">
                 <div className="text-gray-600">{notification.message}</div>
-                <div className="text-gray-400 text-sm">{notification.timestamp}</div>
+                <button className="ml-2 p-1 bg-red-500 text-white rounded">
+                  <FiX />
+                </button>
               </div>
-              <button className="self-end mt-2 p-1 bg-red-500 text-white rounded">
-                <FiX />
-              </button>
+              <div className="text-gray-400 text-sm mt-4 self-end">{notification.timestamp}</div>
             </div>
           ))}
         </div>
       </div>
       {showSettings && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Notification Settings</h2>
-            {/* Add settings form here */}
-            <button onClick={handleSettingsToggle} className="p-2 bg-gray-200 rounded mt-4">
-              Close
-            </button>
-          </div>
-        </div>
+        < NotificationSettings />
       )}
     </div>
   );
