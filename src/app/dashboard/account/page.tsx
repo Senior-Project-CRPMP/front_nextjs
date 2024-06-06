@@ -35,11 +35,11 @@ const AccountPage: React.FC = () => {
   return (
     <div>
       <div className="flex space-x-2">
-        <div className="h-screen bg-white rounded-md  mr-2 w-4/5">
+        <div className="h-screen bg-white rounded-md mr-2 w-screen">
           <div className="p-4 flex-col h-screen space-x-0">
             <div className="h-1/6">
               <Navigation onNavItemSelect={setSelectedNavItem} />
-              <div className="border-t border-grey"></div>
+              <div className="border-t border-grey "></div>
             </div>
             <div className="h-5/6">{renderContent()}</div>
           </div>

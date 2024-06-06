@@ -1,6 +1,6 @@
-'use client'
-import React, {useState, useEffect} from "react";
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 interface Project {
   id: number;
@@ -61,16 +61,22 @@ export default function Projects() {
   }, []);
 
   return (
-    
     <div className="bg-white h-full">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
           My Projects
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 " >
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
           {projects.map((p) => (
-            <div key={p.id} onClick={() => {router.push('/project_dashboard'); localStorage.setItem('projectId', p.id.toString());}} className="group relative bg-blue-300 rounded-md">
+            <div
+              key={p.id}
+              onClick={() => {
+                router.push("/project_dashboard");
+                localStorage.setItem("projectId", p.id.toString());
+              }}
+              className="group relative bg-blue-300 rounded-md"
+            >
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md  lg:aspect-none group-hover:opacity-75 lg:h-80">
                 {/* <Image
                   src={project.imageSrc}

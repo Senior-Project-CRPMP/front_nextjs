@@ -8,34 +8,31 @@ import { useRouter } from "next/router";
 const ProfileDropdown: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isClient, setIsClient] = useState<boolean>(false);
-  //const router = useRouter();
 
   function logout() {
     if (isClient) {
       localStorage.setItem("loggedin", "false");
-      //router.push("/dashboard");
     }
   }
 
   useEffect(() => {
-    // Set isClient to true to ensure we're in a client-side context
     setIsClient(true);
   }, []);
 
   if (!isClient) {
-    return null; // Do not render if not in client-side context
+    return null;
   }
 
   return (
-    <div className="relative flex justify-center items-center dark:bg-gray-500">
-      <div className="w-64 shadow flex justify-center items-center">
+    <div className="relative flex justify-center items-center">
+      <div className="w-64 flex justify-center items-center">
         <div
           onClick={() => setOpen(!open)}
           className={`relative border-b-4 border-transparent py-3 cursor-pointer ${
             open ? "border-indigo-700 transform transition duration-300" : ""
           }`}
         >
-          <div className="flex flex-col items-center space-y-3">
+          <div className="flex flex-col items-center space-y-2">
             <div className="w-12 h-12 rounded-full overflow-hidden border-2 dark:border-white border-gray-900">
               <Image
                 src={images.avatar1}
@@ -45,14 +42,17 @@ const ProfileDropdown: React.FC = () => {
                 className="object-cover"
               />
             </div>
-            <div className="font-semibold dark:text-white text-white text-lg">
-              <div>Hasan Muhammad</div>
+            <div className="font-semibold dark:text-white text-white text-sm">
+              <div>Meron Kedir</div>
             </div>
           </div>
           {open && (
             <div
               className="absolute w-60 px-5 py-3 dark:bg-gray-800 bg-white rounded-lg shadow border dark:border-transparent mt-5"
-              style={{ transition: "transform opacity 0.3s ease-out" }}
+              style={{
+                top: "70px",
+                transition: "transform opacity 0.3s ease-out",
+              }}
             >
               <ul className="space-y-3 text-black">
                 <li className="font-medium">
