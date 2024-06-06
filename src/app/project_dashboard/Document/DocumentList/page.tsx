@@ -71,14 +71,6 @@ const DocumentList: React.FC = () => {
         }
     };
     
-    
-    
-    
-    
-    
-    
-    
-    
 
     const openDocument = (id: string) => {
         router.push(`/project_dashboard/Document/Document/${id}`);
