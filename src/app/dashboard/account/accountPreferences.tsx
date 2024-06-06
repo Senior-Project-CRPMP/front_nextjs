@@ -24,7 +24,7 @@ const AccountPreferencesPage = () => {
   };
 
   return (
-    <div className="container mx-auto ml- 5 p-4">
+    <div className="container mx-auto ml-5 p-4">
       <h1 className="text-2xl font-semibold mb-4 mt-0 text-black">
         Account Preferences
       </h1>
