@@ -1,9 +1,11 @@
-import { useState } from "react";
+
+
+import { useState } from 'react';
 
 const EmailPage = () => {
   const [emailSettings, setEmailSettings] = useState({
-    primaryEmail: "yordanosyadessa2019@gmail.com",
-    secondaryEmail: "",
+    primaryEmail: 'yordanosyadessa2019@gmail.com',
+    secondaryEmail: '',
     notifications: true,
   });
 
@@ -11,35 +13,27 @@ const EmailPage = () => {
     const { name, value, type, checked } = e.target;
     setEmailSettings({
       ...emailSettings,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log("Email settings updated:", emailSettings);
+    console.log('Email settings updated:', emailSettings);
   };
 
   return (
-    <div className="container mx-auto ml-5 p-4">
+    <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4 text-black">Email Settings</h1>
       <p className="text-gray-700 mb-4">
         Manage your email addresses and notification preferences.
       </p>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md"
-      >
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-black ">
-            Email Addresses
-          </h2>
+          <h2 className="text-xl font-semibold mb-2 text-black ">Email Addresses</h2>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="primaryEmail"
-            >
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="primaryEmail">
               Primary Email
             </label>
             <input
@@ -52,10 +46,7 @@ const EmailPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 font-semibold mb-2"
-              htmlFor="secondaryEmail"
-            >
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="secondaryEmail">
               Secondary Email
             </label>
             <input
@@ -69,9 +60,7 @@ const EmailPage = () => {
           </div>
         </div>
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-black">
-            Notification Preferences
-          </h2>
+          <h2 className="text-xl font-semibold mb-2 text-black">Notification Preferences</h2>
           <div className="mb-4 flex items-center">
             <input
               type="checkbox"

@@ -1,12 +1,40 @@
 'use client'
 
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 
 export default function CreateChatRoom() {
   const [roomName, setRoomName] = useState('');
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
   const [message, setMessage] = useState('');
-  const participants = ['Participant 1', 'Participant 2', 'Participant 3']; // Example participants
+  const [participants, setParticipants] = useState([]);
+
+  useEffect(() => {
+    const getParticipants =async ()=> {
+    try {
+      const res = await fetch(`https://localhost:7174/api/Account/users`);
+      const data = await res.json();
+      console.log(data)
+      setParticipants(data)
+
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+  getParticipants()
+}, [])
+
+  const Participants = () => {
+    
+    return (
+      <>
+      {participants.map((participant: { id: number; firstName: string; lastName: string; }) => (
+        <option key={participant.id} value={participant.firstName}>
+          {participant.firstName} {participant.lastName}
+        </option>
+      ))}
+    </>
+    )
+  };
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -69,11 +97,7 @@ export default function CreateChatRoom() {
           multiple
           required
         >
-          {participants.map((participant, index) => (
-            <option key={index} value={participant}>
-              {participant}
-            </option>
-          ))}
+          <Participants/>
         </select>
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" type="submit">Create Chat Room</button>
       </form>

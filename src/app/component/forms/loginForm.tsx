@@ -1,8 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
+import { jwtDecode } from "jwt-decode";
 
 export default function LoginForm() {
+  const route = useRouter()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -32,6 +35,11 @@ export default function LoginForm() {
       const data = await response.json();
       // Handle successful login and store tokens
       console.log('Login successful:', data);
+      localStorage.setItem('loggedin', 'true')
+      const decoded = jwtDecode(data.token)
+      console.log(JSON.stringify(decoded))
+      localStorage.setItem('loggedinfo', decoded.sub || '')
+      route.push('/dashboard')
     } else {
       // Handle login errors
       const errorData = await response.json();

@@ -1,12 +1,12 @@
 // pages/security.tsx
 
-import { useState } from "react";
+import { useState } from 'react';
 
 const SecurityPage = () => {
   const [securitySettings, setSecuritySettings] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
     twoFactorAuth: false,
   });
 
@@ -14,38 +14,27 @@ const SecurityPage = () => {
     const { name, value, type, checked } = e.target;
     setSecuritySettings({
       ...securitySettings,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log("Security settings updated:", securitySettings);
+    console.log('Security settings updated:', securitySettings);
   };
 
   return (
-    <div className="container mx-auto ml-5 px-4">
-      <h1 className="text-2xl font-semibold mb-4 text-black">
-        Security Settings
-      </h1>
+    <div className="container mx-auto px-4">
+      <h1 className="text-2xl font-semibold mb-4 text-black">Security Settings</h1>
       <p className="text-gray-700 mb-4">
-        Manage your security settings, including password changes and two-factor
-        authentication.
+        Manage your security settings, including password changes and two-factor authentication.
       </p>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md"
-      >
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-black">
-            Change Password
-          </h2>
+          <h2 className="text-xl font-semibold mb-2 text-black">Change Password</h2>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="currentPassword"
-            >
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="currentPassword">
               Current Password
             </label>
             <input
@@ -58,10 +47,7 @@ const SecurityPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="newPassword"
-            >
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="newPassword">
               New Password
             </label>
             <input
@@ -74,10 +60,7 @@ const SecurityPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="confirmPassword"
-            >
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="confirmPassword">
               Confirm New Password
             </label>
             <input
@@ -91,9 +74,7 @@ const SecurityPage = () => {
           </div>
         </div>
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-black">
-            Two-Factor Authentication
-          </h2>
+          <h2 className="text-xl font-semibold mb-2 text-black">Two-Factor Authentication</h2>
           <div className="mb-4 flex items-center">
             <input
               type="checkbox"

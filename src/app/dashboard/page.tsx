@@ -1,8 +1,37 @@
-import React from "react";
+'use client'
+import React, {useState, useEffect} from "react";
+import Image from "next/image";
 import Link from "next/link";
 
-const Dashboard: React.FC = () => {
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
+
+function Dashboard() {
+  const [user, setUser] = useState<User | null>(null);
+  const userEmail = typeof window !== 'undefined' ? localStorage.getItem('loggedinfo') : null;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`https://localhost:7174/api/Account/user/email/${userEmail}`);
+        const data = await res.json();
+        console.log(data)
+
+        setUser(data);
+        localStorage.setItem('loggeduserid', data.id)
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+  
   return (
+    <>
     <div className="max-w-4xl mx-auto m-10">
       <h6 className="text-3xl font-extralight text-gray-900 text-center p-6">
         Recent Projects
@@ -36,7 +65,7 @@ const Dashboard: React.FC = () => {
                 href={
                   project === "Create new project"
                     ? "/createProject"
-                    : "/dashboard/projects"
+                    : "/project_dashboard"
                 }
                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
@@ -64,6 +93,7 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 
