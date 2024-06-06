@@ -5,6 +5,7 @@ import React, { useState, ChangeEvent, FormEvent, MouseEventHandler } from "reac
 
 function CreateProjectForm() {
   const router = useRouter();
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -12,7 +13,7 @@ function CreateProjectForm() {
     startDate: "2024-05-01",
     endDate: "",
     status: "pending",
-    managerId: 1,
+    userId: userId,
   });
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;

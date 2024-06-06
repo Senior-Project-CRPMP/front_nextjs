@@ -1,8 +1,10 @@
 'use client'
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function SignupForm() {
+  const router = useRouter()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -51,6 +53,7 @@ export default function SignupForm() {
     if (response.ok) {
       // Handle successful registration
       console.log('Registration successful');
+      router.push('/login');
     } else {
       // Handle registration errors
       const data = await response.json();

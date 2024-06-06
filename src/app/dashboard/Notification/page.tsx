@@ -1,25 +1,48 @@
 // components/NotificationPage.tsx
 'use client'
-import React, { useState } from 'react';
-import { FiSettings, FiX } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import { FiBell, FiSettings, FiX } from 'react-icons/fi';
 import NotificationSettings from './NotificatonSettings';
 
-
-const notifications = [
-  { id: 1, type: 'task', message: 'Task "Literature Review" has been assigned to you. Due date: July 15, 2024.', timestamp: '2 hours ago' },
-  { id: 2, type: 'project', message: 'Project "AI Research" has reached the milestone "Prototype Development".', timestamp: '1 day ago' },
-  { id: 3, type: 'comment', message: 'John Doe commented on the task "Data Analysis": "Can we discuss the latest findings?"', timestamp: '3 days ago' },
-  { id: 4, type: 'document', message: 'New version of "Research Proposal" has been uploaded by Jane Smith.', timestamp: '5 days ago' },
-  { id: 5, type: 'meeting', message: 'Reminder: Meeting on "Research Methodologies" scheduled for tomorrow at 10 AM.', timestamp: '1 week ago' },
-  // Add more notifications as needed
+const members = [
+  { name: 'Member One', role: 'Role One', email: 'member1@example.com', avatar: '/avatar1.jpg' },
+  { name: 'Member Two', role: 'Role Two', email: 'member2@example.com', avatar: '/avatar2.jpg' },
+  { name: 'Member Three', role: 'Role Three', email: 'member3@example.com', avatar: '/avatar3.jpg' },
+  // Add more members as needed
 ];
 
+type Notification = {
+  id: number;
+  userid : string;
+  message: string;
+  dateCreated: string;
+  isRead: boolean;
+
+}
 const NotificationPage: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
+  const [notification, setNotification] = useState<Notification[]>([])
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
 
   const handleSettingsToggle = () => {
     setShowSettings(!showSettings);
   };
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await fetch('https://localhost:7174/api/Notification/user/${userId}');
+        const data = await res.json();
+        console.log(data)
+
+        setNotification(Array.isArray(data) ? data : [data]);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
@@ -31,8 +54,8 @@ const NotificationPage: React.FC = () => {
             <span className="ml-2">Settings</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
-          {notifications.map(notification => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {notification.map(notification => (
             <div key={notification.id} className="bg-white p-4 rounded shadow-md flex flex-col justify-between">
               <div className="flex justify-between items-start">
                 <div className="text-gray-600">{notification.message}</div>
@@ -40,15 +63,16 @@ const NotificationPage: React.FC = () => {
                   <FiX />
                 </button>
               </div>
-              <div className="text-gray-400 text-sm mt-4 self-end">{notification.timestamp}</div>
+              <div className="text-gray-400 text-sm mt-4 self-end">{notification.dateCreated}</div>
             </div>
           ))}
         </div>
       </div>
       {showSettings && (
-        < NotificationSettings />
+          < NotificationSettings />
       )}
     </div>
+  
   );
 };
 
