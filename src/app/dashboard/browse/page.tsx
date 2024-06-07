@@ -1,17 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 
 const Browse: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Categories");
+  const [searchResults, setSearchResults] = useState<string[]>([]);
 
-  const categories = [
-    "Researches",
-    "Projects",
-    "Templates",
-    "Related Articles",
-  ];
+  const categories: string[] = ["Users", "Projects"];
 
   const filteredCategories = categories.filter((category) =>
     category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -21,8 +18,19 @@ const Browse: React.FC = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setIsDropdownOpen(false); // Close the dropdown when a category is selected
+  };
+
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Simulating a search operation, here you can add your search logic
+    setSearchResults([`${selectedCategory} - ${searchQuery}`]);
   };
 
   return (
@@ -30,7 +38,7 @@ const Browse: React.FC = () => {
       <div className="max-w-lg mx-auto pt-10">
         <h1 className="text-xl font-bold mb-4 text-center">Browse</h1>
 
-        <form>
+        <form onSubmit={handleSearch}>
           <div className="flex relative">
             <button
               id="dropdown-button"
@@ -38,7 +46,7 @@ const Browse: React.FC = () => {
               className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
               type="button"
             >
-              All categories{" "}
+              {selectedCategory}{" "}
               <svg
                 className="w-2.5 h-2.5 ms-2.5"
                 aria-hidden="true"
@@ -69,6 +77,7 @@ const Browse: React.FC = () => {
                       <li key={category}>
                         <button
                           type="button"
+                          onClick={() => handleCategorySelect(category)}
                           className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           {category}
@@ -95,8 +104,8 @@ const Browse: React.FC = () => {
                 id="search-dropdown"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                placeholder="Search related researches, projects..."
+                className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                placeholder="Search users or projects..."
                 required
               />
               <button
@@ -123,6 +132,21 @@ const Browse: React.FC = () => {
             </div>
           </div>
         </form>
+
+        <div className="mt-8">
+          {searchResults.length > 0 && (
+            <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+              <h2 className="text-lg font-semibold mb-2">Search Results:</h2>
+              <ul className="list-disc pl-5 space-y-2">
+                {searchResults.map((result, index) => (
+                  <li key={index} className="text-gray-700">
+                    {result}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

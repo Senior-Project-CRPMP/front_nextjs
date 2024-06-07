@@ -2,6 +2,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { FiBell, FiSettings, FiX } from 'react-icons/fi';
+import NotificationSettings from './NotificatonSettings';
 
 const members = [
   { name: 'Member One', role: 'Role One', email: 'member1@example.com', avatar: '/avatar1.jpg' },
@@ -18,6 +19,7 @@ type Notification = {
   isRead: boolean;
 
 }
+
 const NotificationPage: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [notification, setNotification] = useState<Notification[]>([])
@@ -30,7 +32,7 @@ const NotificationPage: React.FC = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Notification/user/${userId}`);
+        const res = await fetch('https://localhost:7174/api/Notification/user/${userId}');
         const data = await res.json();
         console.log(data)
 
@@ -53,32 +55,25 @@ const NotificationPage: React.FC = () => {
             <span className="ml-2">Settings</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
           {notification.map(notification => (
-            <div key={notification.id} className="bg-white p-4 rounded shadow-md flex flex-col">
-              <div className="flex justify-between items-center">
+            <div key={notification.id} className="bg-white p-4 rounded shadow-md flex flex-col justify-between">
+              <div className="flex justify-between items-start">
                 <div className="text-gray-600">{notification.message}</div>
-                <div className="text-gray-400 text-sm">{notification.dateCreated}</div>
+                <button className="ml-2 p-1 bg-red-500 text-white rounded">
+                  <FiX />
+                </button>
               </div>
-              <button className="self-end mt-2 p-1 bg-red-500 text-white rounded">
-                <FiX />
-              </button>
+              <div className="text-gray-400 text-sm mt-4 self-end">{notification.dateCreated}</div>
             </div>
           ))}
         </div>
       </div>
       {showSettings && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Notification Settings</h2>
-            {/* Add settings form here */}
-            <button onClick={handleSettingsToggle} className="p-2 bg-gray-200 rounded mt-4">
-              Close
-            </button>
-          </div>
-        </div>
+          < NotificationSettings />
       )}
     </div>
+  
   );
 };
 

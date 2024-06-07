@@ -1,14 +1,16 @@
 // pages/account-preferences.tsx
 
-import { useState } from 'react';
+import { useState } from "react";
 
 const AccountPreferencesPage = () => {
   const [preferences, setPreferences] = useState({
-    language: 'English',
-    region: 'United States',
+    language: "English",
+    region: "United States",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setPreferences({
       ...preferences,
@@ -18,20 +20,28 @@ const AccountPreferencesPage = () => {
 
   const handleDeleteAccount = () => {
     // Handle account deletion logic here
-    console.log('Account deletion requested');
+    console.log("Account deletion requested");
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-semi bold mb-4 text-black">Account Preferences</h1>
+    <div className="container mx-auto ml-5 p-4">
+      <h1 className="text-2xl font-semibold mb-4 mt-0 text-black">
+        Account Preferences
+      </h1>
       <p className="text-gray-700 mb-4">
-        Manage your account settings, including language preferences and account deletion.
+        Manage your account settings, including language preferences and account
+        deletion.
       </p>
 
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-semibold mb-2 text-black">Language & Region</h2>
+        <h2 className="text-xl font-semibold mb-2 text-black">
+          Language & Region
+        </h2>
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="language">
+          <label
+            className="block text-gray-700 font-semibold mb-2"
+            htmlFor="language"
+          >
             Language
           </label>
           <select
@@ -48,7 +58,10 @@ const AccountPreferencesPage = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="region">
+          <label
+            className="block text-gray-700 font-bold mb-2"
+            htmlFor="region"
+          >
             Region
           </label>
           <select
@@ -67,9 +80,12 @@ const AccountPreferencesPage = () => {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-2 text-red-400">Delete Your Account</h2>
+        <h2 className="text-xl font-semibold mb-2 text-red-400">
+          Delete Your Account
+        </h2>
         <p className="text-gray-700 mb-4">
-          Deleting your account will remove all your data from our system. This action is irreversible.
+          Deleting your account will remove all your data from our system. This
+          action is irreversible.
         </p>
         <button
           onClick={handleDeleteAccount}

@@ -5,8 +5,8 @@ import images from "../../../public/assets/exportimages";
 
 const Project_Header: React.FC = () => {
   return (
-    <header className="text-white bg-blue-950 body-font">
-      <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center justify-between">
+    <header className="text-white h-24 bg-blue-950 body-font">
+      <div className="container mx-auto flex flex-wrap p-1 flex-col md:flex-row items-center justify-between">
         <div className="flex items-center">
           <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0">
             <Image
@@ -20,10 +20,10 @@ const Project_Header: React.FC = () => {
               }}
               className="object-cover"
             />
-            <span className="text-xl text-white">CRPMP</span>
+            <span className="text-xl text-white ml-3">CRPMP</span>
           </a>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 mt-2 md:mt-0">
           <ProfileDropdown />
         </div>
       </div>
