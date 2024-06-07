@@ -1,34 +1,51 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
 
 export default function CreateChatRoom() {
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
   const [roomName, setRoomName] = useState('');
-  const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
+  const [selectedParticipant, setSelectedParticipant] = useState<string[]>([userId || ""]);
   const [message, setMessage] = useState('');
-  const [participants, setParticipants] = useState([]);
+  const [participants, setParticipants] = useState<User[]>([]);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const route = useRouter()
+
 
   useEffect(() => {
-    const getParticipants =async ()=> {
-    try {
-      const res = await fetch(`https://localhost:7174/api/Account/users`);
-      const data = await res.json();
-      console.log(data)
-      setParticipants(data)
-
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    }
-  };
-  getParticipants()
-}, [])
+    const getParticipants = async () => {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/Account/users`);
+        const data: User[] = await res.json();
+        console.log(data);
+  
+        // Filter out the user with the specific userId
+        const filteredParticipants = data.filter(user => user.id !== userId);
+  
+        setParticipants(filteredParticipants);
+      } catch (error) {
+        console.error("Error fetching participants:", error);
+      }
+    };
+    
+    getParticipants();
+  }, []);
+  
 
   const Participants = () => {
     
     return (
       <>
-      {participants.map((participant: { id: number; firstName: string; lastName: string; }) => (
-        <option key={participant.id} value={participant.firstName}>
+      {participants.map((participant) => (
+        <option key={participant.id} value={participant.id} onClick={(event)=>handleAddParticipant(((event.target as HTMLOptionElement).value))}>
           {participant.firstName} {participant.lastName}
         </option>
       ))}
@@ -36,18 +53,16 @@ export default function CreateChatRoom() {
     )
   };
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   const handleSubmit = async (event : FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/Chat/rooms`, {
+      const response = await fetch(`${apiBaseUrl}/api/ChatRoom/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: roomName, participants: selectedParticipants }),
+        body: JSON.stringify({ name: roomName, participantUserIds: selectedParticipant}),
       });
 
       if (!response.ok) {
@@ -57,7 +72,7 @@ export default function CreateChatRoom() {
 
       setMessage('Chat room created successfully.');
       setRoomName('');
-      setSelectedParticipants([]);
+      setSelectedParticipant([userId || ""]);
     } catch (error: unknown) {
         if (error instanceof Error) {
           setMessage(`Error: ${error.message}`);
@@ -67,9 +82,19 @@ export default function CreateChatRoom() {
       }
   };
 
+  useEffect(()=>{
+    console.log(selectedParticipant)
+  }, [])
+
+  const handleAddParticipant = (newParticipant: string) => {
+    setSelectedParticipant(prevParticipants => [...prevParticipants, newParticipant]);
+    console.log(selectedParticipant)
+};
+
   const handleParticipantChange = (event : ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(event.target.selectedOptions, (option) => option.value);
-    setSelectedParticipants(selectedOptions);
+    const selectedOptions = Array.from(event.target.selectedOptions).map((option: HTMLOptionElement) => option.value);
+    setSelectedParticipant(prevParticipants => [...prevParticipants, selectedOptions[0]]);
+
   };
 
   return (
@@ -92,16 +117,16 @@ export default function CreateChatRoom() {
         <select
           id="participants"
           className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          value={selectedParticipants}
+          value={selectedParticipant}
           onChange={handleParticipantChange}
           multiple
           required
         >
           <Participants/>
         </select>
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" type="submit">Create Chat Room</button>
+        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={(e)=>{handleSubmit; route.push('/dashboard/chat')}}>Create Chat Room</button>
       </form>
-      {message && <div>{message}</div>}
+      {message && <div>{selectedParticipant}</div>}
     </div>
     </div>
     </div>

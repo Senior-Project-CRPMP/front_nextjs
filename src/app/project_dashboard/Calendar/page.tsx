@@ -18,14 +18,13 @@ export default function Calendar() {
   const [isOpen, setIsOpen] = useState(false);
   const projectIdStr = localStorage.getItem('projectId');
   const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const res = await fetch(`${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
         const data = await res.json();
         setTasks(data);
         console.log(tasks);
@@ -128,6 +127,9 @@ export default function Calendar() {
   function handleDayClick(day: number) {
     console.log(`Clicked on day ${day}`);
   }
+
+  // Assuming you have already fetched and stored tasks in the 'tasks' state
+
 
   return (
   <div className="lg:flex lg:h-full lg:flex-col">
