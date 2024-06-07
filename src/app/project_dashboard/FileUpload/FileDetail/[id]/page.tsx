@@ -19,8 +19,6 @@ const FileDetails = () => {
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const router = useRouter();
-
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
@@ -70,11 +68,27 @@ const FileDetails = () => {
 
   const openFile = () => {
     window.open(`${apiBaseUrl}/${fileDetails.filePath}`, '_blank');
-}; 
+  };
 
-const downloadFile = () => {
-  
-}; 
+  const downloadFile = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/FileUpload/download/${fileId}`);
+      if (!response.ok) {
+        throw new Error('Failed to download file');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileDetails.fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
 
   return (
     <div>
@@ -83,9 +97,9 @@ const downloadFile = () => {
       <p><strong>Description:</strong> {fileDetails.description}</p>
       <button onClick={openFile}>Open File</button>
       <button onClick={downloadFile}>Download File</button>
+      
     </div>
   );
 };
-
 
 export default FileDetails;
