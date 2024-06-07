@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import images from "../../../public/assets/exportimages";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 type User = {
   id: string;
@@ -15,14 +15,15 @@ const ProfileDropdown: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const userEmail =
-    typeof window !== "undefined" ? localStorage.getItem("loggedinfo") : null;
-  //const router = useRouter();
+  const userEmail = typeof window !== 'undefined' ? localStorage.getItem('loggedinfo') : null;
+  const router = useRouter();
 
   function logout() {
     if (isClient) {
       localStorage.setItem("loggedin", "false");
-      //router.push("/dashboard");
+      localStorage.setItem("loggedinfo", "");
+      localStorage.setItem("loggeduserinfo", "");
+      router.push("/");
     }
   }
 

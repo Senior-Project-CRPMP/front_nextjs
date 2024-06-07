@@ -10,83 +10,113 @@ import {
 type ChatMessage = {
   id: number;
   userId: string;
-  message: string;
+  content: string;
   timestamp: string;
   chatRoomId: number;
 };
 
 type ChatRoom = {
-  id: number;
+  chatRoomId: number;
   name: string;
+  createdAt: Date;
   participants: { userId: string }[];
   messages: ChatMessage[];
 };
 
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
+
 const Chat = () => {
-  const [connection, setConnection] = useState<HubConnection | null>(null);
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState("");
-  const [currentRoom, setCurrentRoom] = useState<string | null>(null);
-  const [newRoomName, setNewRoomName] = useState("");
+  const msgToSend= {
+    senderUserId: userId,
+    content: message
+  };
+  const [currentRoom, setCurrentRoom] = useState<number | null>(null);
+  const [users, setUser] = useState<User[]>([]);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  
+    const fetchUser = async (userid: string) => {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/Account/user/${userid}`);
+        const data = await res.json();
+        console.log(data)
+
+        setUser(prevUsers => [...prevUsers, data]);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
 
   useEffect(() => {
     fetchChatRooms();
   }, []);
 
   const fetchChatRooms = async () => {
-    const response = await fetch(`${apiBaseUrl}/api/Chat/rooms`);
+    const response = await fetch(`${apiBaseUrl}/api/ChatRoom/user/${userId}/chatrooms`);
     const data: ChatRoom[] = await response.json();
     setChatRooms(data);
+    console.log(data)
     console.log(chatRooms);
   };
 
-  const joinChatRoom = async (roomId: string) => {
-    try {
-      if (connection) {
-        await connection.stop();
-      }
-
-      const newConnection = new HubConnectionBuilder()
-        .withUrl(`${apiBaseUrl}/Chat`, { withCredentials: true })
-        .configureLogging(LogLevel.Information)
-        .withAutomaticReconnect()
-        .build();
-
-      newConnection.on("ReceiveMessage", (message: ChatMessage) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
-
-      await newConnection.start();
-      await newConnection.invoke("JoinRoom", roomId);
-
-      setConnection(newConnection);
+  const joinChatRoom = async (roomId: number) => {
       setCurrentRoom(roomId);
       fetchMessages(roomId);
-    } catch (e) {
-      console.error("Connection failed:", e);
-    }
   };
 
-  const fetchMessages = async (roomId: string) => {
+
+  const fetchMessages = async (roomId: number) => {
     const response = await fetch(
-      `${apiBaseUrl}/api/Chat/rooms/${roomId}/messages`
+      `${apiBaseUrl}/api/ChatRoom/chatroom/${roomId}/messages`
     );
     const data: ChatMessage[] = await response.json();
     setMessages(data);
+    console.log(data)
+    console.log(messages)
   };
 
   const sendMessage = async () => {
-    if (!connection || !message.trim() || !currentRoom) return;
-
     try {
-      await connection.send("SendMessage", currentRoom, "Melat", message);
-      setMessage("");
+      const response = await fetch(
+        `${apiBaseUrl}/api/ChatRoom/chatroom/${currentRoom}/messages/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(msgToSend),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Item created successfully");
+        // Optionally, you can redirect the user or update the UI here
+      } else {
+        console.error("Failed to create item:", response.statusText);
+      }
     } catch (error) {
-      console.error("Send message failed:", error);
+      console.error("Error creating item:", error);
     }
+    
   };
+
+  useEffect(() => {
+    // Fetch user data for each unique userId
+    messages.forEach(async (msg) => {
+      if (!users.find(user => user.id === msg.userId)) {
+        // Fetch user data if it doesn't exist in the users array
+        await fetchUser(msg.userId);
+      }
+    });
+  }, [messages, users]);
 
   return (
     <div>
@@ -136,10 +166,10 @@ const Chat = () => {
 
             <ul>
               {chatRooms.map((room) => (
-                <li className="" key={room.id}>
+                <li className="" key={room.chatRoomId}>
                   <button
                     className="w-full p-1 m-1 bg-white"
-                    onClick={() => joinChatRoom(room.id.toString())}
+                    onClick={() => joinChatRoom(room.chatRoomId)}
                   >
                     {room.name}
                   </button>
@@ -176,10 +206,10 @@ const Chat = () => {
                   <div className="bg-gray-200 flex-1 ">
                     <div className="px-4 py-2">
                       <div className="flex items-center mb-2">
-                        <div className="font-medium">{msg.userId}</div>
+                        <div className="font-medium">{users.find(user => user.id === msg.userId)?.firstName}</div>
                       </div>
                       <div className="bg-white rounded-lg p-2 shadow mb-2 max-w-sm">
-                        {msg.message}
+                        {msg.content}
                       </div>
                     </div>
                   </div>

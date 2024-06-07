@@ -1,8 +1,20 @@
 import React, {useState, useEffect} from "react";
 
+interface Task {
+    id: number;
+    projectId: number;
+    title: string;
+    description: string;
+    assignedTo: string;
+    deadline: string;
+    status: string;
+  }
+
 export default function sideCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   let today = new Date();
+  const projectIdStr = localStorage.getItem('projectId');
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
   useEffect(() => {
     // Update the calendar when the component mounts
@@ -88,6 +100,29 @@ export default function sideCalendar() {
 
     return days;
   }
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    const fetchCard = async () => {
+      try {
+        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const data = await res.json();
+        setTasks(data);
+        console.log(tasks);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCard();
+  }, [projectId]);
+
+  const sortedTasks = tasks.slice().sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+
+    // Filter upcoming tasks
+    const upcomingTasks = sortedTasks.filter(task => new Date(task.deadline) >= new Date());
+
+    // Take the first three upcoming tasks
+    const threeUpcomingTasks = upcomingTasks.slice(0, 3);
 
   
     return(
@@ -148,25 +183,13 @@ export default function sideCalendar() {
                         </div>
                         <div className="md:py-8 py-5 md:px-16 px-5 dark:bg-gray-700 bg-gray-50 rounded-b">
                             <p className="text-sm font-light border-b pb-4 border-gray-400 border-dashed pt-5"> UPCOMING TASKS</p>
-                        </div>
-                        {/* <div className="md:py-8 py-5 md:px-16 px-5 dark:bg-gray-700 bg-gray-50 rounded-b">
-                            <div className="px-4">
-                                <div className="border-b pb-4 border-gray-400 border-dashed">
-                                    <p className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
-                                    <a tabIndex={0} className="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">Zoom call with design team</a>
-                                    <p className="text-sm pt-2 leading-4 leading-none text-gray-600 dark:text-gray-300">Discussion on UX sprint and Wireframe review</p>
-                                </div>
-                                <div className="border-b pb-4 border-gray-400 border-dashed pt-5">
-                                    <p className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">10:00 AM</p>
-                                    <a tabIndex={0} className="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">Orientation session with new hires</a>
-                                </div>
-                                <div className="border-b pb-4 border-gray-400 border-dashed pt-5">
-                                    <p className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
-                                    <a tabIndex={0} className="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">Zoom call with design team</a>
-                                    <p className="text-sm pt-2 leading-4 leading-none text-gray-600 dark:text-gray-300">Discussion on UX sprint and Wireframe review</p>
-                                </div>
+                            {threeUpcomingTasks.map(task => (
+                            <div key={task.id} className="">
+                            <li className="text-sm font-light mb-1">{task.title} {task.deadline}</li>
                             </div>
-                        </div> */}
+                            ))}
+                        </div>
+                        
                     </div>
                 </div>
     );
