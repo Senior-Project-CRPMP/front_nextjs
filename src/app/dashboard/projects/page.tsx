@@ -8,6 +8,7 @@ interface Project {
   id: number;
   title: string;
   status: string;
+  description : string;
   // Add other properties as needed
 }
 
@@ -30,13 +31,15 @@ export default function Projects() {
         );
         const data = await res.json();
         setProjects(data);
+        console.log(data)
+        console.log(projects)
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchProjects();
-  }, [userId, apiBaseUrl]);
+  }, []);
 
   const handleCreateProject = () => {
     console.log("Project Name:", newProjectName);
@@ -46,9 +49,9 @@ export default function Projects() {
   };
 
   return (
-    <div className="bg-slate-50 from-violet-100 to-indigo-100 flex items-center justify-center h-screen">
-      <div className="w-11/12 sm:w-11/12 md:w-8/12 lg:w-6/12 backdrop-blur-sm bg-white/40 p-6  rounded-lg shadow-lg border-violet-200 border">
-        <div className="w-full flex justify-between items-center p-3">
+    <div className="bg-slate-50 from-violet-100 to-indigo-100 flex  h-screen">
+      <div className="w-11/12 sm:w-11/12 md:w-8/12 lg:w-full backdrop-blur-sm bg-white/40 p-8  rounded-lg shadow-lg border-violet-200 border">
+        <div className="w-full flex justify-between  p-4">
           <h2 className="text-xl font-semibold">My Project</h2>
           <button
             id="openModalBtn"
@@ -102,26 +105,13 @@ export default function Projects() {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-50 hover:border-violet-200 transition-colors duration-300"
+              className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-100 hover:border-blue-200 transition-colors duration-300"
+              onClick={()=>{localStorage.setItem('projectId', JSON.stringify(project.id)); router.push('/project_dashboard')}}
             >
               <h2 className="text-xl font-semibold mb-4">{project.title}</h2>
               <p className="text-gray-700">
-                Description of {project.title} goes here. You can provide more
-                details about the project.
+                {project.description}
               </p>
-              <div className="col-start-2 row-start-1 row-end-3 sm:mt-4 lg:mt-4 xl:mt-4">
-                {/* <dd className="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-1.5">
-                  {[48, 49, 50, 51, 52].map((size) => (
-                    <image
-                      key={size}
-                      src={`https://placekitten.com/${size}/${size}`}
-                      alt=""
-                      className="w-6 h-6 rounded-full bg-violet-100"
-                      loading="lazy"
-                    />
-                  ))}
-                </dd> */}
-              </div>
             </div>
           ))}
         </div>
