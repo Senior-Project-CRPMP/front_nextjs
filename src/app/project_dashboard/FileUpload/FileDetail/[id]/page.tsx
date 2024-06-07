@@ -1,6 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 interface FileUpload {
   id: number;
@@ -11,9 +13,11 @@ interface FileUpload {
   projectId: number;
 }
 
-const FileDetails = () => {
+const FileDetails: React.FC = () => {
   const params = useParams();
   const fileId = params.id;
+  
+  const router = useRouter();
 
   const [fileDetails, setFileDetails] = useState<FileUpload | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
@@ -26,7 +30,7 @@ const FileDetails = () => {
       try {
         const response = await fetch(`${apiBaseUrl}/api/FileUpload/${fileId}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch file details');
+          throw new Error("Failed to fetch file details");
         }
         const data: FileUpload = await response.json();
         setFileDetails(data);
@@ -37,9 +41,11 @@ const FileDetails = () => {
 
     const fetchFileContent = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/api/FileUpload/download/${fileId}`);
+        const response = await fetch(
+          `${apiBaseUrl}/api/FileUpload/download/${fileId}`
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch file content');
+          throw new Error("Failed to fetch file content");
         }
         const blob = await response.blob();
         const reader = new FileReader();
@@ -67,18 +73,20 @@ const FileDetails = () => {
   }
 
   const openFile = () => {
-    window.open(`${apiBaseUrl}/${fileDetails.filePath}`, '_blank');
+    window.open(`${apiBaseUrl}/${fileDetails.filePath}`, "_blank");
   };
 
   const downloadFile = async () => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/FileUpload/download/${fileId}`);
+      const response = await fetch(
+        `${apiBaseUrl}/api/FileUpload/download/${fileId}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to download file');
+        throw new Error("Failed to download file");
       }
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = fileDetails.fileName;
       document.body.appendChild(a);
@@ -90,14 +98,24 @@ const FileDetails = () => {
     }
   };
 
+  const deleteFile = () => {
+    router.push(`/project_dashboard/FileUpload/DeleteFile/${fileId}`);
+  };
+
   return (
-    <div>
-      <h1>File Details</h1>
-      <p><strong>Name:</strong> {fileDetails.name}</p>
-      <p><strong>Description:</strong> {fileDetails.description}</p>
-      <button onClick={openFile}>Open File</button>
-      <button onClick={downloadFile}>Download File</button>
-      
+    <div className="flex justify-center items-center h-screen">
+      <div className="bg-white p-8 rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-4">File Details</h1>
+        <p>
+          <strong>Name:</strong> {fileDetails.name}
+        </p>
+        <p>
+          Description: {fileDetails.description}
+        </p>
+        <button onClick={openFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Open File</button>
+        <button onClick={downloadFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Download File</button>
+        <button onClick={deleteFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Delete File</button>
+      </div>
     </div>
   );
 };
