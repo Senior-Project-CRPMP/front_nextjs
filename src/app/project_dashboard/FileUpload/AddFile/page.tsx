@@ -1,100 +1,100 @@
 "use client";
-import React, { useState } from "react";
+import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
-const FileUploadPage = () => {
-  const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState("");
-  const [description, setDescription] = useState("");
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+const AddFile = () => {
+  const router = useRouter();
+  const projectId = 1;
+
+  const [file, setFile] = useState<File | null>(null);
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-    setFileName(event.target.files[0].name);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
   };
 
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value);
-  };
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+    if (!file || !projectId) {
+      setError("Please select a file and ensure project ID is available.");
+      return;
+    }
 
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('fileName', fileName);
-    formData.append('description', description);
+    formData.append("File", file);
+    formData.append("Name", name);
+    formData.append("Description", description);
+    formData.append("ProjectId", projectId.toString());
 
     try {
       const response = await fetch(`${apiBaseUrl}/api/FileUpload/upload`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
 
-      if (response.ok) {
-        setShowSuccessMessage(true);
-      } else {
-        console.error('Failed to upload file');
+      if (!response.ok) {
+        throw new Error("Failed to upload file");
       }
-    } catch (error) {
-      console.error('Error uploading file:', error);
+
+      setSuccess("File uploaded successfully");
+      setError(null);
+      setName("");
+      setDescription("");
+      setFile(null);
+
+      router.push("/project_dashboard/FileUpload/FileList");
+    } catch (error: any) {
+      setError(error.message);
+      setSuccess(null);
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-4">File Upload</h1>
-        {showSuccessMessage && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md mb-4">
-            File uploaded successfully!
-          </div>
-        )}
+        <h1 className="text-2xl font-bold mb-4">Add File to Project {projectId}</h1>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="file" className="block font-medium text-gray-700 mb-2">
-              Select a file:
-            </label>
-            <input
-              type="file"
-              id="file"
-              onChange={handleFileChange}
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
-            />
-          </div>
-          <div>
-            <label htmlFor="fileName" className="block font-medium text-gray-700 mb-2">
-              File Name:
-            </label>
+            <label htmlFor="name" className="block font-medium text-gray-700 mb-2">Name:</label>
             <input
               type="text"
-              id="fileName"
-              value={fileName}
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              readOnly
             />
           </div>
           <div>
-            <label htmlFor="description" className="block font-medium text-gray-700 mb-2">
-              Description:
-            </label>
-            <textarea
+            <label htmlFor="description" className="block font-medium text-gray-700 mb-2">Description:</label>
+            <input
+              type="text"
               id="description"
               value={description}
-              onChange={handleDescriptionChange}
+              onChange={(e) => setDescription(e.target.value)}
+              required
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
             />
           </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
-          >
-            Upload
-          </button>
+          <div>
+            <label htmlFor="file" className="block font-medium text-gray-700 mb-2">File:</label>
+            <input type="file" id="file" onChange={handleFileChange} required className="border border-gray-300 rounded-md px-4 py-2 w-full"/>
+          </div>
+          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Upload File</button>
         </form>
       </div>
     </div>
   );
 };
 
-export default FileUploadPage;
+export default AddFile;
