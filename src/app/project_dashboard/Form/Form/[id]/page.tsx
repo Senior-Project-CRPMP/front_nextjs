@@ -35,24 +35,24 @@ const FormPage: React.FC = () => {
     useEffect(() => {
         const fetchForm = async () => {
             try {
-                // Fetch form details
+                
                 const formResponse = await fetch(`${apiBaseUrl}/api/Form/SingleForm/${formId}`);
                 if (!formResponse.ok) {
                     throw new Error('Failed to fetch form data');
                 }
                 const formData = await formResponse.json();
 
-                // Fetch form questions
+                
                 const questionsResponse = await fetch(`${apiBaseUrl}/api/FormQuestion/QuestionsByFormId/${formData.id}`);
                 if (!questionsResponse.ok) {
                     throw new Error('Failed to fetch form questions');
                 }
                 const questionsData = await questionsResponse.json();
 
-                // Fetch form options for each question
+                
                 const questionsWithOptions = await Promise.all(
                     questionsData.map(async (question: any) => {
-                        if (question.type === 'select' || question.type === 'checkbox') {
+                        if (question.type === 'select' || question.type === 'checkbox' || question.type === 'radio') {
                             const optionsResponse = await fetch(`${apiBaseUrl}/api/FormOption/OptionsByQuestionId/${question.id}`);
                             if (!optionsResponse.ok) {
                                 throw new Error('Failed to fetch form options');
@@ -64,7 +64,7 @@ const FormPage: React.FC = () => {
                     })
                 );
 
-                // Construct the complete form object
+                
                 const formWithFields = {
                     ...formData,
                     fields: questionsWithOptions,
@@ -88,6 +88,7 @@ const FormPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
+        
         const formResponse = {
             formId: form?.id,
             answers: form?.fields.map(field => ({
