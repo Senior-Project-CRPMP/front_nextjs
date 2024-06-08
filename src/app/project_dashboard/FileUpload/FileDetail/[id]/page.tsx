@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { FaFileAlt, FaDownload, FaTrashAlt } from 'react-icons/fa';
+import { FaDownload, FaTrash, FaFileAlt } from 'react-icons/fa';
 
 interface FileUpload {
   id: number;
@@ -23,7 +23,9 @@ const FileDetails: React.FC = () => {
   const [fileDetails, setFileDetails] = useState<FileUpload | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [showOpenModal, setShowOpenModal] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -104,13 +106,9 @@ const FileDetails: React.FC = () => {
     router.push(`/project_dashboard/FileUpload/DeleteFile/${fileId}`);
   };
 
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  };
-
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md relative">
+      <div className="bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">File Details</h1>
         <p>
           <strong>Name:</strong> {fileDetails.name}
@@ -118,92 +116,60 @@ const FileDetails: React.FC = () => {
         <p>
           Description: {fileDetails.description}
         </p>
-        <div className="absolute top-4 right-4 flex gap-2">
-        <button
-            onClick={() => setShowModal(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium p-3 rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            </button>
-          {showPopup && (
-            <div className="absolute top-8 right-0 bg-white p-4 shadow-md rounded-md z-10">
-              <button
-                  onClick={openFile}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md flex items-center space-x-2 mb-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  <span>Open File</span>
-                </button>
-                <button
-                  onClick={downloadFile}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md flex items-center space-x-2 mb-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                    />
-                  </svg>
-                  <span>Download File</span>
-                </button>
-                <button
-            onClick={deleteFile}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md flex items-center space-x-2"
->
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6"
-                        />
-                      </svg>
-                      <span>Delete File</span>
-                        </button>
-            </div>
-          )}
+        <div className="flex justify-end space-x-4">
+          <button onClick={() => setShowOpenModal(true)} className="text-blue-500 hover:text-blue-600 focus:outline-none">
+            <FaFileAlt className="w-6 h-6" />
+          </button>
+          <button onClick={() => setShowDownloadModal(true)} className="text-blue-500 hover:text-blue-600 focus:outline-none">
+            <FaDownload className="w-6 h-6" />
+          </button>
+          <button onClick={() => setShowDeleteModal(true)} className="text-red-500 hover:text-red-600 focus:outline-none">
+            <FaTrash className="w-6 h-6" />
+          </button>
         </div>
       </div>
+
+      {/* Open File Modal */}
+      {showOpenModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4">Open File</h2>
+            <p>Are you sure you want to open the file?</p>
+            <div className="flex justify-end space-x-4 mt-4">
+              <button onClick={openFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Open</button>
+              <button onClick={() => setShowOpenModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Download File Modal */}
+      {showDownloadModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4">Download File</h2>
+            <p>Are you sure you want to download the file?</p>
+            <div className="flex justify-end space-x-4 mt-4">
+              <button onClick={downloadFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Download</button>
+              <button onClick={() => setShowDownloadModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete File Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4">Delete File</h2>
+            <p>Are you sure you want to delete the file?</p>
+            <div className="flex justify-end space-x-4 mt-4">
+              <button onClick={deleteFile} className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md">Delete</button>
+              <button onClick={() => setShowDeleteModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
