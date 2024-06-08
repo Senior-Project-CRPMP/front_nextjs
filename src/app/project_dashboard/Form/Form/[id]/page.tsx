@@ -42,17 +42,13 @@ const FormPage: React.FC = () => {
   useEffect(() => {
     const fetchForm = async () => {
       try {
-        const formResponse = await fetch(
-          `${apiBaseUrl}/api/Form/SingleForm/${formId}`
-        );
+        const formResponse = await fetch(`${apiBaseUrl}/api/Form/SingleForm/${formId}`);
         if (!formResponse.ok) {
           throw new Error("Failed to fetch form data");
         }
         const formData = await formResponse.json();
 
-        const questionsResponse = await fetch(
-          `${apiBaseUrl}/api/FormQuestion/QuestionsByFormId/${formData.id}`
-        );
+        const questionsResponse = await fetch(`${apiBaseUrl}/api/FormQuestion/QuestionsByFormId/${formData.id}`);
         if (!questionsResponse.ok) {
           throw new Error("Failed to fetch form questions");
         }
@@ -60,14 +56,8 @@ const FormPage: React.FC = () => {
 
         const questionsWithOptions = await Promise.all(
           questionsData.map(async (question: any) => {
-            if (
-              question.type === "select" ||
-              question.type === "checkbox" ||
-              question.type === "radio"
-            ) {
-              const optionsResponse = await fetch(
-                `${apiBaseUrl}/api/FormOption/OptionsByQuestionId/${question.id}`
-              );
+            if (question.type === "select" || question.type === "checkbox" || question.type === "radio") {
+              const optionsResponse = await fetch(`${apiBaseUrl}/api/FormOption/OptionsByQuestionId/${question.id}`);
               if (!optionsResponse.ok) {
                 throw new Error("Failed to fetch form options");
               }
@@ -78,11 +68,7 @@ const FormPage: React.FC = () => {
           })
         );
 
-        const formWithFields = {
-          ...formData,
-          fields: questionsWithOptions,
-        };
-
+        const formWithFields = { ...formData, fields: questionsWithOptions };
         setForm(formWithFields);
       } catch (error) {
         console.error("Error fetching form:", error);
@@ -101,28 +87,58 @@ const FormPage: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const formResponse = {
-      formId: form?.id,
-      answers: form?.fields.map((field) => ({
-        formQuestionId: field.id,
-        response: formData[field.id],
-      })),
-    };
-
     try {
-      const response = await fetch(
-        `${apiBaseUrl}/api/FormResponse/SubmitForm`,
-        {
+      // Create the form response first
+      const response = await fetch(`${apiBaseUrl}/api/FormResponse/CreateFormResponse`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create form response");
+      }
+
+      const { formResponseId } = await response.json();
+
+      // Create form answers
+      for (const [fieldId, value] of Object.entries(formData)) {
+        const field = form?.fields.find((f) => f.id === fieldId);
+
+        if (!field) continue;
+
+        await fetch(`${apiBaseUrl}/api/FormAnswer/CreateFormAnswer`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formResponse),
-        }
-      );
+          body: JSON.stringify({
+            formResponseId,
+            formQuestionId: fieldId,
+            response: value,
+          }),
+        });
+      }
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
+      // Handle file uploads separately
+      for (const [fieldId, files] of Object.entries(formData)) {
+        const field = form?.fields.find((f) => f.id === fieldId);
+
+        if (field?.type === "file" && files) {
+          const formData = new FormData();
+          for (let i = 0; i < (files as FileList).length; i++) {
+            formData.append("files", (files as FileList)[i]);
+          }
+
+          formData.append("formResponseId", formResponseId.toString());
+
+          await fetch(`${apiBaseUrl}/api/FormFileStorage/CreateFormFileStorage`, {
+            method: "POST",
+            body: formData,
+          });
+        }
       }
 
       alert("Form submitted successfully!");
@@ -142,7 +158,7 @@ const FormPage: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md ">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4">{form.title}</h1>
         <p className="form-label text-gray-700 font-medium mb-2">{form.description}</p>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -167,15 +183,14 @@ const FormPage: React.FC = () => {
                     required={field.required}
                     maxLength={field.maxLength}
                     onChange={(e) => handleChange(field.id, e.target.value)}
-    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-
+                    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   ></textarea>
                 )}
                 {field.type === "select" && (
                   <select
                     required={field.required}
                     onChange={(e) => handleChange(field.id, e.target.value)}
-                     className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                    className="border border-gray-300 px-3 py-2 rounded-md w-full"
                   >
                     {field.options?.map((option, idx) => (
                       <option key={idx} value={option}>
@@ -191,13 +206,9 @@ const FormPage: React.FC = () => {
                         <input
                           type="checkbox"
                           onChange={(e) =>
-                            handleChange(
-                              field.id,
-                              e.target.checked ? option : null
-                            )
+                            handleChange(field.id, e.target.checked ? option : null)
                           }
                           className="mr-2 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
-
                         />
                         <label className="form-box">{option}</label>
                       </div>
