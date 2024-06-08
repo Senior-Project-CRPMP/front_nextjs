@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { useState } from "react";
 import Navigation from "./nav_button";
-import images from "../../assets/exportimages";
+import images from "../../../public/assets/exportimages";
 import Calendar from "./Calendar/page";
 import SideCalendar from "./Calendar/sideCalendar";
 import Timeline from "./timeline";
