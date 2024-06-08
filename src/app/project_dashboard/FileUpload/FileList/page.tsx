@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AddFile from '../AddFile/AddFile';
+import FileDetail from '../FileDetail/[id]/FileDetail';
 import { FaPlus } from 'react-icons/fa';
 
 type FileUpload = {
@@ -73,7 +74,21 @@ const ProjectFiles = () => {
       closeModal();
     }
   };
+  const [selectedFile, setSelectedFile] = useState<FileUpload | null>(null);
 
+  const openFiledetail = (file: FileUpload) => {
+    setSelectedFile(file);
+  };
+
+  const closeFileDetail = () => {
+    setSelectedFile(null);
+  };
+
+  const handleClickOutsideDetail = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      closeFileDetail();
+    }
+  };
   return (
     <div className="flex justify-center items-center h-screen" onClick={handleClickOutside}>
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -102,6 +117,19 @@ const ProjectFiles = () => {
             <button
               className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md"
               onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {selectedFile && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md" ref={modalRef}>
+            <FileDetail file={selectedFile} onClose={closeFileDetail} />
+            <button
+              className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mt-4"
+              onClick={closeFileDetail}
             >
               Close
             </button>
