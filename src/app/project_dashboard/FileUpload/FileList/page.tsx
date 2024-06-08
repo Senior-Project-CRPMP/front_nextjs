@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AddFile from '../AddFile/AddFile';
+import { FaPlus } from 'react-icons/fa';
 
 type FileUpload = {
   id: number;
@@ -55,10 +57,16 @@ const ProjectFiles = () => {
   const openFile = (id: number) => {
     router.push(`/project_dashboard/FileUpload/FileDetail/${id}`);
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md ">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4">Files for Project {projectId}</h1>
         <ul className="space-y-4">
           {files.map((file) => (
@@ -68,12 +76,28 @@ const ProjectFiles = () => {
             </li>
           ))}
         </ul>
-        <Link href="../FileUpload/AddFile">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Add File</button>
-        </Link>
-
-        
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
+          onClick={openModal}
+        >
+           <FaPlus className="inline-block mr-2" /> 
+          Add File
+        </button>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+            <AddFile />
+            <button
+              className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md"
+              onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
