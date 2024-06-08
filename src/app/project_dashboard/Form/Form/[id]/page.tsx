@@ -167,12 +167,15 @@ const FormPage: React.FC = () => {
                     required={field.required}
                     maxLength={field.maxLength}
                     onChange={(e) => handleChange(field.id, e.target.value)}
+    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+
                   ></textarea>
                 )}
                 {field.type === "select" && (
                   <select
                     required={field.required}
                     onChange={(e) => handleChange(field.id, e.target.value)}
+                     className="border border-gray-300 px-3 py-2 rounded-md w-full"
                   >
                     {field.options?.map((option, idx) => (
                       <option key={idx} value={option}>
@@ -193,7 +196,8 @@ const FormPage: React.FC = () => {
                               e.target.checked ? option : null
                             )
                           }
-                          className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="mr-2 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
+
                         />
                         <label className="form-box">{option}</label>
                       </div>
