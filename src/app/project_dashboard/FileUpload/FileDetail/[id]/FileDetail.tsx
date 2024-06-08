@@ -107,7 +107,7 @@ const FileDetails: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen w-full">
       <div className="bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">File Details</h1>
         <p>
@@ -143,6 +143,7 @@ const FileDetails: React.FC = () => {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Download File</h2>
+            <p>Are you sure you want to download this file?</p>
             <div className="flex justify-end space-x-4 mt-4">
               <button onClick={downloadFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Download</button>
               <button onClick={() => setShowDownloadModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md">Cancel</button>
