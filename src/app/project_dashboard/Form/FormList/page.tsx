@@ -44,10 +44,9 @@ const FormList: React.FC = () => {
           <h2 className="text-2xl font-bold mb-4">Forms</h2>
           <ul className="space-y-4">
             {forms.map((doc) => (
-              <li key={doc.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md">
-                <span>{doc.title}</span>
-                <button onClick={() => openForm(doc.id)}>Open</button>
-              </li>
+             <li key={doc.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md cursor-pointer hover:bg-gray-200" onClick={() => openForm(doc.id)}>
+             <span className="text-gray-800 hover:text-blue-500">{doc.title}</span>
+           </li>
             ))}
           </ul>
           <Link href="../Form/CreateForm">
