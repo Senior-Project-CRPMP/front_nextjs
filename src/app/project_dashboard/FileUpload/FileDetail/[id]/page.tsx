@@ -128,13 +128,10 @@ const FileDetails: React.FC = () => {
           </button>
         </div>
       </div>
-
-      {/* Open File Modal */}
       {showOpenModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Open File</h2>
-            <p>Are you sure you want to open the file?</p>
             <div className="flex justify-end space-x-4 mt-4">
               <button onClick={openFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Open</button>
               <button onClick={() => setShowOpenModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md">Cancel</button>
@@ -142,13 +139,10 @@ const FileDetails: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Download File Modal */}
-      {showDownloadModal && (
+ {showDownloadModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Download File</h2>
-            <p>Are you sure you want to download the file?</p>
             <div className="flex justify-end space-x-4 mt-4">
               <button onClick={downloadFile} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Download</button>
               <button onClick={() => setShowDownloadModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md">Cancel</button>
@@ -156,8 +150,6 @@ const FileDetails: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Delete File Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-md">
