@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import images from "../../../public/assets/exportimages";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 type User = {
   id: string;
@@ -89,8 +90,8 @@ const ProfileDropdown: React.FC = () => {
             >
               <ul className="space-y-3 text-black">
                 <li className="font-medium">
-                  <a
-                    href="#"
+                  <Link
+                    href="/dashboard/Test"
                     className="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-indigo-700"
                   >
                     <div className="mr-3">
@@ -110,7 +111,7 @@ const ProfileDropdown: React.FC = () => {
                       </svg>
                     </div>
                     Account
-                  </a>
+                  </Link>
                 </li>
                 <li className="font-medium">
                   <a

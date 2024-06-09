@@ -1,4 +1,4 @@
-import ViewProfile from "../component/viewProfile";
+import ViewProfile from "../../component/viewProfile";
 
 function Test(){
     return(
