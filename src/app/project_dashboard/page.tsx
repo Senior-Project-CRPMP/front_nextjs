@@ -9,6 +9,8 @@ import Timeline from "./timeline";
 import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
+import TaskLister from "@/app/component/taskLister";
+
 
 type Project = {
   id: number;
@@ -298,7 +300,7 @@ const ProjectPage: React.FC = () => {
             </div>
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2 mx-2">
-                <div className="w-72 grow bg-white rounded-md shadow-2xl p-10">
+                <div className="w-92 grow bg-white rounded-md shadow-2xl p-10">
                   <PageContent currentPage={currentPage} />
                   {isMemberListOpen && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -384,6 +386,7 @@ const ProjectPage: React.FC = () => {
                 </div>
                 <div className="w-72 bg-white rounded-md shadow-2xl">
                   {currentPage === "calendar" && <SideCalendar />}
+                  {currentPage === "overview" && <TaskLister />}
                 </div>
               </div>
             </div>
