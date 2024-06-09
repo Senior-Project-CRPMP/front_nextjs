@@ -7,6 +7,7 @@ type FormFieldType =
   | "long-text"
   | "select"
   | "checkbox"
+  | "radio"      
   | "file"
   | "date"
   | "time";
@@ -84,7 +85,7 @@ const FormPage: React.FC = () => {
     setFormData((prevState) => ({ ...prevState, [fieldId]: value }));
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -109,16 +110,22 @@ const FormPage: React.FC = () => {
 
         if (!field) continue;
 
+        const answerPayload: any = {
+          formResponseId,
+          formQuestionId: fieldId,
+          response: value || null,
+        };
+
+        if (field.type === "select" || field.type === "checkbox" || field.type === "radio") {
+          answerPayload.formOptionId = /* Your logic to determine the FormOptionId */ null; // Update this logic
+        }
+
         await fetch(`${apiBaseUrl}/api/FormAnswer/CreateFormAnswer`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            formResponseId,
-            formQuestionId: fieldId,
-            response: value,
-          }),
+          body: JSON.stringify(answerPayload),
         });
       }
 
@@ -205,6 +212,23 @@ const FormPage: React.FC = () => {
                       <div key={idx}>
                         <input
                           type="checkbox"
+                          onChange={(e) =>
+                            handleChange(field.id, e.target.checked ? option : null)
+                          }
+                          className="mr-2 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
+                        />
+                        <label className="form-box">{option}</label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {field.type === "radio" && (
+                  <div>
+                    {field.options?.map((option, idx) => (
+                      <div key={idx}>
+                        <input
+                          type="radio"
+                          name={field.id}
                           onChange={(e) =>
                             handleChange(field.id, e.target.checked ? option : null)
                           }
