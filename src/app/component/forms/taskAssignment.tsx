@@ -1,18 +1,18 @@
 'use client'
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const Task = () => {
   const router = useRouter();
   const projectIdStr = localStorage.getItem('projectId');
-  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+  const projectId = projectIdStr ? parseInt(projectIdStr, 10) : null;
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     projectId: projectId,
     title: "",
     description: "",
-    assignedTo: "",
+    assignedTo: "c2ac2e34-c67a-4c19-a6a1-87d3e1ff94a0",
     deadline: "",
     status: ""
   });
@@ -57,6 +57,8 @@ const Task = () => {
   };
 
   
+
+  
   return (
     <div className="container mx-auto">
       <div className="flex justify-center">
@@ -71,7 +73,7 @@ const Task = () => {
               name="title"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
               placeholder="Enter task"
-              onChange={(e)=> handleChange}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -83,7 +85,7 @@ const Task = () => {
               name="description"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
               placeholder="Enter task"
-              onChange={(e)=> handleChange}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -93,7 +95,7 @@ const Task = () => {
             <select
               name="status"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              onChange={(e)=> handleChange}
+              onChange={(e)=>handleChange}
             >
               <option value="TODO">TODO</option>
               <option value="inProgress">In progress</option>
@@ -120,6 +122,7 @@ const Task = () => {
               name="assignedTo"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
               placeholder="Enter assignee"
+              value = "e37bbd13-1de8-4f5c-aaa6-ea4832b647c4"
               onChange={handleChange}
             />
           </div>

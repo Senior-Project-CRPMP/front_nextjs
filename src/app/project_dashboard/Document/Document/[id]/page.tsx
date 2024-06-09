@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import { useRouter, usePathname, useParams } from 'next/navigation'
+import { useRouter, usePathname, useParams } from 'next/navigation';
 
 const TOOLBAR_OPTIONS = [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -39,8 +39,6 @@ const Document: React.FC = () => {
                 console.error('Failed to fetch document', error);
             }
         };
-
-            console.log("here it is", id)
 
         if (editor && id) {
             fetchDocument();
@@ -84,12 +82,75 @@ const Document: React.FC = () => {
 
     return (
         <div>
+            <style>
+                {`
+                *,
+                *::before,
+                *::after {
+                    box-sizing: border-box;
+                }
+
+                body {
+                    background-color: #F3F3F3;
+                    margin: 0;
+                }
+
+                .container .ql-editor {
+                    width: 8.5in;
+                    min-height: 11in;
+                    padding: 1in;
+                    margin: 1rem;
+                    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+                    background-color: white;
+                }
+
+                .container .ql-container.ql-snow {
+                    border: none;
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .container .ql-toolbar.ql-snow {
+                    display: flex;
+                    justify-content: center;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1;
+                    background-color: #F3F3F3;
+                    border: none;
+                    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+                }
+
+                @page {
+                    margin: 1in;
+                }
+
+                @media print {
+                    body {
+                        background: none;
+                    }
+
+                    .container .ql-editor {
+                        width: 6.5in;
+                        height: 9in;
+                        padding: 0;
+                        margin: 0;
+                        box-shadow: none;
+                        align-self: flex-start;
+                    }
+
+                    .container .ql-toolbar.ql-snow {
+                        display: none;
+                    }
+                }
+                `}
+            </style>
             <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Document Title"
             />
-            <button onClick={handleSave}>Save</button>
+            <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Save</button>
             <div className="container" ref={wrapperRef}></div>
         </div>
     );

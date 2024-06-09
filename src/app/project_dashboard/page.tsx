@@ -22,11 +22,16 @@ type Project = {
 };
 
 type Member = {
-  name: string;
-  role: string;
-  email: string;
-  avatar: string | StaticImageData;
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
 };
+
+type Role = {
+  userid : string;
+  role: string;
+}
 
 const ProjectPage: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
@@ -35,32 +40,16 @@ const ProjectPage: React.FC = () => {
   const [isMemberListOpen, setIsMemberListOpen] = useState(false);
   const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [roles, setRoles]= useState<Role[]>([]);
+  const [allUsers, setAllUsers] = useState<Member[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<{ [userId: string]: string }>({});
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const projectIdStr =
     typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
   const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
-  const members: Member[] = [
-    {
-      name: "Member One",
-      role: "Role One",
-      email: "member1@example.com",
-      avatar: images.avatar1,
-    },
-    {
-      name: "Member Two",
-      role: "Role Two",
-      email: "member2@example.com",
-      avatar: images.avatar2,
-    },
-    {
-      name: "Member Three",
-      role: "Role Three",
-      email: "member3@example.com",
-      avatar: images.avatar3,
-    },
-  ];
+  const [members, setMembers]= useState<Member[]>([])
 
   const handleToggleMemberList = () => {
     setIsMemberListOpen(!isMemberListOpen);
@@ -74,11 +63,25 @@ const ProjectPage: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredMembers = members.filter(
-    (member) =>
-      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = allUsers.filter(
+    (user) =>
+      (user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      user.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       user.userName?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch(
+        `${apiBaseUrl}/api/Account/users`
+      );
+      const data = await res.json();
+      setAllUsers(data);
+      console.log(data);
+      console.log(allUsers);
+    };
+    fetchUsers().catch((error) => console.error(error));
+  }, [projectId]);
 
   useEffect(() => {
     const fetchCard = async () => {
@@ -93,6 +96,41 @@ const ProjectPage: React.FC = () => {
     fetchCard().catch((error) => console.error(error));
   }, [projectId]);
 
+
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      const res = await fetch(
+        `${apiBaseUrl}/api/UserProject/usersByProjectId/${projectId}`
+      );
+      const data = await res.json();
+      setMembers(data);
+      console.log(data);
+      console.log(members);
+    };
+    fetchMember().catch((error) => console.error(error));
+  }, [projectId]);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      const res = await fetch(
+        `${apiBaseUrl}/api/UserProject/userProjectsByProjectId/${projectId}`
+      );
+      const data = await res.json();
+      setRoles(data);
+      console.log("Roles:", data);
+      console.log(roles);
+    };
+    fetchRole().catch((error) => console.error(error));
+  }, []);
+
+  const getRoleByMember = (member: Member): Role | null => {
+    const role = roles.find((r) => r.userid === member.id);
+    return role || null;
+  };
+
+  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const currentDate = new Date().toLocaleDateString("en-US", {
@@ -103,6 +141,46 @@ const ProjectPage: React.FC = () => {
       setLastUpdated(currentDate);
     }
   }, []);
+
+  const handleRoleChange = (userId: string, role: string) => {
+    setSelectedRoles((prevState) => ({
+      ...prevState,
+      [userId]: role,
+    }));
+  };
+
+  const handleAddClick = async (user: Member) => {
+    // Check if a role is selected
+    if (!selectedRoles) {
+      alert("Please select a role");
+      return;
+    }
+
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/UserProject`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          projectId: projectId,
+          role: selectedRoles[user.id],
+        }),
+      });
+
+
+      if (response.ok) {
+      } else {
+        // Handle error, maybe show an error message or handle it in another way
+        console.error("Failed to add user to project");
+      }
+    } catch (error) {
+      console.error("Error adding user to project:", error);
+    }
+  };
+
 
   const PageContent = ({ currentPage }: { currentPage: string }) => {
     return (
@@ -236,20 +314,11 @@ const ProjectPage: React.FC = () => {
                         </div>
                         <ul>
                           {members.map((member, index) => (
-                            <li key={index} className="flex items-center mb-2">
-                              <div className="w-10 h-10 mr-3">
-                                <Image
-                                  src={member.avatar}
-                                  alt={member.name}
-                                  className="rounded-full"
-                                  width={40}
-                                  height={40}
-                                />
-                              </div>
+                            <li key={member.id} className="flex items-center mb-2">
                               <div>
-                                <p className="font-bold">{member.name}</p>
+                                <p className="font-bold">{member.firstName} {member.lastName}</p>
                                 <p className="text-sm text-gray-600">
-                                  {member.role}
+                                {getRoleByMember(member)?.role || "Role not found"}
                                 </p>
                               </div>
                             </li>
@@ -280,25 +349,31 @@ const ProjectPage: React.FC = () => {
                           onChange={handleSearchChange}
                         />
                         <ul>
-                          {filteredMembers.map((member, index) => (
-                            <li key={index} className="flex items-center mb-2">
-                              <div className="w-10 h-10 mr-3">
-                                <Image
-                                  src={member.avatar}
-                                  alt={member.name}
-                                  className="rounded-full"
-                                  width={40}
-                                  height={40}
-                                />
-                              </div>
+                        {filteredUsers.map((user) => (
+                            <li key={user.id} className="flex items-center mb-2">
                               <div>
-                                <p className="font-bold">{member.name}</p>
-                                <p className="text-sm text-gray-600">
-                                  {member.role}
+                                <p className="font-bold">
+                                  {user.firstName} {user.lastName}
                                 </p>
                                 <p className="text-sm text-gray-600">
-                                  {member.email}
+                                  {user.userName}
                                 </p>
+                              </div>
+                              <div className="flex items-center ml-auto">
+                                <select
+                                  className="mr-2"
+                                  value={selectedRoles[user.id] || ""}
+                                  onChange={(e) =>
+                                    handleRoleChange(user.id, e.target.value)
+                                  }
+                                >
+                                  <option value="">Select Role</option>
+                                  <option value="supervisor">Supervisor</option>
+                                  <option value="researcher">Researcher</option>
+                                </select>
+                                <button onClick={() => handleAddClick(user)}>
+                                  Add
+                                </button>
                               </div>
                             </li>
                           ))}

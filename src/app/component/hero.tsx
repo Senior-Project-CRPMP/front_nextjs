@@ -4,8 +4,6 @@ import Link from "next/link";
 import images from "../../../public/assets/exportimages";
 import HeroImage from '../../../public/assets/HeroImage.jpg';
 
-// pages/index.js
-
 import React, { useState, useEffect } from 'react';
 
 export default function Hero() {
@@ -104,9 +102,28 @@ export default function Hero() {
         <circle cx="300" cy="150" r="20" fill="green" />
         <circle cx="500" cy="150" r="100" fill="grey" />
       </svg>
+      <svg
+        className="absolute bottom-0 left-0 w-full h-30"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1440 320"
+      >
+        <path
+          fill="#ffffff"
+          fillOpacity="1"
+          d="M0,288L48,266.7C96,245,192,203,288,181.3C384,160,480,160,576,181.3C672,203,768,245,864,250.7C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+        ></path>
+      </svg>
+      <svg className="absolute bottom-0 right-0 w-full h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <circle cx="10" cy="50" r="51" fill="red" />
+        <circle cx="150" cy="50" r="30" fill="blue" />
+        <circle cx="300" cy="150" r="20" fill="green" />
+        <circle cx="500" cy="150" r="100" fill="grey" />
+      </svg>
     </section>
 
       </div>
+   
+
    
   );
 }
