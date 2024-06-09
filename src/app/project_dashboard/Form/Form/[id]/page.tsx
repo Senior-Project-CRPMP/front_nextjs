@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { create } from "domain";
 
 type FormFieldType =
   | "short-text"
   | "long-text"
   | "select"
-  | "checkbox"
-  | "radio"      
+  | "radio"
   | "file"
   | "date"
   | "time";
@@ -17,7 +17,7 @@ type FormField = {
   label: string;
   type: FormFieldType;
   required: boolean;
-  options?: string[];
+  options?: { id: string; label: string }[];
   includeComment?: boolean;
   comment?: string;
   maxLength?: number;
@@ -32,12 +32,12 @@ type Form = {
   fields: FormField[];
 };
 
-const FormPage: React.FC = () => {
+const SubmitForm: React.FC = () => {
   const params = useParams();
   const formId = params.id;
   const [form, setForm] = useState<Form | null>(null);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [responses, setResponses] = useState<{ [key: string]: any }>({});
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
@@ -57,19 +57,26 @@ const FormPage: React.FC = () => {
 
         const questionsWithOptions = await Promise.all(
           questionsData.map(async (question: any) => {
-            if (question.type === "select" || question.type === "checkbox" || question.type === "radio") {
+            if (question.type === "select" || question.type === "radio") {
               const optionsResponse = await fetch(`${apiBaseUrl}/api/FormOption/OptionsByQuestionId/${question.id}`);
               if (!optionsResponse.ok) {
                 throw new Error("Failed to fetch form options");
               }
               const optionsData = await optionsResponse.json();
-              question.options = optionsData.map((option: any) => option.label);
+              question.options = optionsData.map((option: any) => ({
+                id: option.id,
+                label: option.label,
+              }));
             }
             return question;
           })
         );
 
-        const formWithFields = { ...formData, fields: questionsWithOptions };
+        const formWithFields = {
+          ...formData,
+          fields: questionsWithOptions,
+        };
+
         setForm(formWithFields);
       } catch (error) {
         console.error("Error fetching form:", error);
@@ -82,14 +89,16 @@ const FormPage: React.FC = () => {
   }, [formId]);
 
   const handleChange = (fieldId: string, value: any) => {
-    setFormData((prevState) => ({ ...prevState, [fieldId]: value }));
+    setResponses({ ...responses, [fieldId]: value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!form) {
+      return;
+    }
 
     try {
-      // Create the form response first
       const response = await fetch(`${apiBaseUrl}/api/FormResponse/CreateFormResponse`, {
         method: "POST",
         headers: {
@@ -104,51 +113,61 @@ const FormPage: React.FC = () => {
 
       const { formResponseId } = await response.json();
 
-      // Create form answers
-      for (const [fieldId, value] of Object.entries(formData)) {
-        const field = form?.fields.find((f) => f.id === fieldId);
+      console.log("createFormResponse: ", formResponseId);
 
-        if (!field) continue;
+      const formAnswers = await Promise.all(
+        form.fields.map(async (field) => {
+          const responseValue = responses[field.id];
+          const formAnswer = {
+            formResponseId,
+            formQuestionId: field.id,
+            formOptionId: null,
+            response: null,
+          };
 
-        const answerPayload: any = {
-          formResponseId,
-          formQuestionId: fieldId,
-          response: value || null,
-        };
-
-        if (field.type === "select" || field.type === "checkbox" || field.type === "radio") {
-          answerPayload.formOptionId = /* Your logic to determine the FormOptionId */ null; // Update this logic
-        }
-
-        await fetch(`${apiBaseUrl}/api/FormAnswer/CreateFormAnswer`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(answerPayload),
-        });
-      }
-
-      // Handle file uploads separately
-      for (const [fieldId, files] of Object.entries(formData)) {
-        const field = form?.fields.find((f) => f.id === fieldId);
-
-        if (field?.type === "file" && files) {
-          const formData = new FormData();
-          for (let i = 0; i < (files as FileList).length; i++) {
-            formData.append("files", (files as FileList)[i]);
+          if (field.type === "radio" || field.type === "select") {
+            formAnswer.formOptionId = responseValue;
+          } else {
+            formAnswer.response = responseValue;
           }
 
-          formData.append("formResponseId", formResponseId.toString());
+          if (field.type === "file" && responseValue) {
+            const formData = new FormData();
+            formData.append("formResponseId", formResponseId.toString());
+            formData.append("formQuestionId", field.id);
+            formData.append("file", responseValue);
 
-          await fetch(`${apiBaseUrl}/api/FormFileStorage/CreateFormFileStorage`, {
+            const fileUploadResponse = await fetch(`${apiBaseUrl}/api/FormAnswer/UploadFileAnswer`, {
+              method: "POST",
+              body: formData,
+            });
+
+            if (!fileUploadResponse.ok) {
+              const errorText = await fileUploadResponse.text();
+              console.error("Failed to upload file answer:", errorText);
+              throw new Error("Failed to upload file answer");
+            }
+
+            return;
+          }
+
+          const createFormAnswer = await fetch(`${apiBaseUrl}/api/FormAnswer/CreateFormAnswer`, {
             method: "POST",
-            body: formData,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formAnswer),
           });
-        }
-      }
 
-      alert("Form submitted successfully!");
+          if (!createFormAnswer.ok) {
+            const errorText = await createFormAnswer.text();
+            console.error("Failed to create form answer:", errorText);
+            throw new Error("Failed to create form answer");
+          }
+        })
+      );
+
+      alert("Form submitted successfully");
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("Failed to submit form");
@@ -164,119 +183,101 @@ const FormPage: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex justify-center items-center">
+      <form className="bg-white p-8 rounded-lg shadow-md w-full md:w-3/4 lg:w-2/3" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold mb-4">{form.title}</h1>
         <p className="form-label text-gray-700 font-medium mb-2">{form.description}</p>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {form.fields.map((field, index) => (
-            <div key={index} className="form-field">
-              <label className="form-box">
-                <strong>{field.label}</strong>
-                {field.required && <span style={{ color: "red" }}>*</span>}
-              </label>
-              <div>
-                {field.type === "short-text" && (
-                  <input
-                    type="text"
-                    required={field.required}
-                    maxLength={field.maxLength}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                )}
-                {field.type === "long-text" && (
-                  <textarea
-                    required={field.required}
-                    maxLength={field.maxLength}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                  ></textarea>
-                )}
-                {field.type === "select" && (
-                  <select
-                    required={field.required}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    className="border border-gray-300 px-3 py-2 rounded-md w-full"
-                  >
-                    {field.options?.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                {field.type === "checkbox" && (
-                  <div>
-                    {field.options?.map((option, idx) => (
-                      <div key={idx}>
-                        <input
-                          type="checkbox"
-                          onChange={(e) =>
-                            handleChange(field.id, e.target.checked ? option : null)
-                          }
-                          className="mr-2 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <label className="form-box">{option}</label>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {field.type === "radio" && (
-                  <div>
-                    {field.options?.map((option, idx) => (
-                      <div key={idx}>
-                        <input
-                          type="radio"
-                          name={field.id}
-                          onChange={(e) =>
-                            handleChange(field.id, e.target.checked ? option : null)
-                          }
-                          className="mr-2 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <label className="form-box">{option}</label>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {field.type === "file" && (
-                  <input
-                    type="file"
-                    required={field.required}
-                    onChange={(e) => handleChange(field.id, e.target.files)}
-                    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                )}
-                {field.type === "date" && (
-                  <input
-                    type="date"
-                    required={field.required}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                )}
-                {field.type === "time" && (
-                  <input
-                    type="time"
-                    required={field.required}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                )}
-              </div>
-              {field.includeComment && <p>{field.comment}</p>}
+        {form.fields.map((field, index) => (
+          <div key={index} className="form-field space-y-4">
+            <label className="form-box">
+              <strong>{field.label}</strong>
+              {field.required && <span style={{ color: "red" }}>*</span>}
+            </label>
+            <div>
+              {field.type === "short-text" && (
+                <input
+                  type="text"
+                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                  required={field.required}
+                  onChange={(e) => handleChange(field.id, e.target.value)}
+                />
+              )}
+              {field.type === "long-text" && (
+                <textarea
+                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                  required={field.required}
+                  onChange={(e) => handleChange(field.id, e.target.value)}
+                ></textarea>
+              )}
+              {field.type === "select" && (
+                <select
+                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                  required={field.required}
+                  onChange={(e) => handleChange(field.id, e.target.value)}
+                >
+                  {field.options?.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {field.type === "radio" && (
+                <div>
+                  {field.options?.map((option) => (
+                    <div key={option.id}>
+                      <input
+                        type="radio"
+                        name={field.id}
+                        value={option.id}
+                        required={field.required}
+                        onChange={(e) => handleChange(field.id, e.target.value)}
+                        className="mr-2"
+                      />
+                      <label>{option.label}</label>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {field.type === "file" && (
+                <input
+                  type="file"
+                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                  required={field.required}
+                  onChange={(e) => handleChange(field.id, e.target.files?.[0])}
+                />
+              )}
+              {field.type === "date" && (
+                <input
+                  type="date"
+                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                  required={field.required}
+                  onChange={(e) => handleChange(field.id, e.target.value)}
+                />
+              )}
+              {field.type === "time" && (
+                <input
+                  type="time"
+                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                  required={field.required}
+                  onChange={(e) => handleChange(field.id, e.target.value)}
+                />
+              )}
             </div>
-          ))}
+            {field.includeComment && <p>{field.comment}</p>}
+          </div>
+        ))}
+        <div className="flex justify-center mt-4">
           <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
           >
             Submit
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
 
-export default FormPage;
+export default SubmitForm;
