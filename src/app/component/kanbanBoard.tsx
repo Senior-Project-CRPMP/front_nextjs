@@ -75,8 +75,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       <Column title="Backlog" column="backlog" headingColor="text-neutral-900" cards={cards} setCards={setCards} />
       <Column title="TODO" column="todo" headingColor="text-yellow-500" cards={cards} setCards={setCards} />
       <Column title="In progress" column="inprogress" headingColor="text-blue-500" cards={cards} setCards={setCards} />
-      <Column title="Complete" column="done" headingColor="text-emerald-500" cards={cards} setCards={setCards} />
-      <BurnBarrel setCards={setCards} />
+      <Column title="Complete" column="done" headingColor="text-emerald-500" cards={cards} setCards={setCards} />/
     </div>
   );
 };
@@ -255,7 +254,6 @@ const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) =
           return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
         })}
         <DropIndicator beforeId={null} column={column} />
-        <AddCard column={column} setCards={setCards} />
       </div>
     </div>
   );
@@ -343,62 +341,3 @@ type AddCardProps = {
   setCards: React.Dispatch<React.SetStateAction<Card[]>>;
 };
 
-const AddCard = ({ column, setCards }: AddCardProps) => {
-  const [text, setText] = useState("");
-  const [adding, setAdding] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!text.trim().length) return;
-
-    const newCard: Card = {
-      column,
-      title: text.trim(),
-      id: Math.random().toString(),
-    };
-
-    setCards((pv) => [...pv, newCard]);
-
-    setAdding(false);
-  };
-
-  return (
-    <>
-      {adding ? (
-        <motion.form layout onSubmit={handleSubmit}>
-          <textarea
-            onChange={(e) => setText(e.target.value)}
-            autoFocus
-            placeholder="Add new task..."
-            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
-          />
-          <div className="mt-1.5 flex items-center justify-end gap-1.5">
-            <button
-              onClick={() => setAdding(false)}
-              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
-            >
-              Close
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
-            >
-              <span>Add</span>
-              <FiPlus />
-            </button>
-          </div>
-        </motion.form>
-      ) : (
-        <motion.button
-          layout
-          onClick={() => setAdding(true)}
-          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
-        >
-          <span>Add card</span>
-          <FiPlus />
-        </motion.button>
-      )}
-    </>
-  );
-};
