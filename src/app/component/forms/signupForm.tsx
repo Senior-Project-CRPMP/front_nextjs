@@ -36,15 +36,6 @@ export default function SignupForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError('');
-    setSuccess(false);
-
-    // Validate form fields
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
     const response = await fetch(`${apiBaseUrl}/api/Account/register`, {
       method: 'POST',
       headers: {
@@ -59,9 +50,10 @@ export default function SignupForm() {
       }),
     });
 
+    console.log("")
+
     if (response.ok) {
       // Handle successful registration
-      setSuccess(true);
       console.log('Registration successful');
       router.push('/login');
     } else {
@@ -81,18 +73,114 @@ export default function SignupForm() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        {error && (
+      {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
             {error}
           </div>
         )}
         {success && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
-            Registration successful!
+            Registration successful! Please check your email to verify your account.
           </div>
         )}
         <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
+              First Name
+            </label>
+            <div className="mt-2">
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                required
+                value={firstName}
+                onChange={handleFirstNameChange}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-3"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
+              Last Name
+            </label>
+            <div className="mt-2">
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                required
+                value={lastName}
+                onChange={handleLastNameChange}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={handleEmailChange}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+              Password
+            </label>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={password}
+                onChange={handlePasswordChange}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
           
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+              Confirm Password
+            </label>
+            <div className="mt-2">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              onClick={()=>handleSubmit}
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign up
+            </button>
+          </div>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
