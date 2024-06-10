@@ -1,8 +1,36 @@
-import React from "react";
+'use client'
+import React, { useState, useEffect, useRef } from 'react';
 import Image from "next/image";
 import images from "../../../public/assets/exportimages";
-
+import Content from './content';
+import Feature from './feature';
+import Hero from './hero';
 const Footer = () => {
+  const featureRef = useRef(null);
+  const aboutUsRef = useRef(null);
+  const homeRef = useRef(null);
+  const [showContent, setShowContent] = useState(false);
+  const [showFeature, setShowFeature] = useState(false);
+  const [showHome, setShowHome] = useState(false);
+    const handleNavigateToFeature = () => {
+    const featureSection = document.getElementById('features');
+    if (featureSection) {
+      featureSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+  };
+  const handleNavigateToAboutUs = () => {
+    const aboutUsSection = document.getElementById('about-us');
+    if (aboutUsSection) {
+      aboutUsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  const handleNavigateToHome = () => {
+    const aboutUsSection = document.getElementById('home');
+    if (aboutUsSection) {
+      aboutUsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <footer className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
@@ -25,78 +53,41 @@ const Footer = () => {
         <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
           <div className="lg:w-1/4 md:w-1/2 w-full px-4">
             <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
+              Links
             </h2>
             <nav className="list-none mb-10">
               <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
+                <a href='#' onClick = {handleNavigateToHome} className="text-gray-600 hover:text-gray-800">Home</a>
               </li>
               <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
+                <a href='#' className="text-gray-600 hover:text-gray-800" onClick={handleNavigateToAboutUs}>About Us</a>
               </li>
               <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
+                <a href = "#" className="text-gray-600 hover:text-gray-800" onClick={handleNavigateToFeature}>Features</a>
               </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
+              {showContent && <Content />}
+              {showFeature && <Feature />}
+              {showHome && <Hero />}
+              
             </nav>
           </div>
           <div className="lg:w-1/4 md:w-1/2 w-full px-4">
             <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
+              Contact Us
             </h2>
             <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
-            </nav>
-          </div>
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
-            </h2>
-            <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
-            </nav>
-          </div>
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
-            </h2>
-            <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
+            <ul className="space-y-2">
+            <li>
+              <p className="text-gray-600">Phone: +2519-20578620</p>
+            </li>
+            <li className="flex items-center">
+              <p className="text-gray-600 mr-2">Email:</p>
+              <p className="text-gray-600">support@crpmp.com</p>
+            </li>
+            <li>
+              <p className="text-gray-600">Address: AASTU, Addis Ababa Ethiopia</p>
+            </li>
+          </ul>
             </nav>
           </div>
         </div>

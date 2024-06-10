@@ -76,5 +76,4 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
     </div>
   );
 };
-
 export default MemberList;

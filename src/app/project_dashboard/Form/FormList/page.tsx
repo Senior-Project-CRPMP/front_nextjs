@@ -12,12 +12,13 @@ const FormList: React.FC = () => {
   const [forms, setForms] = useState<Form[]>([]);
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const projectId = 2;
 
   const router = useRouter();
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/Form/EveryForm`);
+      const response = await fetch(`${apiBaseUrl}/api/Form/ProjectForms/${projectId}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch data");

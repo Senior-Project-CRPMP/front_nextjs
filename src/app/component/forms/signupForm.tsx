@@ -10,6 +10,8 @@ export default function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +33,16 @@ export default function SignupForm() {
   const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(event.target.value);
   };
-
+  const [formData, setFormData] = useState({
+    firstName,
+    lastName,
+    email,
+    password,
+  });
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch(`${apiBaseUrl}/api/Account/register`, {
@@ -51,14 +62,32 @@ export default function SignupForm() {
     console.log("")
 
     if (response.ok) {
-      // Handle successful registration
+      setSuccess(true);
       console.log('Registration successful');
-      router.push('/login');
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000);
     } else {
-      // Handle registration errors
+      let errorMessage = 'Registration failed. Please try again.';
       const data = await response.json();
+      if (data.message.includes('email already exists')) {
+        errorMessage = 'Email already registered. Please use a different email.';
+      } else if (data.message.includes('password too weak')) {
+        errorMessage = 'Password is too weak. It must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number and special character.';
+      } else if (data.message.includes('firstName required')) {
+        errorMessage = 'Please enter your first name.';
+      } else if (data.message.includes('lastName required')) {
+        errorMessage = 'Please enter your last name.';
+      } else if (data.message.includes('email required')) {
+        errorMessage = 'Please enter a valid email address.';
+      } else if (data.message.includes('password required')) {
+        errorMessage = 'Please enter a password.';
+      }
+
+      setError(errorMessage);
       console.error('Registration failed:', data);
     }
+  
   };
 
   return (
@@ -70,6 +99,16 @@ export default function SignupForm() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+            Registration successful!
+          </div>
+        )}
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">

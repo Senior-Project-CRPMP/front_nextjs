@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 const AddFile = () => {
   const router = useRouter();
-  const projectId = 1;
+  const projectId = 2;
 
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
@@ -58,7 +58,7 @@ const AddFile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">Add File to Project {projectId}</h1>
         {error && <p style={{ color: "red" }}>{error}</p>}

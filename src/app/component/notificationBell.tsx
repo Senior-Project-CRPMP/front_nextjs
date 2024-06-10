@@ -12,11 +12,12 @@ interface NotificationBellProps {
 const NotificationBell: React.FC<NotificationBellProps> = ({ unreadCount, className }) => {
   const [notificationCount, setNotificationCount] = useState(0)
   const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
   async function setNotificationToRead() {
     try {
-        const res = await fetch(`https://localhost:7174/api/Notification/user/${userId}/mark-as-read`, {
+        const res = await fetch(`${apiBaseUrl}/api/Notification/user/${userId}/mark-as-read`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

@@ -1,13 +1,16 @@
-import React from "react";
-
-const Content = () => {
+'use client'
+import React, { forwardRef, useRef} from 'react';
+const Content = forwardRef((props, ref)=> {
+ const divRef = useRef<HTMLDivElement>(null);
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
         <div className="flex flex-wrap w-full mb-20 flex-col items-center text-center">
+        <div className="flex flex-wrap w-full mb-20 flex-col items-center text-center"  ref={divRef} id="about-us">
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">
             About Us
           </h1>
+          </div>
           <p className="lg:w-1/2 w-full leading-relaxed text-gray-500">
             Empower your research endeavors with our comprehensive web-based
             application designed to revolutionize project planning, tracking,
@@ -171,6 +174,5 @@ const Content = () => {
       </div>
     </section>
   );
-};
-
+});
 export default Content;
