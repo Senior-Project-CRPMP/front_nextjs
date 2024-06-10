@@ -1,5 +1,5 @@
+'use client'
 import React, { forwardRef, useRef } from 'react';
-
 const Feature = forwardRef((props, ref) => {
   const divRef = useRef<HTMLDivElement>(null);
   return (
