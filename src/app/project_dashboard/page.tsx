@@ -10,6 +10,7 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
+import Link from "next/link";
 
 type Project = {
   id: number;
@@ -46,6 +47,7 @@ const ProjectPage: React.FC = () => {
   const [selectedRoles, setSelectedRoles] = useState<{
     [userId: string]: string;
   }>({});
+  const [memberCount, setMemberCount] = useState<number>(0);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const projectIdStr =
@@ -122,6 +124,18 @@ const ProjectPage: React.FC = () => {
     };
     fetchRole().catch((error) => console.error(error));
   }, []);
+
+  useEffect(() => {
+    const fetchMemberCount = async () => {
+      const res = await fetch(
+        `${apiBaseUrl}/api/UserProject/userCountByProjectId/${projectId}`
+      );
+      const data = await res.json();
+      setMemberCount(data.count);
+      console.log("Member count:", data.count);
+    };
+    fetchMemberCount().catch((error) => console.error(error));
+  }, [projectId]);
 
   const getRoleByMember = (member: Member): Role | null => {
     console.log(member.id);
@@ -213,12 +227,9 @@ const ProjectPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen ">
       <div className="flex space-x-2">
-        <div className="w-1/5 h-screen bg-white rounded-md my-2 shadow-2xl">
-          <NavBar />
-        </div>
-        <div className="h-full bg-white rounded-md my-2 mr-2 w-4/5">
+        <div className="h-full bg-white w-screen rounded-md my-2 mr-2 ">
           <div className="p-4 flex-col h-full space-x-0">
             <div className="h-1/6">
               <div className="flex space-x-96">
@@ -258,7 +269,9 @@ const ProjectPage: React.FC = () => {
                       className="bg-blue-500 rounded-full h-8 w-8 flex items-center justify-center cursor-pointer"
                       onClick={handleToggleMemberList}
                     >
-                      <span className="text-white font-bold text-sm">+7</span>
+                      <span className="text-white font-bold text-sm">
+                        +{memberCount}
+                      </span>
                     </div>
                   </div>
                   <div className="absolute left-24 top-1">
@@ -297,7 +310,7 @@ const ProjectPage: React.FC = () => {
             </div>
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2 mx-2">
-                <div className="w-92 grow bg-white rounded-md shadow-2xl p-10">
+                <div className="w-3/5  bg-white rounded-md shadow-2xl p-10">
                   <PageContent currentPage={currentPage} />
                   {isMemberListOpen && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -410,7 +423,7 @@ const ProjectPage: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <div className="w-72 bg-white rounded-md shadow-2xl">
+                <div className="w-2/5 bg-white rounded-md shadow-2xl">
                   {currentPage === "calendar" && <SideCalendar />}
                   {currentPage === "overview" && (
                     <div>
