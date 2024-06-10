@@ -4,6 +4,7 @@ import Image from "next/image";
 import images from "../../../public/assets/exportimages";
 import Content from './content';
 import Feature from './feature';
+import Hero from './hero';
 const Footer = () => {
   const featureRef = useRef(null);
   const aboutUsRef = useRef(null);
@@ -30,8 +31,6 @@ const Footer = () => {
       aboutUsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
- 
-  
   return (
     <footer className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
