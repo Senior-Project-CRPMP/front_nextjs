@@ -24,6 +24,7 @@ const NotificationPage: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [notification, setNotification] = useState<Notification[]>([])
   const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
+  const apiBaseUrl= process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleSettingsToggle = () => {
     setShowSettings(!showSettings);
@@ -32,7 +33,7 @@ const NotificationPage: React.FC = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch('https://localhost:7174/api/Notification/user/${userId}');
+        const res = await fetch(`${apiBaseUrl}/api/Notification/user/${userId}`);
         const data = await res.json();
         console.log(data)
 

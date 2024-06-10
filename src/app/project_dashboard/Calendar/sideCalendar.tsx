@@ -116,6 +116,7 @@ export default function sideCalendar() {
     fetchCard();
   }, [projectId]);
 
+
   const sortedTasks = tasks.slice().sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
 
     // Filter upcoming tasks

@@ -10,7 +10,6 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
-import Link from "next/link";
 
 type Project = {
   id: number;
@@ -31,7 +30,7 @@ type Member = {
 };
 
 type Role = {
-  userid: string;
+  userId: string;
   role: string;
 };
 
@@ -125,7 +124,10 @@ const ProjectPage: React.FC = () => {
   }, []);
 
   const getRoleByMember = (member: Member): Role | null => {
-    const role = roles.find((r) => r.userid === member.id);
+    console.log(member.id);
+    console.log(roles);
+    const role = roles.find((r) => r.userId === member.id);
+    console.log(role);
     return role || null;
   };
 
@@ -168,6 +170,8 @@ const ProjectPage: React.FC = () => {
       });
 
       if (response.ok) {
+        console.log("Member added successfully");
+        setMembers((prevMembers) => [...prevMembers, user]);
       } else {
         // Handle error, maybe show an error message or handle it in another way
         console.error("Failed to add user to project");
@@ -308,7 +312,7 @@ const ProjectPage: React.FC = () => {
                           </button>
                         </div>
                         <ul>
-                          {members.map((member, index) => (
+                          {members.map((member) => (
                             <li
                               key={member.id}
                               className="flex items-center mb-2"
@@ -350,37 +354,57 @@ const ProjectPage: React.FC = () => {
                           onChange={handleSearchChange}
                         />
                         <ul>
-                          {filteredUsers.map((user) => (
-                            <li
-                              key={user.id}
-                              className="flex items-center mb-2"
-                            >
-                              <div>
-                                <p className="font-bold">
-                                  {user.firstName} {user.lastName}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  {user.userName}
-                                </p>
-                              </div>
-                              <div className="flex items-center ml-auto">
-                                <select
-                                  className="mr-2"
-                                  value={selectedRoles[user.id] || ""}
-                                  onChange={(e) =>
-                                    handleRoleChange(user.id, e.target.value)
-                                  }
-                                >
-                                  <option value="">Select Role</option>
-                                  <option value="supervisor">Supervisor</option>
-                                  <option value="researcher">Researcher</option>
-                                </select>
-                                <button onClick={() => handleAddClick(user)}>
-                                  Add
-                                </button>
-                              </div>
-                            </li>
-                          ))}
+                          {filteredUsers.map((user) => {
+                            const isMember = members.some(
+                              (member) => member.id === user.id
+                            );
+                            return (
+                              <li
+                                key={user.id}
+                                className="flex items-center mb-2"
+                              >
+                                <div>
+                                  <p className="font-bold">
+                                    {user.firstName} {user.lastName}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {user.userName}
+                                  </p>
+                                </div>
+                                <div className="flex items-center ml-auto">
+                                  {isMember ? (
+                                    <span className="text-green-500">✔</span>
+                                  ) : (
+                                    <>
+                                      <select
+                                        className="mr-2"
+                                        value={selectedRoles[user.id] || ""}
+                                        onChange={(e) =>
+                                          handleRoleChange(
+                                            user.id,
+                                            e.target.value
+                                          )
+                                        }
+                                      >
+                                        <option value="">Select Role</option>
+                                        <option value="supervisor">
+                                          Supervisor
+                                        </option>
+                                        <option value="researcher">
+                                          Researcher
+                                        </option>
+                                      </select>
+                                      <button
+                                        onClick={() => handleAddClick(user)}
+                                      >
+                                        Add
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     </div>

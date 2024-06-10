@@ -1,21 +1,42 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { Edit2 } from "react-feather";
 
 interface Task {
   id: number;
   title: string;
+  description: string;
+  userId: string;
+  deadline: string;
 }
 
 const TaskLister = () => {
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: "Task 1" },
-    { id: 2, title: "Task 2" },
-  ]);
-
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [currentTask, setCurrentTask] = useState<string>("");
+  const projectIdStr =
+    typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const res = await fetch(
+          `${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`
+        );
+        const data: Task[] = await res.json();
+        console.log(data);
+
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchCards();
+  }, []);
 
   const handleDeleteTask = (id: number) => {
     const confirmed = window.confirm(

@@ -2,11 +2,25 @@
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
+type User = {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+};
+
+type Project = {
+  id: number;
+  title: string;
+  description: string;
+};
+
 const Browse: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Categories");
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchResults, setSearchResults] = useState<(User | Project)[]>([]);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const categories: string[] = ["Users", "Projects"];
 
@@ -27,10 +41,25 @@ const Browse: React.FC = () => {
     setIsDropdownOpen(false); // Close the dropdown when a category is selected
   };
 
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+  const handleSearch = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Simulating a search operation, here you can add your search logic
-    setSearchResults([`${selectedCategory} - ${searchQuery}`]);
+    let endpoint = "";
+    if (selectedCategory === "Users") {
+      endpoint = `${apiBaseUrl}/api/Account/user/name/${searchQuery}`;
+    } else if (selectedCategory === "Projects") {
+      endpoint = `${apiBaseUrl}/api/Project/SingleProjectByTitle/${searchQuery}`;
+    }
+
+    if (endpoint) {
+      try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        setSearchResults(data);
+        console.log(data)
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    }
   };
 
   return (
@@ -138,9 +167,18 @@ const Browse: React.FC = () => {
             <div className="p-4 bg-gray-100 rounded-lg shadow-md">
               <h2 className="text-lg font-semibold mb-2">Search Results:</h2>
               <ul className="list-disc pl-5 space-y-2">
-                {searchResults.map((result, index) => (
-                  <li key={index} className="text-gray-700">
-                    {result}
+                {searchResults.map((result) => (
+                  <li key={"id" in result ? result.id : (result as Project).id} className="text-gray-700">
+                    {"title" in result ? (
+                      <>
+                        <strong>Project:</strong> {result.title}
+                        <p>{result.description}</p>
+                      </>
+                    ) : (
+                      <>
+                        <strong>User:</strong> {result.firstName} {result.lastName} ({result.userName})
+                      </>
+                    )}
                   </li>
                 ))}
               </ul>
