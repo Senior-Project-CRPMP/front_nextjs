@@ -16,6 +16,9 @@ export default function CreateChatRoom() {
   const [selectedParticipant, setSelectedParticipant] = useState<string[]>([userId || ""]);
   const [message, setMessage] = useState('');
   const [participants, setParticipants] = useState<User[]>([]);
+  const projectIdStr =
+    typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const route = useRouter()
 
@@ -23,7 +26,7 @@ export default function CreateChatRoom() {
   useEffect(() => {
     const getParticipants = async () => {
       try {
-        const res = await fetch(`${apiBaseUrl}/api/Account/users`);
+        const res = await fetch(`${apiBaseUrl}/api/UserProject/usersByProjectId/${projectId}`);
         const data: User[] = await res.json();
         console.log(data);
   
@@ -125,8 +128,8 @@ export default function CreateChatRoom() {
           <Participants/>
         </select>
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={(e)=>{handleSubmit; route.push('/project_dashboard/chat')}}>Create Chat Room</button>
+        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={(e)=>{route.push('/project_dashboard/chat')}}>Cancel</button>
       </form>
-      {message && <div>{selectedParticipant}</div>}
     </div>
     </div>
     </div>
