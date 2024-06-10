@@ -104,9 +104,9 @@ const Hero = forwardRef((props, ref)=> {
           Your Ultimate Research and Project Planning Platform
         </p>
         <Link href='/signup'>
-        <button className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
+        <div className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
           Get Started
-        </button>
+        </div>
         </Link>
       </div>
       <svg

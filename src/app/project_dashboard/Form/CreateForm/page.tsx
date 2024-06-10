@@ -322,11 +322,7 @@ const AddForm: React.FC = () => {
           ))}
           <button
             type="button"
-<<<<<<< HEAD
-            className="bg-blue-500 text-white py-2 px-4 rounded-md mr-3"
-=======
             className="px-4 py-2 text-white bg-blue-500 rounded-md"
->>>>>>> origin
             onClick={handleAddField}
           >
             Add Field

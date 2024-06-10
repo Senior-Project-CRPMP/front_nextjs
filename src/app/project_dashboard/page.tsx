@@ -10,11 +10,7 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
-<<<<<<< HEAD
-import Link from 'next/link';
-=======
 import Link from "next/link";
->>>>>>> origin
 
 type Project = {
   id: number;

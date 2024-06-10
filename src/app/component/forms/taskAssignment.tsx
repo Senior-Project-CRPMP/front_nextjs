@@ -26,7 +26,7 @@ const Task = () => {
     description: "",
     userId: "",
     deadline: "",
-    status: ""
+    status: "todo"
   });
 
   useEffect(() => {
