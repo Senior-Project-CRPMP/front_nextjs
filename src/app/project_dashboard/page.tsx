@@ -57,6 +57,7 @@ const ProjectPage: React.FC = () => {
   const [selectedRoles, setSelectedRoles] = useState<{
     [userId: string]: string;
   }>({});
+  const [memberCount, setMemberCount] = useState<number>(0);
   const [tasks, setTasks] = useState<Task[]>([]);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -134,6 +135,18 @@ const ProjectPage: React.FC = () => {
     };
     fetchRole().catch((error) => console.error(error));
   }, []);
+
+  useEffect(() => {
+    const fetchMemberCount = async () => {
+      const res = await fetch(
+        `${apiBaseUrl}/api/UserProject/userCountByProjectId/${projectId}`
+      );
+      const data = await res.json();
+      setMemberCount(data.count);
+      console.log("Member count:", data.count);
+    };
+    fetchMemberCount().catch((error) => console.error(error));
+  }, [projectId]);
 
   const getRoleByMember = (member: Member): Role | null => {
     console.log(member.id);
@@ -227,7 +240,9 @@ const ProjectPage: React.FC = () => {
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(
+          `https://localhost:7174/api/Task/ProjectTasks/${projectId}`
+        );
         const data = await res.json();
         setTasks(data);
         console.log(tasks);
@@ -238,23 +253,24 @@ const ProjectPage: React.FC = () => {
     fetchCard();
   }, [projectId]);
 
+  const sortedTasks = tasks
+    .slice()
+    .sort(
+      (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    );
 
-  const sortedTasks = tasks.slice().sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+  // Filter upcoming tasks
+  const upcomingTasks = sortedTasks.filter(
+    (task) => new Date(task.deadline) >= new Date()
+  );
 
-    // Filter upcoming tasks
-    const upcomingTasks = sortedTasks.filter(task => new Date(task.deadline) >= new Date());
-
-    // Take the first three upcoming tasks
-    const threeUpcomingTasks = upcomingTasks.slice(0, 3);
-
+  // Take the first three upcoming tasks
+  const threeUpcomingTasks = upcomingTasks.slice(0, 3);
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen ">
       <div className="flex space-x-2">
-        <div className="w-1/5 h-screen bg-white rounded-md my-2 shadow-2xl">
-          <NavBar />
-        </div>
-        <div className="h-full bg-white rounded-md my-2 mr-2 w-4/5">
+        <div className="h-full bg-white w-screen rounded-md my-2 mr-2 ">
           <div className="p-4 flex-col h-full space-x-0">
             <div className="h-1/6">
               <div className="flex space-x-96">
@@ -294,7 +310,9 @@ const ProjectPage: React.FC = () => {
                       className="bg-blue-500 rounded-full h-8 w-8 flex items-center justify-center cursor-pointer"
                       onClick={handleToggleMemberList}
                     >
-                      <span className="text-white font-bold text-sm">+7</span>
+                      <span className="text-white font-bold text-sm">
+                        +{memberCount}
+                      </span>
                     </div>
                   </div>
                   <div className="absolute left-24 top-1">
@@ -333,7 +351,7 @@ const ProjectPage: React.FC = () => {
             </div>
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2 mx-2">
-                <div className="w-92 grow bg-white rounded-md shadow-2xl p-10">
+                <div className="w-3/5  bg-white rounded-md shadow-2xl p-10">
                   <PageContent currentPage={currentPage} />
                   {isMemberListOpen && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -446,20 +464,25 @@ const ProjectPage: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <div className="w-72 bg-white rounded-md shadow-2xl">
+                <div className="w-2/5 bg-white rounded-md shadow-2xl">
                   {currentPage === "calendar" && <SideCalendar />}
                   {currentPage === "overview" && (
                     <div>
                       <div className="md:py-8 py-5 md:px-16 px-5 dark:bg-gray-700 bg-gray-50 rounded-b">
-                            <p className="text-sm font-light border-b pb-4 border-gray-400 border-dashed pt-5"> UPCOMING TASKS</p>
-                            {threeUpcomingTasks.map(task => (
-                            <div key={task.id} className="">
-                            <li className="text-sm font-light mb-1">{task.title} {task.deadline}</li>
-                            </div>
-                            ))}
-                        </div>
+                        <p className="text-sm font-light border-b pb-4 border-gray-400 border-dashed pt-5">
+                          {" "}
+                          UPCOMING TASKS
+                        </p>
+                        {threeUpcomingTasks.map((task) => (
+                          <div key={task.id} className="">
+                            <li className="text-sm font-light mb-1">
+                              {task.title} {task.deadline}
+                            </li>
+                          </div>
+                        ))}
+                      </div>
                       <Link href="project_dashboard/addtask">
-                          <p className="text-blue-600 text-center">Add Task</p>
+                        <p className="text-blue-600 text-center">Add Task</p>
                       </Link>
                       <TaskLister />
                     </div>
