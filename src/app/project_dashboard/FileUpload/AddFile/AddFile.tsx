@@ -3,7 +3,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 const AddFile = () => {
-  const router = useRouter();
+ 
   const projectIdStr =
   typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
 const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
@@ -51,7 +51,7 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
       setName("");
       setDescription("");
       setFile(null);
-
+      const router = useRouter();
       router.push("/project_dashboard/FileUpload/FileList");
     } catch (error: any) {
       setError(error.message);
