@@ -9,6 +9,9 @@ import Timeline from "./timeline";
 import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
+import TaskLister from "@/app/component/taskLister";
+
+
 
 type Project = {
   id: number;
@@ -29,7 +32,7 @@ type Member = {
 };
 
 type Role = {
-  userid : string;
+  userId : string;
   role: string;
 }
 
@@ -44,6 +47,7 @@ const ProjectPage: React.FC = () => {
   const [allUsers, setAllUsers] = useState<Member[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<{ [userId: string]: string }>({});
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+ 
 
   const projectIdStr =
     typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
@@ -125,7 +129,10 @@ const ProjectPage: React.FC = () => {
   }, []);
 
   const getRoleByMember = (member: Member): Role | null => {
-    const role = roles.find((r) => r.userid === member.id);
+    console.log(member.id)
+    console.log(roles)
+    const role = roles.find((r) => r.userId === member.id);
+    console.log(role)
     return role || null;
   };
 
@@ -172,6 +179,8 @@ const ProjectPage: React.FC = () => {
 
 
       if (response.ok) {
+        console.log("Member added successfully")
+        setMembers((prevMembers) => [...prevMembers, user]);
       } else {
         // Handle error, maybe show an error message or handle it in another way
         console.error("Failed to add user to project");
@@ -212,6 +221,7 @@ const ProjectPage: React.FC = () => {
   const Formbuilder = () => {
     return <h1 className="text-black">Formbuilder Page Content</h1>;
   };
+
 
   return (
     <div className="bg-white min-h-screen">
@@ -298,7 +308,7 @@ const ProjectPage: React.FC = () => {
             </div>
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2 mx-2">
-                <div className="w-72 grow bg-white rounded-md shadow-2xl p-10">
+                <div className="w-92 grow bg-white rounded-md shadow-2xl p-10">
                   <PageContent currentPage={currentPage} />
                   {isMemberListOpen && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -313,7 +323,7 @@ const ProjectPage: React.FC = () => {
                           </button>
                         </div>
                         <ul>
-                          {members.map((member, index) => (
+                          {members.map((member) => (
                             <li key={member.id} className="flex items-center mb-2">
                               <div>
                                 <p className="font-bold">{member.firstName} {member.lastName}</p>
@@ -349,41 +359,49 @@ const ProjectPage: React.FC = () => {
                           onChange={handleSearchChange}
                         />
                         <ul>
-                        {filteredUsers.map((user) => (
-                            <li key={user.id} className="flex items-center mb-2">
-                              <div>
-                                <p className="font-bold">
-                                  {user.firstName} {user.lastName}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  {user.userName}
-                                </p>
-                              </div>
-                              <div className="flex items-center ml-auto">
-                                <select
-                                  className="mr-2"
-                                  value={selectedRoles[user.id] || ""}
-                                  onChange={(e) =>
-                                    handleRoleChange(user.id, e.target.value)
-                                  }
-                                >
-                                  <option value="">Select Role</option>
-                                  <option value="supervisor">Supervisor</option>
-                                  <option value="researcher">Researcher</option>
-                                </select>
-                                <button onClick={() => handleAddClick(user)}>
-                                  Add
-                                </button>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
+                        {filteredUsers.map((user) => {
+  const isMember = members.some((member) => member.id === user.id);
+  return (
+    <li key={user.id} className="flex items-center mb-2">
+      <div>
+        <p className="font-bold">
+          {user.firstName} {user.lastName}
+        </p>
+        <p className="text-sm text-gray-600">
+          {user.userName}
+        </p>
+      </div>
+      <div className="flex items-center ml-auto">
+        {isMember ? (
+          <span className="text-green-500">✔</span>
+        ) : (
+          <>
+            <select
+              className="mr-2"
+              value={selectedRoles[user.id] || ""}
+              onChange={(e) =>
+                handleRoleChange(user.id, e.target.value)
+              }
+            >
+              <option value="">Select Role</option>
+              <option value="supervisor">Supervisor</option>
+              <option value="researcher">Researcher</option>
+            </select>
+            <button onClick={() => handleAddClick(user)}>Add</button>
+          </>
+        )}
+      </div>
+    </li>
+  );
+})}
+</ul>
                       </div>
                     </div>
                   )}
                 </div>
                 <div className="w-72 bg-white rounded-md shadow-2xl">
                   {currentPage === "calendar" && <SideCalendar />}
+                  {currentPage === "overview" && <TaskLister />}
                 </div>
               </div>
             </div>

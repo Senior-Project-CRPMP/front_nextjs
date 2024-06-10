@@ -1,5 +1,5 @@
 import React from "react";
-import CreateProjectForm from "../component/forms/createProjectForm";
+import CreateProjectForm from "../../component/forms/createProjectForm";
 
 function CreateProject() {
   return (

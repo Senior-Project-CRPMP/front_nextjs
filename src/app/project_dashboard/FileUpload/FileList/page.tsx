@@ -5,6 +5,7 @@ import Link from "next/link";
 import AddFile from '../AddFile/AddFile';
 import FileDetail from '../FileDetail/[id]/page';
 import { FaPlus } from 'react-icons/fa';
+import NavBar from "../../nav_bar";
 
 type FileUpload = {
   id: number;
@@ -74,44 +75,46 @@ const ProjectFiles = () => {
       closeModal();
     }
   };
- 
 
- 
   return (
-    <div className="flex justify-center items-center h-screen" onClick={handleClickOutside}>
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Files for Project {projectId}</h1>
-        <ul className="space-y-4">
-          {files.map((file) => (
-            <li key={file.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md">
-              <h2>{file.name}</h2>
-              <button onClick={() => openFile(file.id)}>Open</button>
-            </li>
-          ))}
-        </ul>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
-          onClick={openModal}
-        >
-           <FaPlus className="inline-block mr-2" /> 
-          Add File
-        </button>
+    <div className="flex">
+      <div className="w-1/5 h-screen bg-white rounded-md my-2">
+        <NavBar />
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md" ref={modalRef}>
-            <AddFile />
-            <button
-              className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md"
-              onClick={closeModal}
-            >
-              Close
-            </button>
-          </div>
+      <div className="w-full flex-1 flex flex-col h-full items-center  justify-start pt-4" onClick={handleClickOutside}>
+        <div className="bg-white p-4 rounded-lg shadow-md w-full mt-20 ">
+          <h1 className="text-2xl font-bold mb-4">Files for Project {projectId}</h1>
+          <ul className="space-y-4">
+            {files.map((file) => (
+              <li key={file.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md">
+                <h2>{file.name}</h2>
+                <button onClick={() => openFile(file.id)}>Open</button>
+              </li>
+            ))}
+          </ul>
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md mt-4"
+            onClick={openModal}
+          >
+            <FaPlus className="inline-block mr-2" />
+            Add File
+          </button>
         </div>
-      )}
-      
+
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md" ref={modalRef}>
+              <AddFile />
+              <button
+                className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mt-4"
+                onClick={closeModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

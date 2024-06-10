@@ -1,85 +1,120 @@
+'use client'
 import React from "react";
+import { useState, useEffect } from "react";
+import Image from 'next/image'
 
-function Help() {
-  return (
-    <div className="bg-white min-h-screen">
-      <div className="max-w-lg mx-auto pt-10">
-        {/* Header */}
-        <h2 className="text-3xl font-semibold text-center">Help Center</h2>
-        <div className="p-6 mt-6 mb-12">
-          <div className="flex items-center border rounded-full p-2">
-            {/* Search Icon */}
-            <div className="w-[10%] bg-red-600"></div>
-            <input
-              type="text"
-              name="search"
-              className="w-full h-4/5 border-0 focus:border-0 focus:outline-none focus:ring-0"
-              placeholder="search"
-            />
-            <button
-              type="submit"
-              className="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-full border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              <svg
-                className="w-4 h-4"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                />
-              </svg>
-              <span className="sr-only">Search</span>
-            </button>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-0.5 bg-slate-200 [&>*]:h-24 [&>*]:px-3 [&>*]:bg-white [&>*]:flex [&>*]:items-center [&>*]:justify-center [&>*]:cursor-pointer [&>*:hover]:scale-105 [&>*:hover]:shadow-sm [&>*:hover]:shadow-slate-800/80">
-          <div>
-            <h2>Billing and Membership</h2>
-          </div>
-          <div>
-            <h2>Managing and Organizing</h2>
-          </div>
-          <div>
-            <h2>Uploading</h2>
-          </div>
-          <div>
-            <h2>Uploading</h2>
-          </div>
-          <div>
-            <h2>Video Enterprise</h2>
-          </div>
-          <div>
-            <h2>Creators</h2>
-          </div>
-          <div>
-            <h2>Enterprise</h2>
-          </div>
-          <div>
-            <h2>Features</h2>
-          </div>
-          <div>
-            <h2>Sales</h2>
-          </div>
-          <div>
-            <h2>Embedding and Sharing</h2>
-          </div>
-          <div>
-            <h2>FAQs</h2>
-          </div>
-          <div>
-            <h2>Developers</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+interface FAQ {
+  id: number;
+  question: string;
+  response: string;
 }
 
-export default Help;
+const FAQ: React.FC = () => {
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [question, setQuestion] = useState("");
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (question) {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/Question`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            content: question
+          }),
+        });
+
+        if (res.ok) {
+          console.log("FAQ saved successfully");
+        } else {
+          console.error("Failed to save Question");
+          console.log(question)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const filteredFaqs = faqs.filter((faq) =>
+    faq.question.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(()=>{
+    const fetchFaqs = async () => {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/FAQ`);
+        const data = await res.json();
+        setFaqs(data);
+        console.log(data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchFaqs()
+  },[])
+
+  return (
+    <section className="text-gray-600 body-font">
+      <div className="container px-5 py-24 mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl font-medium title-font text-gray-900 mb-4">Frequently Asked Questions</h1>
+          <p className="leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">Find answers to some of the most commonly asked questions about CRPMP.</p>
+        </div>
+        <div className="flex justify-center mb-12">
+          <input
+            type="text"
+            placeholder="Search questions..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full lg:w-1/2 px-4 py-2 border rounded-md"
+          />
+        </div>
+        <div className="flex flex-wrap lg:w-4/5 sm:mx-auto sm:mb-2 -mx-2">
+          {filteredFaqs.map((faq, index) => (
+            <div key={index} className="w-full lg:w-1/2 px-4 py-2">
+              <details className="mb-4">
+                <summary className="font-semibold bg-gray-200 rounded-md py-2 px-4">{faq.question}</summary>
+                <span className="px-4 py-2">{faq.response}</span>
+              </details>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mb-12">
+          <Image
+            src="/assets/questionWoman.jpg"
+            alt="Woman asking a question"
+            width={300}
+            height={300}
+            className="mx-auto"
+          />
+        </div>
+        <div className="text-center mb-12">
+          <h2 className="text-2xl font-medium title-font text-gray-900 mb-4">Ask a Question</h2>
+          <form onSubmit={handleSubmit} className="w-full lg:w-1/2 mx-auto">
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Your question"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md"
+              />
+            </div>
+            <button type="submit" className="inline-flex text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+export default FAQ;

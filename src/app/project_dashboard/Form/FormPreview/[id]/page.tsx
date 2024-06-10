@@ -6,7 +6,7 @@ type FormFieldType =
   | "short-text"
   | "long-text"
   | "select"
-  | "checkbox"
+  | "radio"
   | "file"
   | "date"
   | "time";
@@ -62,7 +62,7 @@ const FormPreview: React.FC = () => {
         // Fetch form options for each question
         const questionsWithOptions = await Promise.all(
           questionsData.map(async (question: any) => {
-            if (question.type === "select" || question.type === "checkbox") {
+            if (question.type === "select" || question.type === "radio") {
               const optionsResponse = await fetch(
                 `${apiBaseUrl}/api/FormOption/OptionsByQuestionId/${question.id}`
               );
@@ -119,16 +119,16 @@ const FormPreview: React.FC = () => {
                 <select disabled className="border border-gray-300 px-3 py-2 rounded-md w-full">
                   {field.options?.map((option, idx) => (
                     <option key={idx} value={option}>
-                      {option}`124`
+                      {option}
                     </option>
                   ))}
                 </select>
               )}
-              {field.type === "checkbox" && (
+              {field.type === "radio" && (
                 <div>
                   {field.options?.map((option, idx) => (
                     <div key={idx}>
-                      <input type="checkbox" disabled className="mr-2 text-blue-500 focus:ring-blue-500 border-gray-300 rounded mt-3"/>
+                      <input type="radio" disabled className="mr-2" />
                       <label>{option}</label>
                     </div>
                   ))}

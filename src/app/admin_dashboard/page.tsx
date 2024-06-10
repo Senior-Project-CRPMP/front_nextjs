@@ -4,6 +4,9 @@ import React,{useState} from 'react';
 import Feedback from './feedbacks';
 import User from './users';
 import Link from "next/link";
+import Question from './questions';
+import Dashboard from './dashboard';
+import NotificationForm from './notificationForm';
  function Admin() {
     const [currentPage, setCurrentPage] = useState('dashboard')
     const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +18,8 @@ import Link from "next/link";
             {currentPage === "dashboard" && <Dashboard />}
             {currentPage === "feedback" && <Feedback />}
             {currentPage === "user" && <User />}
+            {currentPage === "question" && <Question />}
+            {currentPage === "notification" && <NotificationForm/>}
             
           </div>
         );
@@ -24,9 +29,6 @@ import Link from "next/link";
     //     return <h1 className="text-black">User List Content</h1>;
     //   };
       
-      const Dashboard = () => {
-        return <h1 className="text-black">Dashboard Content</h1>;
-      };
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
     };
@@ -61,6 +63,23 @@ import Link from "next/link";
                     <UsersIcon className="h-4 w-4" />
                     Users
                     </button>
+
+                    <button
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                    onClick={(e)=>setCurrentPage("notification")}
+                    >
+                    <UsersIcon className="h-4 w-4" />
+                    Set Notification
+                    </button>
+
+                    <button
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                    onClick={(e)=>setCurrentPage("question")}
+                    >
+                    <UsersIcon className="h-4 w-4" />
+                    Questions
+                    </button>
+
                     <div className="relative">
                     <button
                     type="button"

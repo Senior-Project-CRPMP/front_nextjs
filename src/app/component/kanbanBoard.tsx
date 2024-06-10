@@ -8,7 +8,7 @@ type Task = {
   projectId: number;
   title: string;
   description: string;
-  assignedTo: string;
+  userId: string;
   deadline: string;
   status: string;
 };
@@ -33,12 +33,13 @@ const Board = () => {
   const projectIdStr = typeof window !== 'undefined' ? localStorage.getItem('projectId') : null;
 const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
 
 
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const res = await fetch(`${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(`${apiBaseUrl}/api/Task/TasksByProjectAndUser/${projectId}/${userId}`);
         const data: Task[] = await res.json();
         console.log(data)
         const mappedCards: Card[] = data.map(task => ({
@@ -75,8 +76,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       <Column title="Backlog" column="backlog" headingColor="text-neutral-900" cards={cards} setCards={setCards} />
       <Column title="TODO" column="todo" headingColor="text-yellow-500" cards={cards} setCards={setCards} />
       <Column title="In progress" column="inprogress" headingColor="text-blue-500" cards={cards} setCards={setCards} />
-      <Column title="Complete" column="done" headingColor="text-emerald-500" cards={cards} setCards={setCards} />
-      <BurnBarrel setCards={setCards} />
+      <Column title="Complete" column="done" headingColor="text-emerald-500" cards={cards} setCards={setCards} />/
     </div>
   );
 };
@@ -255,7 +255,6 @@ const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) =
           return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
         })}
         <DropIndicator beforeId={null} column={column} />
-        <AddCard column={column} setCards={setCards} />
       </div>
     </div>
   );
@@ -298,120 +297,4 @@ const DropIndicator = ({ beforeId, column }: DropIndicatorProps) => {
   );
 };
 
-type BurnBarrelProps = {
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
-};
 
-const BurnBarrel = ({ setCards }: BurnBarrelProps) => {
-  const [active, setActive] = useState(false);
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setActive(true);
-  };
-
-  const handleDragLeave = () => {
-    setActive(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    const cardId = e.dataTransfer.getData("cardId");
-
-    setCards((pv) => pv.filter((c) => c.id !== cardId));
-
-    setActive(false);
-  };
-
-  return (
-    <div
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
-        active
-          ? "border-red-800 bg-red-800/20 text-red-500"
-          : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
-      }`}
-    >
-      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
-    </div>
-  );
-};
-
-type AddCardProps = {
-  column: string;
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
-};
-
-const AddCard = ({ column, setCards }: AddCardProps) => {
-  const [text, setText] = useState("");
-  const [adding, setAdding] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!text.trim().length) return;
-
-    const newCard: Card = {
-      column,
-      title: text.trim(),
-      id: Math.random().toString(),
-    };
-    console.log('Submitted text:', text);
-    setText('');
-    setCards((pv) => [...pv, newCard]);
-
-    setAdding(false);
-  };
-
-  return (
-    <>
-      {adding ? (
-  <motion.form layout onSubmit={handleSubmit}>
-    <div className="relative">
-      <textarea
-        onChange={(e) => setText(e.target.value)}
-        autoFocus
-        placeholder="Add new task..."
-        className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0 relative z-10"
-      />
-      <div
-        className={`absolute top-0 left-0 w-full rounded bg-neutral-50 p-3 text-sm text-neutral-950 shadow-lg transition-opacity duration-300 ${
-          isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {text}
-      </div>
-    </div>
-    <div className="mt-1.5 flex items-center justify-end gap-1.5">
-      <button
-        onClick={() => setAdding(false)}
-        className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
-      >
-        Close
-      </button>
-      <button
-        type="submit"
-        className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
-      >
-        <span>Add</span>
-        <FiPlus />
-      </button>
-    </div>
-  </motion.form>
-) : (
-  <motion.button
-    layout
-    onClick={() => setAdding(true)}
-    className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
-  >
-    <span>Add card</span>
-    <FiPlus />
-  </motion.button>
-)}
-    </>
-  );
-};

@@ -17,6 +17,7 @@ const TOOLBAR_OPTIONS = [
 ];
 
 const Document: React.FC = () => {
+    const router = useRouter();
     const params = useParams();
     const id = params.id;
     const [editor, setEditor] = useState<Quill | null>(null);
@@ -79,6 +80,10 @@ const Document: React.FC = () => {
             console.error('Failed to save document', error);
         }
     };
+
+    const deleteDocument = () => {
+        router.push(`/project_dashboard/DeleteDocument/${id}`);
+    }
 
     return (
         <div>
@@ -151,6 +156,7 @@ const Document: React.FC = () => {
                 placeholder="Document Title"
             />
             <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Save</button>
+            <button onClick={deleteDocument} className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md">Delete</button>
             <div className="container" ref={wrapperRef}></div>
         </div>
     );
