@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useState, ChangeEvent } from 'react';
-import { Edit2 } from 'react-feather';
+import { useState, ChangeEvent } from "react";
+import { Edit2 } from "react-feather";
 
 interface Task {
   id: number;
@@ -10,32 +10,38 @@ interface Task {
 
 const TaskLister = () => {
   const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: 'Task 1' },
-    { id: 2, title: 'Task 2' },
+    { id: 1, title: "Task 1" },
+    { id: 2, title: "Task 2" },
   ]);
 
   const [isEditing, setIsEditing] = useState<number | null>(null);
-  const [currentTask, setCurrentTask] = useState<string>('');
+  const [currentTask, setCurrentTask] = useState<string>("");
 
   const handleDeleteTask = (id: number) => {
-    const confirmed = window.confirm('Are you sure you want to delete this task?');
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
     if (confirmed) {
-      setTasks(tasks.filter(task => task.id !== id));
+      setTasks(tasks.filter((task) => task.id !== id));
     }
   };
 
   const handleEditTask = (id: number) => {
     setIsEditing(id);
-    const task = tasks.find(task => task.id === id);
+    const task = tasks.find((task) => task.id === id);
     if (task) {
       setCurrentTask(task.title);
     }
   };
 
   const handleUpdateTask = (id: number) => {
-    setTasks(tasks.map(task => (task.id === id ? { ...task, title: currentTask } : task)));
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, title: currentTask } : task
+      )
+    );
     setIsEditing(null);
-    setCurrentTask('');
+    setCurrentTask("");
   };
 
   const handleEditInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +53,10 @@ const TaskLister = () => {
       <h1 className="text-2xl font-bold mb-4">Project tasks</h1>
       <ul className="space-y-2">
         {tasks.map((task) => (
-          <li key={task.id} className="flex items-center justify-between p-2 border border-gray-300 rounded">
+          <li
+            key={task.id}
+            className="flex items-center justify-between p-2 border border-gray-300 rounded"
+          >
             {isEditing === task.id ? (
               <div className="flex items-center space-x-2 flex-grow">
                 <input
