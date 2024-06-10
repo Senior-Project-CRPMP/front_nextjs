@@ -83,11 +83,11 @@ const DocumentList: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className=" flex items-center h-screen">
       <div className="w-1/5 h-screen bg-white rounded-md my-2">
         <NavBar />
       </div>
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg shadow-md w-4/5 max-w-md">
         <h1 className="text-2xl font-bold mb-4">Documents</h1>
         
         <ul className="space-y-4">
