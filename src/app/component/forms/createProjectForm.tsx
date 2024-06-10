@@ -60,6 +60,7 @@ function CreateProjectForm() {
   return (
     <form >
       <div className="flex flex-col justify-center px-20  lg:px-28 py-12">
+      <div className="w-11/12 md:w-3/5 bg-white shadow-xl rounded-lg p-6">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-xl font-semibold leading-7 text-gray-900">
@@ -166,12 +167,13 @@ function CreateProjectForm() {
                      
             <button onClick={handleSubmit}
               type="button"
-              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Save
             </button>
         
         </div>
+      </div>
       </div>
     </form>
   );

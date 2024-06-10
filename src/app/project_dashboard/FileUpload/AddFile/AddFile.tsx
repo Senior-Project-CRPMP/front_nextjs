@@ -60,25 +60,26 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
   };
 
   return (
-    <div className="flex justify-center items-center h-full">
-      <div className="bg-white p-2 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-4">Add File to Project {projectId}</h1>
+    <div className="container mx-auto">
+    <div className="flex justify-center">
+      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
+        <h1 className="text-xl font-semibold leading-7 text-gray-900 pb-4">Add File to Project {projectId}</h1>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block font-medium text-gray-700 mb-2">Name:</label>
+            <label htmlFor="name"  className="block text-sm font-medium leading-6 text-gray-900">Name:</label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
+             className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
           <div>
-            <label htmlFor="description" className="block font-medium text-gray-700 mb-2">Description:</label>
+            <label htmlFor="description"   className="block text-sm font-medium leading-6 text-gray-900">Description:</label>
             <input
               type="text"
               id="description"
@@ -89,12 +90,13 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
             />
           </div>
           <div>
-            <label htmlFor="file" className="block font-medium text-gray-700 mb-2">File:</label>
+            <label htmlFor="file"  className="block text-sm font-medium leading-6 text-gray-900">File:</label>
             <input type="file" id="file" onChange={handleFileChange} required className="border border-gray-300 rounded-md px-4 py-2 w-full"/>
           </div>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Upload File</button>
+          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Upload File</button>
         </form>
       </div>
+    </div>
     </div>
   );
 };
