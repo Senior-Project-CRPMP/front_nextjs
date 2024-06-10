@@ -17,7 +17,9 @@ const ProfileDropdown: React.FC = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const userEmail = typeof window !== 'undefined' ? localStorage.getItem('loggedinfo') : null;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
   const router = useRouter();
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   function logout() {
     if (isClient) {
@@ -32,7 +34,7 @@ const ProfileDropdown: React.FC = () => {
     const fetchUser = async () => {
       try {
         const res = await fetch(
-          `https://localhost:7174/api/Account/user/email/${userEmail}`
+          `${apiBaseUrl}/api/Account/user/email/${userEmail}`
         );
         const data = await res.json();
         console.log(data);
@@ -90,8 +92,7 @@ const ProfileDropdown: React.FC = () => {
             >
               <ul className="space-y-3 text-black">
                 <li className="font-medium">
-                  <Link
-                    href="/dashboard/Test"
+                  <div onClick={()=>router.push(`/dashboard/ViewPage/${userId}`)}
                     className="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-indigo-700"
                   >
                     <div className="mr-3">
@@ -111,7 +112,7 @@ const ProfileDropdown: React.FC = () => {
                       </svg>
                     </div>
                     Account
-                  </Link>
+                  </div>
                 </li>
                 <li className="font-medium">
                   <a

@@ -41,6 +41,7 @@ export default function LoginForm() {
       const decoded = jwtDecode(data.token)
       console.log(JSON.stringify(decoded))
       localStorage.setItem('loggedinfo', decoded.sub || '')
+      console.log(decoded.sub)
       route.push('/dashboard')
     } else {
       // Handle login errors

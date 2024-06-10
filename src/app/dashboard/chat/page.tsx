@@ -150,7 +150,7 @@ class Chat extends Component<{}, State> {
       <div className="flex h-screen">
       <div className="h-full w-1/4 p-4 bg-blue-100">
         <h2 className="border-b-2 border-black font-bold">Chats</h2>
-        <div className="flex mb-2">
+        {/* <div className="flex mb-2">
             <input
               className="w-full p-2 border rounded-l-full"
               type="text"
@@ -173,7 +173,7 @@ class Chat extends Component<{}, State> {
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zm-5.44 1.1a5.5 5.5 0 1 1 0-7.778 5.5 5.5 0 0 1 0 7.778z"/>
               </svg>
             </button>
-          </div>
+          </div> */}
           <ul>
             {filteredChatRooms.map((room) => (
               <li className="" key={room.chatRoomId}>
@@ -187,7 +187,7 @@ class Chat extends Component<{}, State> {
             ))}
           </ul>
           <Link
-            href="/createChatRoom"
+            href="/dashboard/createChatRoom"
             className="inline-flex items-center my-2 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Add

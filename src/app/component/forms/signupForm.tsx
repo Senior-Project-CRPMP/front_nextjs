@@ -44,10 +44,10 @@ export default function SignupForm() {
     email,
     password,
   });
- const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  setFormData({ ...formData, [e.target.name]: e.target.value });
-};
-
+  const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch(`${apiBaseUrl}/api/Account/register`, {

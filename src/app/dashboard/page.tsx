@@ -12,11 +12,12 @@ type User = {
 function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const userEmail = typeof window !== 'undefined' ? localStorage.getItem('loggedinfo') : null;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Account/user/email/${userEmail}`);
+        const res = await fetch(`${apiBaseUrl}/api/Account/user/email/${userEmail}`);
         const data = await res.json();
         console.log(data)
 
@@ -33,14 +34,11 @@ function Dashboard() {
   return (
     <>
     <div className="max-w-4xl mx-auto m-10">
-      <h6 className="text-3xl font-extralight text-gray-900 text-center p-6">
+      {/* <h6 className="text-3xl font-extralight text-gray-900 text-center p-6">
         Recent Projects
-      </h6>
+      </h6> */}
       <div className="flex flex-wrap justify-around">
         {[
-          "Project one",
-          "Project two",
-          "Project three",
           "Create new project",
         ].map((project, index) => (
           <div

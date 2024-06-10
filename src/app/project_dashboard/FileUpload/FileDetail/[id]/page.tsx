@@ -107,8 +107,9 @@ const FileDetails: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen w-full">
-      <div className="bg-white p-8 rounded-lg shadow-md">
+    <div className="container mx-auto">
+    <div className="flex justify-center">
+      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
         <h1 className="text-2xl font-bold mb-4">File Details</h1>
         <p>
           <strong>Name:</strong> {fileDetails.name}
@@ -163,6 +164,7 @@ const FileDetails: React.FC = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

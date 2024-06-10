@@ -82,7 +82,7 @@ const Document: React.FC = () => {
     };
 
     const deleteDocument = () => {
-        router.push(`/project_dashboard/DeleteDocument/${id}`);
+        router.push(`/project_dashboard/Document/DeleteDocument/${id}`);
     }
 
     return (

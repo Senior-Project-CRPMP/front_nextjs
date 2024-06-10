@@ -203,14 +203,16 @@ const AddForm: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-3/4 lg:w-2/3">
-        <h1 className="text-2xl font-bold mb-4">Create New Form</h1>
+    <div className="container mx-auto">
+  <div className="flex justify-center">
+    <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
+        <h1 className="text-xl font-semibold leading-7 text-gray-900 pb-4">Create New Form</h1>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="form-box">
-            <p className="form-label text-gray-700 font-medium mb-2">Form Title:</p>
+            <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Form Title:</p>
             <input
-              className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="block mb-3 w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder="Enter form title"
               type="text"
               name="title"
               value={formData.title}
@@ -218,18 +220,20 @@ const AddForm: React.FC = () => {
             />
           </label>
           <label className="form-box">
-            <p className="form-label text-gray-700 font-medium mb-2">Form Description:</p>
+            <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Form Description:</p>
             <textarea
-              className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+               className="block mb-3 w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder="Enter form description here..."
               name="description"
               value={formData.description}
               onChange={handleChange}
             />
           </label>
           <label className="form-box">
-            <p className="form-label text-gray-700 font-medium mb-2">Project ID:</p>
+            <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Project ID:</p>
             <input
-              className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-3"
+               className="block w-full rounded-md mb-3 border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder="Enter project ID"
               type="text"
               name="projectId"
               value={formData.projectId}
@@ -239,18 +243,18 @@ const AddForm: React.FC = () => {
           {formFields.map((field, fieldIndex) => (
             <div key={fieldIndex}>
               <label className="block mb-2">
-                <p className="form-label text-gray-700 font-medium mb-2">Field Label:</p>
+                <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Field Label:</p>
                 <input
-                  className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 className="block w-full rounded-md mb-3 border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   type="text"
                   value={field.label}
                   onChange={(e) => handleFieldChange(fieldIndex, "label", e.target.value)}
                 />
               </label>
               <label className="block mb-2">
-                <p className="form-label text-gray-700 font-medium mb-2">Field Type:</p>
+                <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Field Type:</p>
                 <select
-                  className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full rounded-md mb-3 border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={field.type}
                   onChange={(e) => handleFieldChange(fieldIndex, "type", e.target.value)}
                 >
@@ -264,7 +268,7 @@ const AddForm: React.FC = () => {
               </label>
               {field.type === "select" || field.type === "radio" ? (
                 <div className="mb-4">
-                  <p className="form-label text-gray-700 font-medium mb-2">Options:</p>
+                  <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Options:</p>
                   {field.options.map((option, optionIndex) => (
                     <div key={optionIndex} className="flex items-center mb-2">
                       <input
@@ -322,7 +326,7 @@ const AddForm: React.FC = () => {
           ))}
           <button
             type="button"
-            className="px-4 py-2 text-white bg-blue-500 rounded-md"
+            className="px-4 py-2 text-white bg-blue-500 rounded-md mr-3"
             onClick={handleAddField}
           >
             Add Field
@@ -335,6 +339,7 @@ const AddForm: React.FC = () => {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 };
