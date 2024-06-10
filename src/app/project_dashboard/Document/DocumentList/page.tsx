@@ -90,10 +90,10 @@ const DocumentList: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="flex-1 flex flex-col items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
-          <h1 className="text-2xl font-bold mb-4">Documents</h1>
+    <div className="container mx-auto">
+    <div className="flex justify-center">
+      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
+          <h1 className="text-xl font-semibold leading-7 text-gray-900 pb-4">Documents</h1>
 
           <ul className="space-y-4">
             {documents.map((doc) => (
