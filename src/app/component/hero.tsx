@@ -5,7 +5,8 @@ import images from "../../../public/assets/exportimages";
 import HeroImage from '../../../public/assets/HeroImage.jpg';
 import Content from "./content";
 import Feature from "./feature";
-import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef} from 'react';
+
 
 const Hero = forwardRef((props, ref)=> {
   const [headerBackground, setHeaderBackground] = useState('transparent');
@@ -26,7 +27,9 @@ const Hero = forwardRef((props, ref)=> {
   const aboutUsRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
   const [showFeature, setShowFeature] = useState(false);
-
+  const handleGetStartedClick = () => {
+    window.location.href = '/signup';
+  };
   const handleNavigateToFeature = () => {
     const featureSection = document.getElementById('features');
     if (featureSection) {
@@ -102,7 +105,7 @@ const Hero = forwardRef((props, ref)=> {
         <p className="text-lg md:text-xl tracking-widest text-white mb-8 drop-shadow-md">
           Your Ultimate Research and Project Planning Platform
         </p>
-        <button className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
+        <button  onClick={handleGetStartedClick} className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
           Get Started
         </button>
       </div>
