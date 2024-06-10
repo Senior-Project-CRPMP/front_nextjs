@@ -122,85 +122,85 @@ const Task = () => {
 
 
   return (
-    <div className="container mx-auto">
-      <div className="flex justify-center">
-        <div className="max-w-md w-full bg-white shadow-md rounded-md p-6 mt-10">
-          <h1 className="text-2xl font-bold mb-4">Task Assignment</h1>
-          <div className="mb-4">
-            <label htmlFor="task" className="block font-medium mb-2">
-              Task
-            </label>
-            <input
-              type="text"
-              name="title"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              placeholder="Enter task"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="block font-medium mb-2">
-              Description
-            </label>
-            <input
-              type="text"
-              name="description"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              placeholder="Enter task"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="status" className="block font-medium mb-2">
-              Status
-            </label>
-            <select
-              name="status"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              onChange={handleChange}
-            >
-              <option value="TODO">TODO</option>
-              <option value="inProgress">In progress</option>
-              <option value="Done">Done</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="deadline" className="block font-medium mb-2">
-              Deadline
-            </label>
-            <input
-              type="date"
-              name="deadline"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="assignedTo" className="block font-medium mb-2">
-              Assignee
-            </label>
-            <select
-              name="userId"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              onChange={handleChange}
-            >
-              <option value="">Select Assignee</option>
-              {members.map((member) => (
-                <option key={member.id} value={member.id}>
-                  {member.firstName} {member.lastName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
-            Add Task
-          </button>
-        </div>
+   <div className="container mx-auto">
+  <div className="flex justify-center">
+    <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
+      <h1 className="text-xl font-semibold leading-7 text-gray-900 pb-4">Assign Task</h1>
+      <div className="mb-4">
+        <label htmlFor="task"  className="block text-sm font-medium leading-6 text-gray-900">
+          Task Name
+        </label>
+        <input
+          type="text"
+          name="title"
+          className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          placeholder="Enter task name"
+          onChange={handleChange}
+        />
       </div>
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+          Description
+        </label>
+        <input
+          type="text"
+          name="description"
+          className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          placeholder="Enter task description"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
+          Status
+        </label>
+        <select
+          name="status"
+          className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          onChange={handleChange}
+        >
+          <option value="TODO" className="block text-sm font-medium leading-6 text-gray-900">TODO</option>
+          <option value="inProgress" className="block text-sm font-medium leading-6 text-gray-900">In progress</option>
+          <option value="Done" className="block text-sm font-medium leading-6 text-gray-900">Done</option>
+        </select>
+      </div>
+      <div className="mb-4">
+        <label htmlFor="deadline" className="block text-sm font-medium leading-6 text-gray-900">
+          Deadline
+        </label>
+        <input
+          type="date"
+          name="deadline"
+          className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="assignedTo" className="block text-sm font-medium leading-6 text-gray-900">
+          Assignee
+        </label>
+        <select
+          name="userId"
+          className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          onChange={handleChange}
+        >
+          <option value="" >Select Assignee</option>
+          {members.map((member) => (
+            <option key={member.id} value={member.id}>
+              {member.firstName} {member.lastName}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        onClick={handleSubmit}
+      >
+        Add Task
+      </button>
     </div>
+  </div>
+</div>
   );
 };
 

@@ -6,9 +6,6 @@ import HeroImage from '../../../public/assets/HeroImage.jpg';
 import Content from "./content";
 import Feature from "./feature";
 import React, { useState, useEffect, useRef, forwardRef} from 'react';
-import { useRouter } from 'next/router';
-
-
 const Hero = forwardRef((props, ref)=> {
   const [headerBackground, setHeaderBackground] = useState('transparent');
 
@@ -29,10 +26,7 @@ const Hero = forwardRef((props, ref)=> {
   const [showContent, setShowContent] = useState(false);
   const [showFeature, setShowFeature] = useState(false);
  
-   const handleGetStartedClick = () => {
-    const router = useRouter();
-    router.push('/signup');
-  };
+  
   const handleNavigateToFeature = () => {
     const featureSection = document.getElementById('features');
     if (featureSection) {
@@ -79,7 +73,7 @@ const Hero = forwardRef((props, ref)=> {
           {showFeature && <Feature />}
         </nav>
         <Link href="/login">
-            <button onClick= {handleGetStartedClick} className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-indigo-600 rounded text-base text-black mt-4 md:mt-0">
+            <button  className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-indigo-600 rounded text-base text-black mt-4 md:mt-0">
               Login
               <svg
                 fill="none"
@@ -108,13 +102,14 @@ const Hero = forwardRef((props, ref)=> {
         <p className="text-lg md:text-xl tracking-widest text-white mb-8 drop-shadow-md">
           Your Ultimate Research and Project Planning Platform
         </p>
-         <div>
-      <button  onClick={handleGetStartedClick} className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
-          Get Started
-        </button> 
-    </div>
       </div>
-     
+      <div className="flex justify-center mt-6">
+            <Link href="/signup">
+              <button className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                Get Started
+              </button>
+            </Link>
+          </div> 
       <svg
         className="absolute bottom-0 left-0 w-full h-30"
         xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +145,7 @@ const Hero = forwardRef((props, ref)=> {
         <circle cx="500" cy="150" r="100" fill="grey" />
       </svg>
     </section>
-     
+   
 
       </div>
    
