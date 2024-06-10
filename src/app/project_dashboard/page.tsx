@@ -10,6 +10,7 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
+import Link from 'next/link';
 
 type Project = {
   id: number;

@@ -1,18 +1,21 @@
-import React from "react";
+import React, { forwardRef } from 'react';
 
-function Feature() {
+const Feature = forwardRef((props, ref) => {
   return (
     <div>
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
           <div className="text-center mb-20">
+          <div className="text-center mb-20"  ref={ref} id="features">
             <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900 mb-4">
               Features
             </h1>
+            </div>
             <p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500s">
-              Blue bottle crucifix vinyl post-ironic four dollar toast vegan
-              taxidermy. Gastropub indxgo juice poutine, ramps microdosing banh
-              mi pug.
+            Streamline your project workflows, stay on top of progress and deadlines, 
+            gain valuable insights, customize data collection, generate professional documents, 
+            and facilitate effective team collaboration 
+            all within our cutting-edge research and project planning platform.
             </p>
             <div className="flex mt-6 justify-center">
               <div className="w-16 h-1 rounded-full bg-indigo-500 inline-flex"></div>
@@ -42,20 +45,7 @@ function Feature() {
                   Effortlessly initiate and oversee projects with intuitive
                   management tools.
                 </p>
-                <a className="mt-3 text-indigo-500 inline-flex items-center">
-                  Learn More
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+               
               </div>
             </div>
             <div className="p-4 md:w-1/3 flex flex-col text-center items-center">
@@ -93,20 +83,7 @@ function Feature() {
                   Stay on course and meet deadlines with advanced tracking and
                   scheduling features.
                 </p>
-                <a className="mt-3 text-indigo-500 inline-flex items-center">
-                  Learn More
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+               
               </div>
             </div>
             <div className="p-4 md:w-1/3 flex flex-col text-center items-center">
@@ -139,20 +116,7 @@ function Feature() {
                   Gain invaluable insights at a glance with customizable
                   dashboards and in-depth analysis tools.
                 </p>
-                <a className="mt-3 text-indigo-500 inline-flex items-center">
-                  Learn More
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+               
               </div>
             </div>
           </div>
@@ -210,20 +174,7 @@ function Feature() {
                   Craft bespoke data collection forms suited to your projects
                   unique requirements.
                 </p>
-                <a className="mt-3 text-indigo-500 inline-flex items-center">
-                  Learn More
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+               
               </div>
             </div>
 
@@ -255,20 +206,7 @@ function Feature() {
                   Generate polished reports and documents effortlessly with our
                   streamlined document generation tools.
                 </p>
-                <a className="mt-3 text-indigo-500 inline-flex items-center">
-                  Learn More
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+                
               </div>
             </div>
 
@@ -294,30 +232,14 @@ function Feature() {
                   Foster seamless collaboration among research teams with
                   integrated communication and sharing features.
                 </p>
-                <a className="mt-3 text-indigo-500 inline-flex items-center">
-                  Learn More
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-4 h-4 ml-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                  </svg>
-                </a>
+               
               </div>
             </div>
           </div>
         </div>
       </section>
-      <button className="flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-        Learn More
-      </button>
     </div>
   );
-}
+});
 
 export default Feature;

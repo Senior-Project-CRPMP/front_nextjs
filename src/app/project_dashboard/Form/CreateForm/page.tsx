@@ -229,7 +229,7 @@ const AddForm: React.FC = () => {
           <label className="form-box">
             <p className="form-label text-gray-700 font-medium mb-2">Project ID:</p>
             <input
-              className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-3"
               type="text"
               name="projectId"
               value={formData.projectId}
@@ -455,7 +455,7 @@ const AddForm: React.FC = () => {
           ))}
           <button
             type="button"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md"
+            className="bg-blue-500 text-white py-2 px-4 rounded-md mr-3"
             onClick={handleAddField}
           >
             Add Field

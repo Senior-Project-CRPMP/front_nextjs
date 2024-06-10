@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import images from "../../../public/assets/exportimages";
 import HeroImage from '../../../public/assets/HeroImage.jpg';
+import Content from "./content";
+import Feature from "./feature";
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 
-import React, { useState, useEffect } from 'react';
-
-export default function Hero() {
+const Hero = forwardRef((props, ref)=> {
   const [headerBackground, setHeaderBackground] = useState('transparent');
 
   useEffect(() => {
@@ -21,9 +22,27 @@ export default function Hero() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  const featureRef = useRef(null);
+  const aboutUsRef = useRef(null);
+  const [showContent, setShowContent] = useState(false);
+  const [showFeature, setShowFeature] = useState(false);
+
+  const handleNavigateToFeature = () => {
+    const featureSection = document.getElementById('features');
+    if (featureSection) {
+      featureSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+  };
+  const handleNavigateToAboutUs = () => {
+    const aboutUsSection = document.getElementById('about-us');
+    if (aboutUsSection) {
+      aboutUsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div>
+    <div id="home" ref={ref}>
       <header
         className={`fixed top-0 left-0 right-0 z-10 transition-colors duration-300 ${
           headerBackground === 'transparent'
@@ -48,8 +67,10 @@ export default function Hero() {
           <span className=" text-xl text-white">CRPMP</span>
         </a>
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-          <a className="mr-5 text-white hover:text-gray-600 ">About Us</a>
-          <a className="mr-5  text-white hover:text-gray-600">Services</a>
+          <a  href="#" className="mr-5 text-white hover:text-gray-600 " onClick={handleNavigateToAboutUs}>About Us</a>
+          <a  href="#" className="mr-5  text-white hover:text-gray-600" onClick={handleNavigateToFeature}>Features</a>
+          {showContent && <Content />}
+          {showFeature && <Feature />}
         </nav>
         <Link href="/login">
             <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-indigo-600 rounded text-base text-black mt-4 md:mt-0">
@@ -126,4 +147,5 @@ export default function Hero() {
 
    
   );
-}
+});
+export default Hero;
