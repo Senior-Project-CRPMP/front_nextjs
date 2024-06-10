@@ -31,11 +31,11 @@ function Navigation({ setCurrentPage }: NavigationProps) {
       />
       <NavButton text="Board" page="board" setCurrentPage={setCurrentPage} />
       {/* <NavButton text="List" page="list" setCurrentPage={setCurrentPage} /> */}
-      <NavButton
+      {/* <NavButton
         text="Timeline"
         page="timeline"
         setCurrentPage={setCurrentPage}
-      />
+      /> */}
       <NavButton
         text="Calendar"
         page="calendar"

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IdentificationIcon } from "@heroicons/react/24/outline";
+import NavBar from "../../nav_bar";
 
 type Document = {
   id: string;
@@ -82,7 +83,10 @@ const DocumentList: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="w-1/5 h-screen bg-white rounded-md my-2">
+        <NavBar />
+      </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4">Documents</h1>
         

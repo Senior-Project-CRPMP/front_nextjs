@@ -107,7 +107,6 @@ export default function LoginForm() {
               />
             </div>
           </div>
-
           <div>
             <button
               type="submit"

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Navigation from "./nav_button";
 import images from "../../../public/assets/exportimages";
 import Calendar from "./Calendar/page";
@@ -10,7 +10,7 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
-
+import Link from "next/link";
 
 type Project = {
   id: number;
@@ -31,9 +31,9 @@ type Member = {
 };
 
 type Role = {
-  userid : string;
+  userId: string;
   role: string;
-}
+};
 
 const ProjectPage: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
@@ -42,16 +42,18 @@ const ProjectPage: React.FC = () => {
   const [isMemberListOpen, setIsMemberListOpen] = useState(false);
   const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [roles, setRoles]= useState<Role[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [allUsers, setAllUsers] = useState<Member[]>([]);
-  const [selectedRoles, setSelectedRoles] = useState<{ [userId: string]: string }>({});
+  const [selectedRoles, setSelectedRoles] = useState<{
+    [userId: string]: string;
+  }>({});
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const projectIdStr =
     typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
   const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
-  const [members, setMembers]= useState<Member[]>([])
+  const [members, setMembers] = useState<Member[]>([]);
 
   const handleToggleMemberList = () => {
     setIsMemberListOpen(!isMemberListOpen);
@@ -67,16 +69,14 @@ const ProjectPage: React.FC = () => {
 
   const filteredUsers = allUsers.filter(
     (user) =>
-      (user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-       user.userName?.toLowerCase().includes(searchTerm.toLowerCase()))
+      user.userName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch(
-        `${apiBaseUrl}/api/Account/users`
-      );
+      const res = await fetch(`${apiBaseUrl}/api/Account/users`);
       const data = await res.json();
       setAllUsers(data);
       console.log(data);
@@ -97,8 +97,6 @@ const ProjectPage: React.FC = () => {
     };
     fetchCard().catch((error) => console.error(error));
   }, [projectId]);
-
-
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -127,11 +125,12 @@ const ProjectPage: React.FC = () => {
   }, []);
 
   const getRoleByMember = (member: Member): Role | null => {
-    const role = roles.find((r) => r.userid === member.id);
+    console.log(member.id);
+    console.log(roles);
+    const role = roles.find((r) => r.userId === member.id);
+    console.log(role);
     return role || null;
   };
-
-  
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -158,7 +157,6 @@ const ProjectPage: React.FC = () => {
       return;
     }
 
-
     try {
       const response = await fetch(`${apiBaseUrl}/api/UserProject`, {
         method: "POST",
@@ -172,8 +170,9 @@ const ProjectPage: React.FC = () => {
         }),
       });
 
-
       if (response.ok) {
+        console.log("Member added successfully");
+        setMembers((prevMembers) => [...prevMembers, user]);
       } else {
         // Handle error, maybe show an error message or handle it in another way
         console.error("Failed to add user to project");
@@ -183,14 +182,13 @@ const ProjectPage: React.FC = () => {
     }
   };
 
-
   const PageContent = ({ currentPage }: { currentPage: string }) => {
     return (
       <div>
         {currentPage === "overview" && <Overview project={project} />}
         {currentPage === "board" && <Board />}
         {currentPage === "list" && <List />}
-        {currentPage === "timeline" && <Timeline />}
+        {/* {currentPage === "timeline" && <Timeline />} */}
         {currentPage === "calendar" && <Calendar />}
         {currentPage === "workflow" && <Workflow />}
         {currentPage === "files" && <Files />}
@@ -315,12 +313,18 @@ const ProjectPage: React.FC = () => {
                           </button>
                         </div>
                         <ul>
-                          {members.map((member, index) => (
-                            <li key={member.id} className="flex items-center mb-2">
+                          {members.map((member) => (
+                            <li
+                              key={member.id}
+                              className="flex items-center mb-2"
+                            >
                               <div>
-                                <p className="font-bold">{member.firstName} {member.lastName}</p>
+                                <p className="font-bold">
+                                  {member.firstName} {member.lastName}
+                                </p>
                                 <p className="text-sm text-gray-600">
-                                {getRoleByMember(member)?.role || "Role not found"}
+                                  {getRoleByMember(member)?.role ||
+                                    "Role not found"}
                                 </p>
                               </div>
                             </li>
@@ -351,34 +355,57 @@ const ProjectPage: React.FC = () => {
                           onChange={handleSearchChange}
                         />
                         <ul>
-                        {filteredUsers.map((user) => (
-                            <li key={user.id} className="flex items-center mb-2">
-                              <div>
-                                <p className="font-bold">
-                                  {user.firstName} {user.lastName}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  {user.userName}
-                                </p>
-                              </div>
-                              <div className="flex items-center ml-auto">
-                                <select
-                                  className="mr-2"
-                                  value={selectedRoles[user.id] || ""}
-                                  onChange={(e) =>
-                                    handleRoleChange(user.id, e.target.value)
-                                  }
-                                >
-                                  <option value="">Select Role</option>
-                                  <option value="supervisor">Supervisor</option>
-                                  <option value="researcher">Researcher</option>
-                                </select>
-                                <button onClick={() => handleAddClick(user)}>
-                                  Add
-                                </button>
-                              </div>
-                            </li>
-                          ))}
+                          {filteredUsers.map((user) => {
+                            const isMember = members.some(
+                              (member) => member.id === user.id
+                            );
+                            return (
+                              <li
+                                key={user.id}
+                                className="flex items-center mb-2"
+                              >
+                                <div>
+                                  <p className="font-bold">
+                                    {user.firstName} {user.lastName}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {user.userName}
+                                  </p>
+                                </div>
+                                <div className="flex items-center ml-auto">
+                                  {isMember ? (
+                                    <span className="text-green-500">✔</span>
+                                  ) : (
+                                    <>
+                                      <select
+                                        className="mr-2"
+                                        value={selectedRoles[user.id] || ""}
+                                        onChange={(e) =>
+                                          handleRoleChange(
+                                            user.id,
+                                            e.target.value
+                                          )
+                                        }
+                                      >
+                                        <option value="">Select Role</option>
+                                        <option value="supervisor">
+                                          Supervisor
+                                        </option>
+                                        <option value="researcher">
+                                          Researcher
+                                        </option>
+                                      </select>
+                                      <button
+                                        onClick={() => handleAddClick(user)}
+                                      >
+                                        Add
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     </div>
@@ -386,7 +413,30 @@ const ProjectPage: React.FC = () => {
                 </div>
                 <div className="w-72 bg-white rounded-md shadow-2xl">
                   {currentPage === "calendar" && <SideCalendar />}
-                  {currentPage === "overview" && <TaskLister />}
+                  {currentPage === "overview" && (
+                    <div>
+                      <Link href="/addtask">
+                        <button className="flex items-center bg-gradient-to-r from-violet-300 to-indigo-300 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300">
+                          <svg
+                            className="w-4 h-4 mr-2 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                            ></path>
+                          </svg>
+                          <p className="text-white">Add Task</p>
+                        </button>
+                      </Link>
+                      <TaskLister />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
