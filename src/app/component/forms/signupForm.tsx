@@ -55,7 +55,8 @@ export default function SignupForm() {
     if (response.ok) {
       // Handle successful registration
       console.log('Registration successful');
-      router.push('/login');
+      setSuccess(true)
+      // router.push('/login');
     } else {
       // Handle registration errors
       const data = await response.json();
