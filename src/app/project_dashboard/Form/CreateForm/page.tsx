@@ -7,7 +7,6 @@ type FormFieldType =
   | "long-text"
   | "select"
   | "radio"
-  | "file"
   | "date"
   | "time";
 
@@ -20,8 +19,6 @@ type FormField = {
   includeComment: boolean;
   comment: string;
   maxLength: number | null;
-  maxUploadSize: number | null;
-  allowedTypes: string[];
   [key: string]: any;
 };
 
@@ -37,8 +34,8 @@ const AddForm: React.FC = () => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleAddField = () => {
-    setFormFields([
-      ...formFields,
+    setFormFields((prevFields) => [
+      ...prevFields,
       {
         label: "",
         type: "short-text",
@@ -48,16 +45,12 @@ const AddForm: React.FC = () => {
         includeComment: false,
         comment: "",
         maxLength: null,
-        maxUploadSize: null,
-        allowedTypes: [],
       },
     ]);
   };
 
   const handleRemoveField = (index: number) => {
-    const updatedFields = [...formFields];
-    updatedFields.splice(index, 1);
-    setFormFields(updatedFields);
+    setFormFields((prevFields) => prevFields.filter((_, i) => i !== index));
   };
 
   const handleFieldChange = (
@@ -66,52 +59,63 @@ const AddForm: React.FC = () => {
     value: any,
     optionIndex?: number | boolean
   ) => {
-    const updatedFields = [...formFields];
-    if (name === "options" && typeof optionIndex === "number") {
-      updatedFields[index].options[optionIndex] = value as string;
-    } else if (name === "allowedTypes" && typeof optionIndex === "boolean") {
-      const fileType = value as string;
-      const updatedTypes = [...(formFields[index].allowedTypes || [])];
-      if (optionIndex) {
-        if (!updatedTypes.includes(fileType)) {
-          updatedTypes.push(fileType);
-        }
+    setFormFields((prevFields) => {
+      const updatedFields = [...prevFields];
+      if (name === "options" && typeof optionIndex === "number") {
+        updatedFields[index].options[optionIndex] = value as string;
       } else {
-        const indexToRemove = updatedTypes.indexOf(fileType);
-        if (indexToRemove !== -1) {
-          updatedTypes.splice(indexToRemove, 1);
-        }
+        updatedFields[index][name] = value;
       }
-      updatedFields[index].allowedTypes = updatedTypes;
-    } else {
-      updatedFields[index][name] = value;
-    }
-    setFormFields(updatedFields);
+      return updatedFields;
+    });
   };
 
   const handleAddOption = (fieldIndex: number) => {
-    const updatedFields = [...formFields];
-    updatedFields[fieldIndex].options.push(updatedFields[fieldIndex].optionInput);
-    updatedFields[fieldIndex].optionInput = "";
-    setFormFields(updatedFields);
+    setFormFields((prevFields) => {
+      const updatedFields = [...prevFields];
+      if (updatedFields[fieldIndex].optionInput.trim()) {
+        updatedFields[fieldIndex].options = [
+          ...updatedFields[fieldIndex].options,
+          updatedFields[fieldIndex].optionInput,
+        ];
+        updatedFields[fieldIndex].optionInput = "";
+      }
+      return updatedFields;
+    });
   };
 
   const handleRemoveOption = (fieldIndex: number, optionIndex: number) => {
-    const updatedFields = [...formFields];
-    updatedFields[fieldIndex].options.splice(optionIndex, 1);
-    setFormFields(updatedFields);
+    setFormFields((prevFields) => {
+      const updatedFields = [...prevFields];
+      updatedFields[fieldIndex].options.splice(optionIndex, 1);
+      return updatedFields;
+    });
   };
 
   const handleDuplicateField = (index: number) => {
-    const updatedFields = [...formFields];
-    const fieldToDuplicate = updatedFields[index];
-    const duplicatedField = JSON.parse(JSON.stringify(fieldToDuplicate));
-    updatedFields.splice(index + 1, 0, duplicatedField);
-    setFormFields(updatedFields);
+    setFormFields((prevFields) => {
+      const updatedFields = [...prevFields];
+      const fieldToDuplicate = updatedFields[index];
+      const duplicatedField = { ...fieldToDuplicate, options: [...fieldToDuplicate.options] };
+      updatedFields.splice(index + 1, 0, duplicatedField);
+      return updatedFields;
+    });
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    // Ensure the last input option is saved before submission
+    const updatedFormFields = formFields.map((field) => {
+      if ((field.type === "select" || field.type === "radio") && field.optionInput.trim()) {
+        return {
+          ...field,
+          options: [...field.options, field.optionInput],
+          optionInput: "",
+        };
+      }
+      return field;
+    });
 
     try {
       const formResponse = await fetch(`${apiBaseUrl}/api/Form/CreateForm`, {
@@ -133,7 +137,7 @@ const AddForm: React.FC = () => {
       const formResult = await formResponse.json();
       const formId = formResult.id;
 
-      const createQuestionPromises = formFields.map(async (field) => {
+      const createQuestionPromises = updatedFormFields.map(async (field) => {
         const payload: any = {
           formId,
           type: field.type,
@@ -144,10 +148,6 @@ const AddForm: React.FC = () => {
 
         if (field.comment) payload.comment = field.comment;
         if (field.maxLength !== null) payload.maxLength = field.maxLength;
-        if (field.maxUploadSize !== null)
-          payload.maxUploadSize = field.maxUploadSize;
-        if (field.allowedTypes.length > 0)
-          payload.allowedTypes = field.allowedTypes;
 
         const questionResponse = await fetch(
           `${apiBaseUrl}/api/FormQuestion/CreateQuestion`,
@@ -206,7 +206,7 @@ const AddForm: React.FC = () => {
     <div className="flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-3/4 lg:w-2/3">
         <h1 className="text-2xl font-bold mb-4">Create New Form</h1>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="form-box">
             <p className="form-label text-gray-700 font-medium mb-2">Form Title:</p>
             <input
@@ -239,233 +239,99 @@ const AddForm: React.FC = () => {
           {formFields.map((field, fieldIndex) => (
             <div key={fieldIndex}>
               <label className="block mb-2">
-                Question Label:
+                <p className="form-label text-gray-700 font-medium mb-2">Field Label:</p>
                 <input
+                  className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   type="text"
-                  name="label"
                   value={field.label}
-                  className="border border-gray-300 rounded-md px-4 py-2 w-full"
-                  onChange={(e) =>
-                    handleFieldChange(
-                      fieldIndex,
-                      e.target.name as keyof FormField,
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => handleFieldChange(fieldIndex, "label", e.target.value)}
                 />
               </label>
               <label className="block mb-2">
-                Question Type:
+                <p className="form-label text-gray-700 font-medium mb-2">Field Type:</p>
                 <select
-                  name="type"
+                  className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={field.type}
-                  className="border border-gray-300 px-3 py-2 rounded-md w-full"
-                  onChange={(e) =>
-                    handleFieldChange(
-                      fieldIndex,
-                      e.target.name as keyof FormField,
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => handleFieldChange(fieldIndex, "type", e.target.value)}
                 >
                   <option value="short-text">Short Text</option>
                   <option value="long-text">Long Text</option>
-                  <option value="select">Dropdown</option>
-                  <option value="radio">Radio Button</option>
-                  <option value="file">File Upload</option>
+                  <option value="select">Select</option>
+                  <option value="radio">Radio</option>
                   <option value="date">Date</option>
                   <option value="time">Time</option>
                 </select>
               </label>
-              {(field.type === "select" || field.type === "radio") && (
-                <div>
+              {field.type === "select" || field.type === "radio" ? (
+                <div className="mb-4">
+                  <p className="form-label text-gray-700 font-medium mb-2">Options:</p>
                   {field.options.map((option, optionIndex) => (
-                    <div key={optionIndex} className="flex mb-2">
+                    <div key={optionIndex} className="flex items-center mb-2">
                       <input
+                        className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex-1 mr-2"
                         type="text"
-                        name="options"
                         value={option}
-                        className="border border-gray-300 rounded-md px-4 py-2 w-full"
                         onChange={(e) =>
-                          handleFieldChange(
-                            fieldIndex,
-                            "options",
-                            e.target.value,
-                            optionIndex
-                          )
+                          handleFieldChange(fieldIndex, "options", e.target.value, optionIndex)
                         }
                       />
                       <button
                         type="button"
-                        className="ml-2 text-red-500"
-                        onClick={() =>
-                          handleRemoveOption(fieldIndex, optionIndex)
-                        }
+                        className="px-2 py-1 text-white bg-red-500 rounded-md"
+                        onClick={() => handleRemoveOption(fieldIndex, optionIndex)}
                       >
                         Remove
                       </button>
                     </div>
                   ))}
-                  <div className="flex">
+                  <div className="flex items-center mb-2">
                     <input
+                      className="form-input bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex-1 mr-2"
                       type="text"
                       value={field.optionInput}
-                      className="border border-gray-300 rounded-md px-4 py-2 w-full"
-                      onChange={(e) =>
-                        handleFieldChange(fieldIndex, "optionInput", e.target.value)
-                      }
+                      onChange={(e) => handleFieldChange(fieldIndex, "optionInput", e.target.value)}
                     />
                     <button
                       type="button"
-                      className="ml-2 text-blue-500"
+                      className="px-2 py-1 text-white bg-blue-500 rounded-md"
                       onClick={() => handleAddOption(fieldIndex)}
                     >
                       Add Option
                     </button>
                   </div>
                 </div>
-              )}
-              <label className="block mb-2">
-                Required:
-                <input
-                  type="checkbox"
-                  name="required"
-                  checked={field.required}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      fieldIndex,
-                      e.target.name as keyof FormField,
-                      e.target.checked
-                    )
-                  }
-                />
-              </label>
-              <label className="block mb-2">
-                Include Comment:
-                <input
-                  type="checkbox"
-                  name="includeComment"
-                  checked={field.includeComment}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      fieldIndex,
-                      e.target.name as keyof FormField,
-                      e.target.checked
-                    )
-                  }
-                />
-              </label>
-              {field.includeComment && (
-                <label className="block mb-2">
-                  Comment:
-                  <input
-                    type="text"
-                    name="comment"
-                    value={field.comment}
-                    className="border border-gray-300 rounded-md px-4 py-2 w-full"
-                    onChange={(e) =>
-                      handleFieldChange(
-                        fieldIndex,
-                        e.target.name as keyof FormField,
-                        e.target.value
-                      )
-                    }
-                  />
-                </label>
-              )}
-              {field.type === "short-text" && (
-                <label className="block mb-2">
-                  Max Length:
-                  <input
-                    type="number"
-                    name="maxLength"
-                    value={field.maxLength || ""}
-                    className="border border-gray-300 rounded-md px-4 py-2 w-full"
-                    onChange={(e) =>
-                      handleFieldChange(
-                        fieldIndex,
-                        e.target.name as keyof FormField,
-                        parseInt(e.target.value, 10) || null
-                      )
-                    }
-                  />
-                </label>
-              )}
-              {field.type === "file" && (
-                <div className="mb-2">
-                  <label className="block mb-2">
-                    Max Upload Size (MB):
-                    <input
-                      type="number"
-                      name="maxUploadSize"
-                      value={field.maxUploadSize || ""}
-                      className="border border-gray-300 rounded-md px-4 py-2 w-full"
-                      onChange={(e) =>
-                        handleFieldChange(
-                          fieldIndex,
-                          e.target.name as keyof FormField,
-                          parseInt(e.target.value, 10) || null
-                        )
-                      }
-                    />
-                  </label>
-                  <label className="block mb-2">
-                    Allowed File Types:
-                    {["image/jpeg", "image/png", "application/pdf"].map(
-                      (fileType) => (
-                        <div key={fileType} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name="allowedTypes"
-                            value={fileType}
-                            checked={field.allowedTypes.includes(fileType)}
-                            onChange={(e) =>
-                              handleFieldChange(
-                                fieldIndex,
-                                e.target.name as keyof FormField,
-                                fileType,
-                                e.target.checked
-                              )
-                            }
-                          />
-                          <span className="ml-2">{fileType}</span>
-                        </div>
-                      )
-                    )}
-                  </label>
-                </div>
-              )}
-              <div className="flex justify-end">
+              ) : null}
+              {/* Additional field properties */}
+              <div className="flex justify-between mt-4">
                 <button
                   type="button"
-                  className="text-blue-500"
-                  onClick={() => handleDuplicateField(fieldIndex)}
+                  className="px-2 py-1 text-white bg-red-500 rounded-md"
+                  onClick={() => handleRemoveField(fieldIndex)}
                 >
-                  Duplicate
+                  Remove Field
                 </button>
                 <button
                   type="button"
-                  className="text-red-500 ml-2"
-                  onClick={() => handleRemoveField(fieldIndex)}
+                  className="px-2 py-1 text-white bg-gray-500 rounded-md"
+                  onClick={() => handleDuplicateField(fieldIndex)}
                 >
-                  Remove
+                  Duplicate Field
                 </button>
               </div>
             </div>
           ))}
           <button
             type="button"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md"
+            className="px-4 py-2 text-white bg-blue-500 rounded-md"
             onClick={handleAddField}
           >
             Add Field
           </button>
           <button
             type="submit"
-            className="bg-green-500 text-white py-2 px-4 rounded-md"
-            onClick={handleSubmit}
+            className="px-4 py-2 text-white bg-green-500 rounded-md"
           >
-            Submit Form
+            Save Form
           </button>
         </form>
       </div>
