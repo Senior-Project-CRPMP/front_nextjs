@@ -6,6 +6,7 @@ import HeroImage from '../../../public/assets/HeroImage.jpg';
 import Content from "./content";
 import Feature from "./feature";
 import React, { useState, useEffect, useRef, forwardRef} from 'react';
+import { useRouter } from 'next/router';
 
 
 const Hero = forwardRef((props, ref)=> {
@@ -27,9 +28,6 @@ const Hero = forwardRef((props, ref)=> {
   const aboutUsRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
   const [showFeature, setShowFeature] = useState(false);
-  const handleGetStartedClick = () => {
-    window.location.href = '/signup';
-  };
   const handleNavigateToFeature = () => {
     const featureSection = document.getElementById('features');
     if (featureSection) {
@@ -43,9 +41,9 @@ const Hero = forwardRef((props, ref)=> {
       aboutUsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
+  const divRef = useRef<HTMLDivElement>(null);
   return (
-    <div id="home" ref={ref}>
+    <div id="home" ref={divRef}>
       <header
         className={`fixed top-0 left-0 right-0 z-10 transition-colors duration-300 ${
           headerBackground === 'transparent'
@@ -105,9 +103,6 @@ const Hero = forwardRef((props, ref)=> {
         <p className="text-lg md:text-xl tracking-widest text-white mb-8 drop-shadow-md">
           Your Ultimate Research and Project Planning Platform
         </p>
-        <button  onClick={handleGetStartedClick} className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
-          Get Started
-        </button>
       </div>
       <svg
         className="absolute bottom-0 left-0 w-full h-30"
