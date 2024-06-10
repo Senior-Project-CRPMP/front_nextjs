@@ -4,49 +4,56 @@ import { useRouter } from 'next/navigation';
 
 
 interface Form{
-    id:number;
-    name: string
-}
+    id: number;
+    title: string;
+    description: string;
+    projectId: number
+  }
+const projectIdStr =
+typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const Forms = () => {
-  const [forms, setForms] = useState<Form[]>([
-    {
-        id: 1,
-        name: 'Form1'
-
-    },
-  ]);
-  const [loading, setLoading] = useState(true);
+  const [forms, setForms] = useState<Form[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
+    if (!projectId) return;
+  
     const fetchForms = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/api/forms-with-responses`);
-        const data = await response.json();
+        const response = await fetch(
+          `${apiBaseUrl}/api/Form/ProjectFormsWithResponsesOnly/${projectId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch forms");
+        }
+        const data: Form[] = await response.json();
         setForms(data);
-      } catch (error) {
-        console.error('Error fetching forms:', error);
-      } finally {
+        setLoading(false);
+      } catch (error: any) {
+        setError(error.message);
         setLoading(false);
       }
     };
-
+  
     fetchForms();
-  }, []);
-
-  const handleFormClick = (formId:number) => {
-    router.push(`/project_dashboard/Analyze/View/${formId}`);
-  };
-
+  }, [projectId]);
+  
   if (loading) {
-    return <p className="text-center">Loading...</p>;
+    return <div>Loading...</div>;
   }
-
-  if (forms.length === 0) {
-    return <p className=" text-center">No forms found</p>;
+  
+  if (error) {
+    return <div>Error: {error}</div>;
   }
+  
+  const openFile = (id: number) => {
+    router.push(`/project_dashboard/Analyze/View/${id}`);
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen mt-10 space-y-8">
@@ -56,9 +63,9 @@ const Forms = () => {
           <div
             key={form.id}
             className="p-4 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
-            onClick={() => handleFormClick(form.id)}
+            onClick={() => openFile(form.id)}
           >
-            <h2 className="text-xl font-semibold">{form.name}</h2>
+            <h2 className="text-xl font-semibold">{form.title}</h2>
           </div>
         ))}
       </div>
