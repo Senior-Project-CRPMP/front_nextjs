@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 const AddFile = () => {
   const router = useRouter();
-  const projectId = 1;
+  const projectId = 2;
 
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
