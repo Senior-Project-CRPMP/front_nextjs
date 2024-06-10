@@ -57,6 +57,7 @@ export default function CreateChatRoom() {
     event.preventDefault();
 
     try {
+
       const response = await fetch(`${apiBaseUrl}/api/ChatRoom/create`, {
         method: 'POST',
         headers: {

@@ -15,6 +15,7 @@ export default function sideCalendar() {
   let today = new Date();
   const projectIdStr = localStorage.getItem('projectId');
   const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     // Update the calendar when the component mounts
@@ -105,7 +106,7 @@ export default function sideCalendar() {
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(`${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`);
         const data = await res.json();
         setTasks(data);
         console.log(tasks);
