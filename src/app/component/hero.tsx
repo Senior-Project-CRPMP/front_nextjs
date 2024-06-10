@@ -97,7 +97,7 @@ const Hero = forwardRef((props, ref)=> {
         <h1 className="text-4xl font-extralight md:text-6xl tracking-widest  text-white mb-4 drop-shadow-lg">
           Welcome
         </h1>
-        <h1 className= "mb-4 font-light italic  text-white tracing-widest  text-5xl">comprehensive Research And Project Management Platform </h1>
+        <h1 className= "mb-4 font-light italic  text-white tracing-widest  text-5xl">Comprehensive Research And Project Management Platform </h1>
 
         <p className="text-lg md:text-xl tracking-widest text-white mb-8 drop-shadow-md">
           Your Ultimate Research and Project Planning Platform

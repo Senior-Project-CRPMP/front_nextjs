@@ -10,7 +10,11 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
+<<<<<<< HEAD
 import Link from 'next/link';
+=======
+import Link from "next/link";
+>>>>>>> origin
 
 type Project = {
   id: number;
@@ -35,6 +39,16 @@ type Role = {
   role: string;
 };
 
+interface Task {
+  id: number;
+  projectId: number;
+  title: string;
+  description: string;
+  assignedTo: string;
+  deadline: string;
+  status: string;
+}
+
 const ProjectPage: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
@@ -47,6 +61,7 @@ const ProjectPage: React.FC = () => {
   const [selectedRoles, setSelectedRoles] = useState<{
     [userId: string]: string;
   }>({});
+  const [tasks, setTasks] = useState<Task[]>([]);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const projectIdStr =
@@ -212,6 +227,30 @@ const ProjectPage: React.FC = () => {
   const Formbuilder = () => {
     return <h1 className="text-black">Formbuilder Page Content</h1>;
   };
+
+  useEffect(() => {
+    const fetchCard = async () => {
+      try {
+        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const data = await res.json();
+        setTasks(data);
+        console.log(tasks);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCard();
+  }, [projectId]);
+
+
+  const sortedTasks = tasks.slice().sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+
+    // Filter upcoming tasks
+    const upcomingTasks = sortedTasks.filter(task => new Date(task.deadline) >= new Date());
+
+    // Take the first three upcoming tasks
+    const threeUpcomingTasks = upcomingTasks.slice(0, 3);
+
 
   return (
     <div className="bg-white min-h-screen">
@@ -415,24 +454,16 @@ const ProjectPage: React.FC = () => {
                   {currentPage === "calendar" && <SideCalendar />}
                   {currentPage === "overview" && (
                     <div>
-                      <Link href="/addtask">
-                        <button className="flex items-center bg-gradient-to-r from-violet-300 to-indigo-300 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300">
-                          <svg
-                            className="w-4 h-4 mr-2 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                            ></path>
-                          </svg>
-                          <p className="text-white">Add Task</p>
-                        </button>
+                      <div className="md:py-8 py-5 md:px-16 px-5 dark:bg-gray-700 bg-gray-50 rounded-b">
+                            <p className="text-sm font-light border-b pb-4 border-gray-400 border-dashed pt-5"> UPCOMING TASKS</p>
+                            {threeUpcomingTasks.map(task => (
+                            <div key={task.id} className="">
+                            <li className="text-sm font-light mb-1">{task.title} {task.deadline}</li>
+                            </div>
+                            ))}
+                        </div>
+                      <Link href="project_dashboard/addtask">
+                          <p className="text-blue-600 text-center">Add Task</p>
                       </Link>
                       <TaskLister />
                     </div>
