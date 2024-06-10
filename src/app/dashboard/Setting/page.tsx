@@ -39,15 +39,17 @@ const Settings = () => {
   };
 
   return (
-    <div className="w-full h-screen mx-auto p-8 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+    <div className="container mx-auto">
+    <div className="flex justify-center">
+      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
       <form onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold text-center mb-8 text-black dark:text-white">
+        <h1 className="text-xl font-semibold leading-7 text-gray-900 pb-4">
           Settings
         </h1>
 
         {/* General Section */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4 mt-0 text-black dark:text-white">
+          <h2 className="text-xl font-semibold leading-7 text-gray-900 pb-4">
             General
           </h2>
           <div className="mb-4"></div>
@@ -57,17 +59,17 @@ const Settings = () => {
 
         {/* Display Settings Section */}
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-black dark:text-white">
+          <h2 className="text-xl font-semibold leading-7 text-gray-900 pb-4">
             Display Settings
           </h2>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium leading-6 text-gray-900">
               Display Density:
             </label>
             <select
               value={displayDensity}
               onChange={(e) => setDisplayDensity(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-black dark:text-white"
+             className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
               <option value="comfortable">Comfortable</option>
               <option value="compact">Compact</option>
@@ -81,12 +83,12 @@ const Settings = () => {
             Dark Mode
           </h2>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium leading-6 text-gray-900">
               <input
                 type="checkbox"
                 checked={isDarkMode}
                 onChange={toggleDarkMode}
-                className="mr-2 leading-tight"
+                
               />
               Enable Dark Mode
             </label>
@@ -99,12 +101,12 @@ const Settings = () => {
             Notifications
           </h2>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium leading-6 text-gray-900">
               <input
                 type="checkbox"
                 checked={notificationsEnabled}
                 onChange={(e) => setNotificationsEnabled(e.target.checked)}
-                className="mr-2 leading-tight"
+                
               />
               Enable Notifications
             </label>
@@ -113,11 +115,13 @@ const Settings = () => {
 
         <button
           type="submit"
-          className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
         >
           Save Settings
         </button>
       </form>
+    </div>
+    </div>
     </div>
   );
 };
