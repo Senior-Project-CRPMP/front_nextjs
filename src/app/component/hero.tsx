@@ -109,7 +109,7 @@ const Hero = forwardRef((props, ref)=> {
           Your Ultimate Research and Project Planning Platform
         </p>
          <div>
-      <button   className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
+      <button  onClick={handleGetStartedClick} className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105">
           Get Started
         </button> 
     </div>
