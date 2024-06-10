@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 
 interface User {
@@ -11,10 +11,11 @@ interface User {
 
 const User = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch(`https://localhost:7174/api/Account/users`);
+      const res = await fetch(`${apiBaseUrl}/api/Account/users`);
       const data = await res.json();
       setUsers(data);
       console.log("Did it work?");
@@ -28,13 +29,16 @@ const User = () => {
       const updatedUser = { ...user, isAdmin: !user.isAdmin };
 
       try {
-        const res = await fetch(`https://localhost:7174/api/Account/update-user/${userId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUser),
-        });
+        const res = await fetch(
+          `https://localhost:/api/Account/update-user/${userId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedUser),
+          }
+        );
 
         if (res.ok) {
           setUsers((prevUsers) =>
@@ -52,9 +56,12 @@ const User = () => {
 
   const deleteUser = async (userId: string) => {
     try {
-      const res = await fetch(`https://localhost:7174/api/Account/delete-user/${userId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${apiBaseUrl}/api/Account/delete-user/${userId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
         setUsers((prevUsers) => prevUsers.filter((u) => u.id !== userId));
@@ -78,7 +85,8 @@ const User = () => {
               className="w-full px-4 py-2 bg-white hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-200 transition-all duration-300 ease-in-out flex justify-between items-center"
             >
               <div>
-                {u.firstName} {u.lastName} - {u.email} - {u.isAdmin ? "Admin" : "User"}
+                {u.firstName} {u.lastName} - {u.email} -{" "}
+                {u.isAdmin ? "Admin" : "User"}
               </div>
               <div>
                 <button

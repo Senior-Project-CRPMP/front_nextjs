@@ -18,6 +18,7 @@ const ProfileDropdown: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const userEmail = typeof window !== 'undefined' ? localStorage.getItem('loggedinfo') : null;
   const router = useRouter();
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   function logout() {
     if (isClient) {
@@ -32,7 +33,7 @@ const ProfileDropdown: React.FC = () => {
     const fetchUser = async () => {
       try {
         const res = await fetch(
-          `https://localhost:7174/api/Account/user/email/${userEmail}`
+          `${apiBaseUrl}/api/Account/user/email/${userEmail}`
         );
         const data = await res.json();
         console.log(data);

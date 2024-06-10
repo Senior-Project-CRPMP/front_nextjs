@@ -52,7 +52,8 @@ class DashboardLayout extends React.Component<DashboardLayoutProps, DashboardLay
   setNotificationToRead = async () => {
     try {
       const { userId } = this.state;
-      const res = await fetch(`https://localhost:7174/api/Notification/user/${userId}/mark-as-read`, {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const res = await fetch(`${apiBaseUrl}/api/Notification/user/${userId}/mark-as-read`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

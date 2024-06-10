@@ -14,7 +14,7 @@ type Document = {
 const DocumentList: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const router = useRouter();
-  const projectId = 2;
+  const projectId = localStorage.getItem("projectId");
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 

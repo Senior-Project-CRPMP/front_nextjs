@@ -12,11 +12,12 @@ type User = {
 function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const userEmail = typeof window !== 'undefined' ? localStorage.getItem('loggedinfo') : null;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Account/user/email/${userEmail}`);
+        const res = await fetch(`${apiBaseUrl}/api/Account/user/email/${userEmail}`);
         const data = await res.json();
         console.log(data)
 

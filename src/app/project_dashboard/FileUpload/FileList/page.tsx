@@ -18,7 +18,7 @@ type FileUpload = {
 
 const ProjectFiles = () => {
   const router = useRouter();
-  const projectId = 2;
+  const projectId = localStorage.getItem("projectId");
   const [files, setFiles] = useState<FileUpload[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

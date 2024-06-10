@@ -10,11 +10,8 @@ import NavBar from "./nav_bar";
 import Board from "./board";
 import Overview from "./overview/page";
 import TaskLister from "@/app/component/taskLister";
-<<<<<<< HEAD
 import Link from 'next/link';
-=======
-import Link from "next/link";
->>>>>>> origin
+
 
 type Project = {
   id: number;
@@ -231,7 +228,7 @@ const ProjectPage: React.FC = () => {
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const res = await fetch(`https://localhost:7174/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(`${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`);
         const data = await res.json();
         setTasks(data);
         console.log(tasks);
