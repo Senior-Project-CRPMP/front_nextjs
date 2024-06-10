@@ -32,6 +32,9 @@ const AddForm: React.FC = () => {
 
   const router = useRouter();
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const projectIdStr =
+  typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
   const handleAddField = () => {
     setFormFields((prevFields) => [
@@ -126,7 +129,7 @@ const AddForm: React.FC = () => {
         body: JSON.stringify({
           title: formData.title,
           description: formData.description,
-          projectId: formData.projectId,
+          projectId: projectId,
         }),
       });
 
@@ -226,17 +229,6 @@ const AddForm: React.FC = () => {
               placeholder="Enter form description here..."
               name="description"
               value={formData.description}
-              onChange={handleChange}
-            />
-          </label>
-          <label className="form-box">
-            <p className="block text-sm font-medium leading-6 text-gray-900 mb-1">Project ID:</p>
-            <input
-               className="block w-full rounded-md mb-3 border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="Enter project ID"
-              type="text"
-              name="projectId"
-              value={formData.projectId}
               onChange={handleChange}
             />
           </label>
