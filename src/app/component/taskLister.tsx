@@ -16,12 +16,11 @@ const TaskLister = () => {
 
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [currentTask, setCurrentTask] = useState<string>('');
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
 
   const handleDeleteTask = (id: number) => {
-    const confirmed = window.confirm('Are you sure you want to delete this task?');
-    if (confirmed) {
-      setTasks(tasks.filter(task => task.id !== id));
-    }
+    setTasks(tasks.filter(task => task.id !== id));
+    setTaskToDelete(null);
   };
 
   const handleEditTask = (id: number) => {
@@ -40,6 +39,14 @@ const TaskLister = () => {
 
   const handleEditInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentTask(e.target.value);
+  };
+
+  const confirmDeleteTask = (task: Task) => {
+    setTaskToDelete(task);
+  };
+
+  const cancelDeleteTask = () => {
+    setTaskToDelete(null);
   };
 
   return (
@@ -74,7 +81,7 @@ const TaskLister = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteTask(task.id)}
+                    onClick={() => confirmDeleteTask(task)}
                     className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
                   >
                     Delete
@@ -85,6 +92,28 @@ const TaskLister = () => {
           </li>
         ))}
       </ul>
+
+      {taskToDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded shadow-lg">
+            <h2 className="text-xl mb-4">Are you sure you want to delete this task?</h2>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={cancelDeleteTask}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteTask(taskToDelete.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
