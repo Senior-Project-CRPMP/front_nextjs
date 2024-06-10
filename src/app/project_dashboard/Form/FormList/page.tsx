@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import NavBar from "../../nav_bar";
 
 type Form = {
   id: string;
@@ -41,9 +40,6 @@ const FormList: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="w-1/5 h-screen bg-white rounded-md my-2">
-        <NavBar />
-      </div>
       <div className="w-full flex">
         <div className="w-full bg-white mt-4 p-8 rounded-lg shadow-md ">
           <h2 className="text-2xl font-bold mb-4">Forms</h2>
@@ -54,12 +50,16 @@ const FormList: React.FC = () => {
                 className="flex justify-between items-center bg-gray-100 p-4 rounded-md cursor-pointer hover:bg-gray-200"
                 onClick={() => openForm(doc.id)}
               >
-                <span className="text-gray-800 hover:text-blue-500">{doc.title}</span>
+                <span className="text-gray-800 hover:text-blue-500">
+                  {doc.title}
+                </span>
               </li>
             ))}
           </ul>
           <Link href="../Form/CreateForm">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Create Form</button>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">
+              Create Form
+            </button>
           </Link>
         </div>
       </div>

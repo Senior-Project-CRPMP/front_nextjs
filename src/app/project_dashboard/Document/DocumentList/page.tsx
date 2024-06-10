@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IdentificationIcon } from "@heroicons/react/24/outline";
-import NavBar from "../../nav_bar";
 
 type Document = {
   id: string;
@@ -91,22 +90,34 @@ const DocumentList: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="w-1/5 h-screen bg-white rounded-md my-2">
-        <NavBar />
-      </div>
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Documents</h1>
-        
-        <ul className="space-y-4">
-          {documents.map((doc) => (
-            <li key={doc.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md">
-              <span>{doc.title}</span>
-              <button onClick={() => openDocument(doc.id)}>Open</button>
-            </li>
-          ))}
-        </ul>
-        <button onClick={createNewDocument} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Create New Document</button>
+    <div className="flex h-screen">
+      <div className="flex-1 flex flex-col items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
+          <h1 className="text-2xl font-bold mb-4">Documents</h1>
+
+          <ul className="space-y-4">
+            {documents.map((doc) => (
+              <li
+                key={doc.id}
+                className="flex justify-between items-center bg-gray-100 p-4 rounded-md"
+              >
+                <span>{doc.title}</span>
+                <button
+                  onClick={() => openDocument(doc.id)}
+                  className="text-blue-500"
+                >
+                  Open
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={createNewDocument}
+            className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
+          >
+            Create New Document
+          </button>
+        </div>
       </div>
     </div>
   );

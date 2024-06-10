@@ -26,7 +26,7 @@ const Task = () => {
     description: "",
     userId: "",
     deadline: "",
-    status: ""
+    status: "todo"
   });
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const Task = () => {
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     addTask();
     SetNotification(formData.userId);
-    //router.push('/project_dashboard');
+    router.push('/project_dashboard');
   };
 
   async function SetNotification(userId : string) {
