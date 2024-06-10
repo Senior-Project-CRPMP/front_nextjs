@@ -33,14 +33,11 @@ function Dashboard() {
   return (
     <>
     <div className="max-w-4xl mx-auto m-10">
-      <h6 className="text-3xl font-extralight text-gray-900 text-center p-6">
+      {/* <h6 className="text-3xl font-extralight text-gray-900 text-center p-6">
         Recent Projects
-      </h6>
+      </h6> */}
       <div className="flex flex-wrap justify-around">
         {[
-          "Project one",
-          "Project two",
-          "Project three",
           "Create new project",
         ].map((project, index) => (
           <div

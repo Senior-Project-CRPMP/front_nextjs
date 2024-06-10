@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 
 const AddFile = () => {
   const router = useRouter();
-  const projectId = 2;
+  const projectIdStr =
+  typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
@@ -58,8 +60,8 @@ const AddFile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md">
+    <div className="flex justify-center items-center h-full">
+      <div className="bg-white p-2 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">Add File to Project {projectId}</h1>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
