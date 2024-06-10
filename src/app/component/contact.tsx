@@ -88,7 +88,6 @@ function Contact() {
           <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
             Feedback
           </h2>
-          <p className="leading-relaxed mb-5 text-gray-600">Contact Us here</p>
           <div className="relative mb-4">
             <label className="leading-7 text-sm text-gray-600">Name</label>
             <input
