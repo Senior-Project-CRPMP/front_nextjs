@@ -346,6 +346,7 @@ type AddCardProps = {
 const AddCard = ({ column, setCards }: AddCardProps) => {
   const [text, setText] = useState("");
   const [adding, setAdding] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -357,7 +358,8 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
       title: text.trim(),
       id: Math.random().toString(),
     };
-
+    console.log('Submitted text:', text);
+    setText('');
     setCards((pv) => [...pv, newCard]);
 
     setAdding(false);
@@ -366,39 +368,50 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
   return (
     <>
       {adding ? (
-        <motion.form layout onSubmit={handleSubmit}>
-          <textarea
-            onChange={(e) => setText(e.target.value)}
-            autoFocus
-            placeholder="Add new task..."
-            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
-          />
-          <div className="mt-1.5 flex items-center justify-end gap-1.5">
-            <button
-              onClick={() => setAdding(false)}
-              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
-            >
-              Close
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
-            >
-              <span>Add</span>
-              <FiPlus />
-            </button>
-          </div>
-        </motion.form>
-      ) : (
-        <motion.button
-          layout
-          onClick={() => setAdding(true)}
-          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
-        >
-          <span>Add card</span>
-          <FiPlus />
-        </motion.button>
-      )}
+  <motion.form layout onSubmit={handleSubmit}>
+    <div className="relative">
+      <textarea
+        onChange={(e) => setText(e.target.value)}
+        autoFocus
+        placeholder="Add new task..."
+        className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0 relative z-10"
+      />
+      <div
+        className={`absolute top-0 left-0 w-full rounded bg-neutral-50 p-3 text-sm text-neutral-950 shadow-lg transition-opacity duration-300 ${
+          isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {text}
+      </div>
+    </div>
+    <div className="mt-1.5 flex items-center justify-end gap-1.5">
+      <button
+        onClick={() => setAdding(false)}
+        className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+      >
+        Close
+      </button>
+      <button
+        type="submit"
+        className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+      >
+        <span>Add</span>
+        <FiPlus />
+      </button>
+    </div>
+  </motion.form>
+) : (
+  <motion.button
+    layout
+    onClick={() => setAdding(true)}
+    className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+  >
+    <span>Add card</span>
+    <FiPlus />
+  </motion.button>
+)}
     </>
   );
 };
