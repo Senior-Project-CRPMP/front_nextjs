@@ -2,9 +2,21 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+
+type Member = {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+};
+
 const Task = () => {
   const router = useRouter();
-  const projectIdStr = localStorage.getItem('projectId');
+  const [members, setMembers] = useState<Member[]>([]);
+  const [project, setProject] = useState({
+    title: ""
+  })
+  const projectIdStr = typeof window !== 'undefined' ? localStorage.getItem('projectId') : null;
   const projectId = projectIdStr ? parseInt(projectIdStr, 10) : null;
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -12,23 +24,44 @@ const Task = () => {
     projectId: projectId,
     title: "",
     description: "",
-    assignedTo: "c2ac2e34-c67a-4c19-a6a1-87d3e1ff94a0",
+    assignedTo: "",
     deadline: "",
     status: ""
   });
 
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (projectId) {
+        const res = await fetch(`${apiBaseUrl}/api/UserProject/usersByProjectId/${projectId}`);
+        const data = await res.json();
+        setMembers(data);
+        console.log(data)
+      }
+    };
+    fetchMembers().catch((error) => console.error(error));
+  }, [projectId]);
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      if (projectId) {
+        const res = await fetch(`${apiBaseUrl}/api/UserProject/usersByProjectId/${projectId}`);
+        const data = await res.json();
+        setProject(data);
+        console.log(data)
+      }
+    };
+    fetchProject().catch((error) => console.error(error));
+  }, [projectId]);
+
   async function addTask() {
     try {
-      const response = await fetch(
-        `${apiBaseUrl}/api/Task/CreateTask`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${apiBaseUrl}/api/Task/CreateTask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
         console.log("Item created successfully");
@@ -42,23 +75,55 @@ const Task = () => {
   }
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(formData);
+    console.log(formData)
+    console.log(members[0].id)
   };
-  
+
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-
-    addTask()
+    addTask();
+    members.forEach(member => {
+      SetNotification(member.id)
+    });
     router.push('/project_dashboard');
-    console.log(formData);
   };
 
-  
+  const SetNotification= (userId : string) => {
+    const notification= {
+        userId: userId,
+        message: `New Task added to ${project.title}` ,
+        isRead: false
+      };
+        try {
+          async ()=>{
+          const response = await fetch(`${apiBaseUrl}/api/Notification`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(notification),
+          });
+    
+          if (response.ok) {
+            console.log("Item created successfully");
+            // Optionally, you can redirect the user or update the UI here
+          } else {
+            console.error("Failed to create item:", response.statusText);
+          }
+        }
+        } catch (error) {
+          console.error("Error creating item:", error);
+        }
+      }
+    
+    
+    
 
-  
+
+
   return (
     <div className="container mx-auto">
       <div className="flex justify-center">
@@ -77,7 +142,7 @@ const Task = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="task" className="block font-medium mb-2">
+            <label htmlFor="description" className="block font-medium mb-2">
               Description
             </label>
             <input
@@ -89,13 +154,13 @@ const Task = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="priority" className="block font-medium mb-2">
+            <label htmlFor="status" className="block font-medium mb-2">
               Status
             </label>
             <select
               name="status"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              onChange={(e)=>handleChange}
+              onChange={handleChange}
             >
               <option value="TODO">TODO</option>
               <option value="inProgress">In progress</option>
@@ -103,7 +168,7 @@ const Task = () => {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="dueDate" className="block font-medium mb-2">
+            <label htmlFor="deadline" className="block font-medium mb-2">
               Deadline
             </label>
             <input
@@ -117,14 +182,18 @@ const Task = () => {
             <label htmlFor="assignedTo" className="block font-medium mb-2">
               Assignee
             </label>
-            <input
-              type="text"
+            <select
               name="assignedTo"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
-              placeholder="Enter assignee"
-              value = "e37bbd13-1de8-4f5c-aaa6-ea4832b647c4"
               onChange={handleChange}
-            />
+            >
+              <option value="">Select Assignee</option>
+              {members.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.firstName} {member.lastName}
+                </option>
+              ))}
+            </select>
           </div>
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
@@ -132,8 +201,6 @@ const Task = () => {
           >
             Add Task
           </button>
-        </div>
-        <div className="flex flex-wrap justify-center mt-10">
         </div>
       </div>
     </div>

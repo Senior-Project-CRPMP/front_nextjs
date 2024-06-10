@@ -8,7 +8,7 @@ type Task = {
   projectId: number;
   title: string;
   description: string;
-  assignedTo: string;
+  userId: string;
   deadline: string;
   status: string;
 };
@@ -33,12 +33,13 @@ const Board = () => {
   const projectIdStr = typeof window !== 'undefined' ? localStorage.getItem('projectId') : null;
 const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const userId = typeof window !== 'undefined' ? localStorage.getItem('loggeduserid') : null;
 
 
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const res = await fetch(`${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`);
+        const res = await fetch(`${apiBaseUrl}/api/Task/TasksByProjectAndUser/${projectId}/${userId}`);
         const data: Task[] = await res.json();
         console.log(data)
         const mappedCards: Card[] = data.map(task => ({

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import NavBar from "../../nav_bar";
 
 type Form = {
   id: string;
@@ -38,15 +39,22 @@ const FormList: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-center items-center h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md ">
+    <div className="flex">
+      <div className="w-1/5 h-screen bg-white rounded-md my-2">
+        <NavBar />
+      </div>
+      <div className="w-full flex">
+        <div className="w-full bg-white mt-4 p-8 rounded-lg shadow-md ">
           <h2 className="text-2xl font-bold mb-4">Forms</h2>
           <ul className="space-y-4">
             {forms.map((doc) => (
-             <li key={doc.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md cursor-pointer hover:bg-gray-200" onClick={() => openForm(doc.id)}>
-             <span className="text-gray-800 hover:text-blue-500">{doc.title}</span>
-           </li>
+              <li
+                key={doc.id}
+                className="flex justify-between items-center bg-gray-100 p-4 rounded-md cursor-pointer hover:bg-gray-200"
+                onClick={() => openForm(doc.id)}
+              >
+                <span className="text-gray-800 hover:text-blue-500">{doc.title}</span>
+              </li>
             ))}
           </ul>
           <Link href="../Form/CreateForm">
@@ -54,7 +62,7 @@ const FormList: React.FC = () => {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

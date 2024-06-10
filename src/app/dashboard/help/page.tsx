@@ -1,47 +1,63 @@
 'use client'
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from 'next/image'
 
+interface FAQ {
+  id: number;
+  question: string;
+  response: string;
+}
+
 const FAQ: React.FC = () => {
-  const [faqs, setFaqs] = useState([
-    {
-      question: "What is CRPMP?",
-      answer: "CRPMP stands for Comprehensive Research and Project Management Platform. It's your ultimate research and project planning platform.",
-    },
-    {
-      question: "How do I sign up?",
-      answer: "To sign up, click the 'Get Started' button on the hero section and fill out the registration form.",
-    },
-    {
-      question: "Can I manage multiple projects?",
-      answer: "Yes, CRPMP allows you to manage multiple projects efficiently.",
-    },
-    {
-      question: "How do I reset my password?",
-      answer: "To reset your password, click on the 'Forgot Password' link on the login page and follow the instructions.",
-    },
-    {
-      question: "How can I contact support?",
-      answer: "You can contact support via email at support@crpmp.com or through our contact form on the website.",
-    },
-  ]);
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (question && answer) {
-      setFaqs([...faqs, { question, answer }]);
-      setQuestion("");
-      setAnswer("");
+    if (question) {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/Question`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            content: question
+          }),
+        });
+
+        if (res.ok) {
+          console.log("FAQ saved successfully");
+        } else {
+          console.error("Failed to save Question");
+          console.log(question)
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const filteredFaqs = faqs.filter((faq) =>
     faq.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect(()=>{
+    const fetchFaqs = async () => {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/FAQ`);
+        const data = await res.json();
+        setFaqs(data);
+        console.log(data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchFaqs()
+  },[])
 
   return (
     <section className="text-gray-600 body-font">
@@ -64,7 +80,7 @@ const FAQ: React.FC = () => {
             <div key={index} className="w-full lg:w-1/2 px-4 py-2">
               <details className="mb-4">
                 <summary className="font-semibold bg-gray-200 rounded-md py-2 px-4">{faq.question}</summary>
-                <span className="px-4 py-2">{faq.answer}</span>
+                <span className="px-4 py-2">{faq.response}</span>
               </details>
             </div>
           ))}
@@ -87,15 +103,6 @@ const FAQ: React.FC = () => {
                 placeholder="Your question"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Your answer"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
                 className="w-full px-4 py-2 border rounded-md"
               />
             </div>
