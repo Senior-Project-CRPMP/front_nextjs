@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ChangeEvent } from 'react';
+
 
 export default function SignupForm() {
   const router = useRouter()
@@ -33,6 +35,15 @@ export default function SignupForm() {
   const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(event.target.value);
   };
+  const [formData, setFormData] = useState({
+    firstName,
+    lastName,
+    email,
+    password,
+  });
+ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+};
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,16 +64,34 @@ export default function SignupForm() {
     console.log("")
 
     if (response.ok) {
-      // Handle successful registration
+      setSuccess(true);
       console.log('Registration successful');
       setSuccess(true)
       // router.push('/login');
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000);
     } else {
-      // Handle registration errors
+      let errorMessage = 'Registration failed. Please try again.';
       const data = await response.json();
-      setError(`Registration failed: ${data.message}`);
+      if (data.message.includes('email already exists')) {
+        errorMessage = 'Email already registered. Please use a different email.';
+      } else if (data.message.includes('password too weak')) {
+        errorMessage = 'Password is too weak. It must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number and special character.';
+      } else if (data.message.includes('firstName required')) {
+        errorMessage = 'Please enter your first name.';
+      } else if (data.message.includes('lastName required')) {
+        errorMessage = 'Please enter your last name.';
+      } else if (data.message.includes('email required')) {
+        errorMessage = 'Please enter a valid email address.';
+      } else if (data.message.includes('password required')) {
+        errorMessage = 'Please enter a password.';
+      }
+
+      setError(errorMessage);
       console.error('Registration failed:', data);
     }
+  
   };
 
   return (
@@ -81,7 +110,7 @@ export default function SignupForm() {
         )}
         {success && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
-            Registration successful! Please check your email to verify your account.
+            Registration successful!
           </div>
         )}
         <form className="space-y-6" onSubmit={handleSubmit}>
