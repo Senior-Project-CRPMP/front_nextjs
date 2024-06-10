@@ -4,11 +4,12 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { Edit2 } from "react-feather";
 
 interface Task {
-  id: number;
-  title: string;
-  description: string;
-  userId: string;
-  deadline: string;
+  id: number,
+    title: string,
+    description: string,
+    userId: string,
+    deadline: string,
+    status: string,
 }
 
 const TaskLister = () => {
@@ -38,6 +39,33 @@ const TaskLister = () => {
 
     fetchCards();
   }, []);
+
+  async function EditTask(id:number) {
+    try {
+        const res = await fetch(`${apiBaseUrl}/api/Task/UpdateTask/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tasks.map(task => (task.id === id ? {
+              id: task.id,
+              description:task.description, 
+              deadline: task.deadline,
+              userId: task.userId,
+              status: task.status,
+              projectId: projectId,
+              title: currentTask } : task))),
+        });
+
+        if (res.ok) {
+            console.log("Notifications marked as read successfully.");
+        } else {
+            console.error("Failed to mark notifications as read:", res.statusText);
+        }
+    } catch (error) {
+        console.error("Error", error);
+    }
+}
 
   const handleDeleteTask = (id: number) => {
     const confirmed = window.confirm(
@@ -96,7 +124,7 @@ const TaskLister = () => {
                   className="p-1 border border-gray-300 rounded flex-grow"
                 />
                 <button
-                  onClick={() => handleUpdateTask(task.id)}
+                  onClick={() => EditTask(task.id)}
                   className="p-1 bg-green-500 text-white rounded hover:bg-green-600"
                 >
                   <Edit2 size={16} />

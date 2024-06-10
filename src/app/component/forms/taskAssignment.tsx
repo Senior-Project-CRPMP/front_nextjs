@@ -24,7 +24,7 @@ const Task = () => {
     projectId: projectId,
     title: "",
     description: "",
-    assignedTo: "",
+    userId: "",
     deadline: "",
     status: ""
   });
@@ -44,14 +44,15 @@ const Task = () => {
   useEffect(() => {
     const fetchProject = async () => {
       if (projectId) {
-        const res = await fetch(`${apiBaseUrl}/api/UserProject/usersByProjectId/${projectId}`);
+        const res = await fetch(`${apiBaseUrl}/api/Project/SingleProjectById/${projectId}`);
         const data = await res.json();
-        setProject(data);
-        console.log(data)
+        setProject(data.title);
+        console.log(data.title)
       }
     };
     fetchProject().catch((error) => console.error(error));
   }, [projectId]);
+  
 
   async function addTask() {
     try {
@@ -65,7 +66,7 @@ const Task = () => {
 
       if (response.ok) {
         console.log("Item created successfully");
-        // Optionally, you can redirect the user or update the UI here
+        console.log(formData.userId)
       } else {
         console.error("Failed to create item:", response.statusText);
       }
@@ -85,20 +86,19 @@ const Task = () => {
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     addTask();
-    members.forEach(member => {
-      SetNotification(member.id)
-    });
-    router.push('/project_dashboard');
+    SetNotification(formData.userId);
+    //router.push('/project_dashboard');
   };
 
-  const SetNotification= (userId : string) => {
+  async function SetNotification(userId : string) {
     const notification= {
         userId: userId,
-        message: `New Task added to ${project.title}` ,
-        isRead: false
+        message: `New Task has been added to you on Project: ${project.title}` ,
+        isRead: false,
+        dateCreated: new Date().toISOString(),
       };
         try {
-          async ()=>{
+          
           const response = await fetch(`${apiBaseUrl}/api/Notification`, {
             method: "POST",
             headers: {
@@ -108,17 +108,14 @@ const Task = () => {
           });
     
           if (response.ok) {
-            console.log("Item created successfully");
-            // Optionally, you can redirect the user or update the UI here
+            console.log("Notification created successfully");
           } else {
             console.error("Failed to create item:", response.statusText);
           }
-        }
         } catch (error) {
           console.error("Error creating item:", error);
         }
       }
-    
     
     
 
@@ -183,7 +180,7 @@ const Task = () => {
               Assignee
             </label>
             <select
-              name="assignedTo"
+              name="userId"
               className="border border-gray-300 rounded-md px-4 py-2 w-full"
               onChange={handleChange}
             >
