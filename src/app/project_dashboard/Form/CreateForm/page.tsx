@@ -326,6 +326,7 @@ const AddForm: React.FC = () => {
           >
             Add Field
           </button>
+          
           <button
             type="submit"
             className="px-4 py-2 text-white bg-green-500 rounded-md"

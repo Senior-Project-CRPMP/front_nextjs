@@ -1,6 +1,36 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useParams } from "next/navigation";
+
+interface ClipboardLinkProps {
+  id: string;
+}
+
+const ClipboardLink: React.FC<ClipboardLinkProps> = ({ id }) => {
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = useCallback(() => {
+    const link = `http://localhost:3000/Form/${id}`;
+    navigator.clipboard.writeText(link).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); 
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }, [id]);
+
+  return (
+    <div>
+      <a href="#" onClick={(e) => { e.preventDefault(); copyToClipboard(); }}>
+        Form Link
+      </a>
+      {copied && <span style={{ marginLeft: '10px', color: 'green' }}>Link copied to clipboard!</span>}
+    </div>
+  );
+};
+
+
+
 
 type FormFieldType =
   | "short-text"
@@ -103,9 +133,9 @@ const FormPreview: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-3/4 lg:w-2/3">
+      <div className="bg-white mt-16 p-8 rounded-lg shadow-md w-full md:w-3/4 lg:w-2/3">
         <h1 className="text-2xl font-bold mb-4">{form.title}</h1>
-        <p className="form-label text-gray-700 font-medium mb-2">{form.description}</p>
+        <p className="form-label text-gray-700 font-medium mb-2">{form.description} <ClipboardLink id={form.id}/></p>
         {form.fields.map((field, index) => (
           <div key={index} className="form-field space-y-4">
             <label className="form-box">
@@ -141,6 +171,7 @@ const FormPreview: React.FC = () => {
             {field.includeComment && <p>{field.comment}</p>}
           </div>
         ))}
+        
       </div>
     </div>
   );

@@ -58,7 +58,7 @@ const FormList: React.FC = () => {
             ))}
           </ul>
           <Link href="../Form/CreateForm">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 mt-4 px-4 rounded-md">
               Create Form
             </button>
           </Link>

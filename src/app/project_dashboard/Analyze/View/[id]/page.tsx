@@ -24,7 +24,7 @@ type FormField = {
   maxUploadSize?: number;
   allowedTypes?: string[];
   formAnswers?: string[];
-  optionCounts?: { option: string; count: number }[]; // Added this line to include option counts
+  optionCounts?: { option: string; count: number }[];
 };
 
 type FormAnswerField = {
@@ -56,12 +56,12 @@ const ViewFormData: React.FC = () => {
   const formId = params.id;
   const [form, setForm] = useState<Form | null>(null);
   const [loading, setLoading] = useState(true);
+  const [visibleAnswers, setVisibleAnswers] = useState<{ [key: string]: boolean }>({});
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchForm = async () => {
       try {
-        // Fetch form details
         const formResponse = await fetch(
           `${apiBaseUrl}/api/Form/SingleForm/${formId}`
         );
@@ -70,7 +70,6 @@ const ViewFormData: React.FC = () => {
         }
         const formData = await formResponse.json();
 
-        // Fetch form questions
         const questionsResponse = await fetch(
           `${apiBaseUrl}/api/FormQuestion/QuestionsByFormId/${formData.id}`
         );
@@ -79,7 +78,6 @@ const ViewFormData: React.FC = () => {
         }
         const questionsData = await questionsResponse.json();
 
-        // Fetch form options and answers for each question
         const questionsWithOptionsAndAnswers = await Promise.all(
           questionsData.map(async (question: any) => {
             if (question.type === "select" || question.type === "radio") {
@@ -90,8 +88,7 @@ const ViewFormData: React.FC = () => {
                 throw new Error("Failed to fetch form options");
               }
               const optionsData = await optionsResponse.json();
-              
-              // Fetch counts for each option
+
               const optionsWithCounts = await Promise.all(
                 optionsData.map(async (option: any) => {
                   const countResponse = await fetch(
@@ -104,7 +101,7 @@ const ViewFormData: React.FC = () => {
                   return { option: option.label, count: countData };
                 })
               );
-              
+
               question.options = optionsData.map((option: any) => option.label);
               question.optionCounts = optionsWithCounts;
             }
@@ -122,7 +119,6 @@ const ViewFormData: React.FC = () => {
           })
         );
 
-        // Construct the complete form object
         const formWithFields = {
           ...formData,
           fields: questionsWithOptionsAndAnswers,
@@ -139,6 +135,13 @@ const ViewFormData: React.FC = () => {
     fetchForm();
   }, [formId]);
 
+  const toggleAnswersVisibility = (fieldId: string) => {
+    setVisibleAnswers((prev) => ({
+      ...prev,
+      [fieldId]: !prev[fieldId],
+    }));
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -154,9 +157,17 @@ const ViewFormData: React.FC = () => {
         <p className="form-label text-gray-700 font-medium mb-2">{form.description}</p>
         {form.fields.map((field, index) => (
           <div key={index} className="form-field space-y-4">
-            <label className="form-box">
-              <strong>{field.label}</strong>
-              {field.required && <span style={{ color: "red" }}>*</span>}
+            <label className="form-box flex justify-between items-center">
+              <div>
+                <strong>{field.label}</strong>
+                {field.required && <span style={{ color: "red" }}>*</span>}
+              </div>
+              <button
+                onClick={() => toggleAnswersVisibility(field.id)}
+                className="ml-4 bg-blue-500 text-white px-2 py-1 rounded"
+              >
+                {visibleAnswers[field.id] ? "Hide Answers" : "Show Answers"}
+              </button>
             </label>
             <div>
               {field.type === "short-text" && <input type="text" disabled />}
@@ -185,32 +196,36 @@ const ViewFormData: React.FC = () => {
               {field.type === "time" && <input type="time" disabled />}
             </div>
             {field.includeComment && <p>{field.comment}</p>}
-            {field.formAnswers && (
+            {visibleAnswers[field.id] && (
               <div>
-                <strong>Answers:</strong>
-                <ul>
-                  {field.formAnswers.map((answer: string, idx: number) => (
-                    <li key={idx}>{answer}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {(field.type === "select" || field.type === "radio") && field.optionCounts && (
-              <div>
-                <strong>Option Counts:</strong>
-                <MUIPieChart
-                  series={[
-                    {
-                      data: field.optionCounts.map((optionCount, idx) => ({
-                        id: idx,
-                        value: optionCount.count,
-                        label: optionCount.option,
-                      })),
-                    },
-                  ]}
-                  width={400}
-                  height={200}
-                />
+                {field.formAnswers && (
+                  <div>
+                    <strong>Answers:</strong>
+                    <ul>
+                      {field.formAnswers.map((answer: string, idx: number) => (
+                        <li key={idx}>{answer}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {(field.type === "select" || field.type === "radio") && field.optionCounts && (
+                  <div>
+                    <strong>Option Counts:</strong>
+                    <MUIPieChart
+                      series={[
+                        {
+                          data: field.optionCounts.map((optionCount, idx) => ({
+                            id: idx,
+                            value: optionCount.count,
+                            label: optionCount.option,
+                          })),
+                        },
+                      ]}
+                      width={400}
+                      height={200}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -252,7 +252,7 @@ const getUserRole = ()=>{
     const fetchCard = async () => {
       try {
         const res = await fetch(
-          `https://localhost:7174/api/Task/ProjectTasks/${projectId}`
+          `${apiBaseUrl}/api/Task/ProjectTasks/${projectId}`
         );
         const data = await res.json();
         setTasks(data);
@@ -618,7 +618,8 @@ const getUserRole = ()=>{
                       <Link href="project_dashboard/addtask">
                         <p className="text-blue-600 text-center">Add Task</p>
                       </Link>
-                      <TaskLister />
+                      {!(tasks.length == 0) &&
+                      <TaskLister />}
                       </>)}
                     </div>
                   )}
