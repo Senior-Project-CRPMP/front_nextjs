@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { PieChart as MUIPieChart } from "@mui/x-charts/PieChart";
 
 type FormFieldType =
   | "short-text"
@@ -22,6 +23,16 @@ type FormField = {
   maxLength?: number;
   maxUploadSize?: number;
   allowedTypes?: string[];
+  formAnswers?: string[];
+  optionCounts?: { option: string; count: number }[]; // Added this line to include option counts
+};
+
+type FormAnswerField = {
+  id: number;
+  formResponseId: number;
+  formQuestionId: number;
+  formOptionId: number;
+  response: string;
 };
 
 type Form = {
@@ -29,6 +40,15 @@ type Form = {
   title: string;
   description: string;
   fields: FormField[];
+  formAnswerFields: FormAnswerField[];
+};
+
+type FormAnswer = {
+  id: string;
+  formResponseId: number;
+  formQuestionId: number;
+  formOptionId: number;
+  response: string;
 };
 
 const ViewFormData: React.FC = () => {
@@ -59,8 +79,8 @@ const ViewFormData: React.FC = () => {
         }
         const questionsData = await questionsResponse.json();
 
-        // Fetch form options for each question
-        const questionsWithOptions = await Promise.all(
+        // Fetch form options and answers for each question
+        const questionsWithOptionsAndAnswers = await Promise.all(
           questionsData.map(async (question: any) => {
             if (question.type === "select" || question.type === "radio") {
               const optionsResponse = await fetch(
@@ -70,8 +90,34 @@ const ViewFormData: React.FC = () => {
                 throw new Error("Failed to fetch form options");
               }
               const optionsData = await optionsResponse.json();
+              
+              // Fetch counts for each option
+              const optionsWithCounts = await Promise.all(
+                optionsData.map(async (option: any) => {
+                  const countResponse = await fetch(
+                    `${apiBaseUrl}/api/FormAnswer/FormAnswerCountByOptionId/${option.id}`
+                  );
+                  if (!countResponse.ok) {
+                    throw new Error("Failed to fetch option count");
+                  }
+                  const countData = await countResponse.json();
+                  return { option: option.label, count: countData };
+                })
+              );
+              
               question.options = optionsData.map((option: any) => option.label);
+              question.optionCounts = optionsWithCounts;
             }
+
+            const formAnswerResponse = await fetch(
+              `${apiBaseUrl}/api/FormAnswer/FormAnswersByQuestionId/${question.id}`
+            );
+            if (!formAnswerResponse.ok) {
+              throw new Error("Failed to fetch form answers");
+            }
+            const formAnswerData = await formAnswerResponse.json();
+            question.formAnswers = formAnswerData.map((formAnswer: any) => formAnswer.response);
+
             return question;
           })
         );
@@ -79,7 +125,7 @@ const ViewFormData: React.FC = () => {
         // Construct the complete form object
         const formWithFields = {
           ...formData,
-          fields: questionsWithOptions,
+          fields: questionsWithOptionsAndAnswers,
         };
 
         setForm(formWithFields);
@@ -139,6 +185,34 @@ const ViewFormData: React.FC = () => {
               {field.type === "time" && <input type="time" disabled />}
             </div>
             {field.includeComment && <p>{field.comment}</p>}
+            {field.formAnswers && (
+              <div>
+                <strong>Answers:</strong>
+                <ul>
+                  {field.formAnswers.map((answer: string, idx: number) => (
+                    <li key={idx}>{answer}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {(field.type === "select" || field.type === "radio") && field.optionCounts && (
+              <div>
+                <strong>Option Counts:</strong>
+                <MUIPieChart
+                  series={[
+                    {
+                      data: field.optionCounts.map((optionCount, idx) => ({
+                        id: idx,
+                        value: optionCount.count,
+                        label: optionCount.option,
+                      })),
+                    },
+                  ]}
+                  width={400}
+                  height={200}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>

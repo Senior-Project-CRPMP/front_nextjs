@@ -1,8 +1,8 @@
 import React from "react";
 import RadialChart from "@/app/component/radialChart";
 import AreaChart from "@/app/component/areaChart";
+//import MemberList from "@/app/component/MemberList";
 import MemberList from "@/app/component/MemberList";
-
 
 type Project = {
   id: number;
