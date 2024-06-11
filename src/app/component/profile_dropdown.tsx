@@ -76,7 +76,7 @@ const ProfileDropdown: React.FC = () => {
                 className="object-cover"
               />
             </div>
-            <div className="font-semibold dark:text-white text-white text-lg">
+            <div className="font-normal dark:text-white text-white text-sm">
               <div>
                 {user?.firstName} {user?.lastName}
               </div>
