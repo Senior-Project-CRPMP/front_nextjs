@@ -30,7 +30,7 @@ const User = () => {
 
       try {
         const res = await fetch(
-          `https://localhost:/api/Account/update-user/${userId}`,
+          `${apiBaseUrl}/api/Account/update-user/${userId}`,
           {
             method: "PUT",
             headers: {
