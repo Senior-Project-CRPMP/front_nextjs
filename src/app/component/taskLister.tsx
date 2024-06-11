@@ -108,12 +108,12 @@ const TaskLister = () => {
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h1 className="text-xl font-semibold leading-7 text-gray-900 pb-4">Project tasks</h1>
+      <h1 className="text-2xl font-bold mb-4">Project tasks</h1>
       <ul className="space-y-2">
         {tasks.map((task) => (
           <li
             key={task.id}
-            className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-md shadow-sm"
+            className="flex items-center justify-between p-2 border border-gray-300 rounded"
           >
             {isEditing === task.id ? (
               <div className="flex items-center space-x-2 flex-grow">
@@ -121,7 +121,7 @@ const TaskLister = () => {
                   type="text"
                   value={currentTask}
                   onChange={handleEditInputChange}
-                  className="p-2 border border-gray-300 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="p-1 border border-gray-300 rounded flex-grow"
                 />
                 <button
                   onClick={() => EditTask(task.id)}
