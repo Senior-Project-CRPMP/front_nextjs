@@ -16,12 +16,8 @@ const AccountPage: React.FC = () => {
     switch (selectedNavItem) {
       case "Profile and visibility":
         return <ProfilePage />;
-      case "Email":
-        return <EmailPage />;
       case "Security":
         return <SecurityPage />;
-      case "Account preferences":
-        return <AccountPreferencesPage />;
       default:
         return <div>Select an option</div>;
     }

@@ -60,12 +60,22 @@ const ProjectPage: React.FC = () => {
   const [memberCount, setMemberCount] = useState<number>(0);
   const [tasks, setTasks] = useState<Task[]>([]);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
+  const [userRole, setUserRole]= useState('')
   const projectIdStr =
     typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
   const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
+  const userId =
+    typeof window !== "undefined" ? localStorage.getItem("loggeduserid") : null;
 
   const [members, setMembers] = useState<Member[]>([]);
+
+  
+const getUserRole = ()=>{
+  const role = (roles.find((r) => r.userId === userId));
+  console.log(role)
+    setUserRole(role?.role || '');
+    console.log("UserRole:" , role?.role);
+}
 
   const handleToggleMemberList = () => {
     setIsMemberListOpen(!isMemberListOpen);
@@ -144,6 +154,7 @@ const ProjectPage: React.FC = () => {
       const data = await res.json();
       setMemberCount(data.count);
       console.log("Member count:", data.count);
+      getUserRole()
     };
     fetchMemberCount().catch((error) => console.error(error));
   }, [projectId]);
@@ -351,6 +362,124 @@ const ProjectPage: React.FC = () => {
             </div>
             <div className="h-5/6 m-3">
               <div className="flex h-full space-x-2 mx-2">
+              {currentPage === 'board' ?
+              
+              <div className="w-full  bg-white rounded-md shadow-2xl p-10">
+              <PageContent currentPage={currentPage} />
+              {isMemberListOpen && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                  <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-bold">Members</h2>
+                      <button
+                        className="text-gray-500 hover:text-gray-700"
+                        onClick={handleToggleMemberList}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <ul>
+                      {members.map((member) => (
+                        <li
+                          key={member.id}
+                          className="flex items-center mb-2"
+                        >
+                          <div>
+                            <p className="font-bold">
+                              {member.firstName} {member.lastName}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              {getRoleByMember(member)?.role ||
+                                "Role not found"}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+              {isSearchPopupOpen && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                  <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-bold">
+                        Search To Add Member
+                      </h2>
+                      <button
+                        className="text-gray-500 hover:text-gray-700"
+                        onClick={handleToggleSearchPopup}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      className="border rounded p-2 mb-4 w-full"
+                      placeholder="Search by name or email"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                    />
+                    <ul>
+                      {filteredUsers.map((user) => {
+                        const isMember = members.some(
+                          (member) => member.id === user.id
+                        );
+                        return (
+                          <li
+                            key={user.id}
+                            className="flex items-center mb-2"
+                          >
+                            <div>
+                              <p className="font-bold">
+                                {user.firstName} {user.lastName}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {user.userName}
+                              </p>
+                            </div>
+                            <div className="flex items-center ml-auto">
+                              {isMember ? (
+                                <span className="text-green-500">✔</span>
+                              ) : (
+                                <>
+                                  <select
+                                    className="mr-2"
+                                    value={selectedRoles[user.id] || ""}
+                                    onChange={(e) =>
+                                      handleRoleChange(
+                                        user.id,
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option value="">Select Role</option>
+                                    <option value="supervisor">
+                                      Supervisor
+                                    </option>
+                                    <option value="researcher">
+                                      Researcher
+                                    </option>
+                                  </select>
+                                  {userRole !== "researcher" && (
+                                  <button
+                                    onClick={() => handleAddClick(user)}
+                                  >
+                                    Add
+                                  </button>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          :
                 <div className="w-3/5  bg-white rounded-md shadow-2xl p-10">
                   <PageContent currentPage={currentPage} />
                   {isMemberListOpen && (
@@ -448,11 +577,13 @@ const ProjectPage: React.FC = () => {
                                           Researcher
                                         </option>
                                       </select>
-                                      <button
-                                        onClick={() => handleAddClick(user)}
-                                      >
-                                        Add
-                                      </button>
+                                      {userRole !== "researcher" && (
+                                  <button
+                                    onClick={() => handleAddClick(user)}
+                                  >
+                                    Add
+                                  </button>
+                                  )}
                                     </>
                                   )}
                                 </div>
@@ -463,7 +594,8 @@ const ProjectPage: React.FC = () => {
                       </div>
                     </div>
                   )}
-                </div>
+                </div>}
+                {currentPage === "board" ? <></> : 
                 <div className="w-2/5 bg-white rounded-md shadow-2xl">
                   {currentPage === "calendar" && <SideCalendar />}
                   {currentPage === "overview" && (
@@ -481,13 +613,17 @@ const ProjectPage: React.FC = () => {
                           </div>
                         ))}
                       </div>
+                      {userRole !== "researcher" && (
+                      <>
                       <Link href="project_dashboard/addtask">
                         <p className="text-blue-600 text-center">Add Task</p>
                       </Link>
                       <TaskLister />
+                      </>)}
                     </div>
                   )}
                 </div>
+}
               </div>
             </div>
           </div>

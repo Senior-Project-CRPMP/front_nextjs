@@ -12,9 +12,7 @@ const Navigation: React.FC<NavigationProps> = ({ onNavItemSelect }) => {
 
   const navItems = [
     { label: 'Profile and visibility' },
-    { label: 'Email'},
     { label: 'Security'},
-    { label: 'Account preferences'}
   ];
 
   useEffect(() => {

@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent } from 'react';
 import Image from 'next/image'
 
-
+type Error = {
+  description : string;
+}
 
 
 export default function SignupForm() {
@@ -15,7 +17,7 @@ export default function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<Error[]>([]);
   const [success, setSuccess] = useState(false);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -64,8 +66,6 @@ export default function SignupForm() {
       }),
     });
 
-    console.log("")
-
     if (response.ok) {
       setSuccess(true);
       console.log('Registration successful');
@@ -75,24 +75,10 @@ export default function SignupForm() {
         router.push('/login');
       }, 3000);
     } else {
-      let errorMessage = 'Registration failed. Please try again.';
       const data = await response.json();
-      if (data.message.includes('email already exists')) {
-        errorMessage = 'Email already registered. Please use a different email.';
-      } else if (data.message.includes('password too weak')) {
-        errorMessage = 'Password is too weak. It must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number and special character.';
-      } else if (data.message.includes('firstName required')) {
-        errorMessage = 'Please enter your first name.';
-      } else if (data.message.includes('lastName required')) {
-        errorMessage = 'Please enter your last name.';
-      } else if (data.message.includes('email required')) {
-        errorMessage = 'Please enter a valid email address.';
-      } else if (data.message.includes('password required')) {
-        errorMessage = 'Please enter a password.';
-      }
-
-      setError(errorMessage);
-      console.error('Registration failed:', data);
+      console.log(data)
+      setError(data)
+    
     }
   
   };
@@ -122,7 +108,11 @@ export default function SignupForm() {
           <h2 className="mt-6 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
             Sign up
           </h2>
-      
+          {error && error.map((e)=>(
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-2 mb-6">
+            {e.description}
+          </div>
+        ))}
           {success && (
             <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
               Registration successful!
