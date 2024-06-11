@@ -147,7 +147,7 @@ const Chat: React.FC = () => {
     <div className="flex">
       <div className="flex-1 flex flex-col items-center justify-center">
         {!chatRooms || chatRooms.length === 0 ? (
-          <div className="max-w-sm mt-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-52 flex items-center justify-center">
+          <div className="max-w-sm mt-6 bg-white border  border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-52 flex items-center justify-center">
             <div className="p-8 text-center">
               <a href="#">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

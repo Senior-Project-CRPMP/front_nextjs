@@ -127,8 +127,8 @@ export default function CreateChatRoom() {
         >
           <Participants/>
         </select>
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={(e)=>{handleSubmit; route.push('/project_dashboard/chat')}}>Create Chat Room</button>
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={(e)=>{route.push('/project_dashboard/chat')}}>Cancel</button>
+        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2"  onClick={(e)=>{handleSubmit; route.push('/project_dashboard/chat')}}>Create Chat Room</button>
+        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2" onClick={(e)=>{route.push('/project_dashboard/chat')}}>Cancel</button>
       </form>
     </div>
     </div>

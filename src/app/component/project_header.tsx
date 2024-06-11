@@ -24,7 +24,10 @@ const Project_Header: React.FC = () => {
           </a>
         </div>
         <div className="flex items-center space-x-4 mt-2 md:mt-0">
-          <ProfileDropdown />
+          {/* Wrapper div with conditional classes */}
+          <div className="hidden md:block">
+            <ProfileDropdown />
+          </div>
         </div>
       </div>
     </header>
