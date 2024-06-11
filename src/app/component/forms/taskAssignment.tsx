@@ -173,6 +173,7 @@ const Task = () => {
           name="deadline"
           className="block w-full rounded-md border-0 p-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={handleChange}
+          min={new Date().toISOString().split('T')[0]}
         />
       </div>
       <div className="mb-4">
@@ -193,7 +194,7 @@ const Task = () => {
         </select>
       </div>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="px-4 py-1 text-white bg-blue-500 rounded-md mr-3"
         onClick={handleSubmit}
       >
         Add Task

@@ -43,7 +43,7 @@ const FormList: React.FC = () => {
     <div className="container mx-auto">
     <div className="flex justify-center">
       <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 mt-6">
-          <h2 className="text-2xl font-bold mb-4">Forms</h2>
+          <h2 className="text-xl font-semibold leading-7 text-gray-900 pb-4">Forms</h2>
           <ul className="space-y-4">
             {forms.map((doc) => (
               <li
