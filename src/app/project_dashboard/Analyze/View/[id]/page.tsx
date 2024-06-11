@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { PieChart as MUIPieChart } from "@mui/x-charts/PieChart";
 
 type FormFieldType =
   | "short-text"
@@ -23,7 +24,7 @@ type FormField = {
   maxUploadSize?: number;
   allowedTypes?: string[];
   formAnswers?: string[];
-  optionCounts?: { option: string; count: number }[];  // Added this line to include option counts
+  optionCounts?: { option: string; count: number }[]; // Added this line to include option counts
 };
 
 type FormAnswerField = {
@@ -100,17 +101,12 @@ const ViewFormData: React.FC = () => {
                     throw new Error("Failed to fetch option count");
                   }
                   const countData = await countResponse.json();
-                  console.log("countData: ", countData)
-                  console.log("countResponsee: ", countResponse)
                   return { option: option.label, count: countData };
                 })
               );
               
               question.options = optionsData.map((option: any) => option.label);
               question.optionCounts = optionsWithCounts;
-              console.log("question: ", question)
-              console.log("question.options: ", question.options)
-              console.log("question.optionCounts: ", question.optionCounts)
             }
 
             const formAnswerResponse = await fetch(
@@ -202,11 +198,19 @@ const ViewFormData: React.FC = () => {
             {(field.type === "select" || field.type === "radio") && field.optionCounts && (
               <div>
                 <strong>Option Counts:</strong>
-                <ul>
-                  {field.optionCounts.map((optionCount, idx) => (
-                    <li key={idx}>{`${optionCount.option}: ${optionCount.count}`}</li>
-                  ))}
-                </ul>
+                <MUIPieChart
+                  series={[
+                    {
+                      data: field.optionCounts.map((optionCount, idx) => ({
+                        id: idx,
+                        value: optionCount.count,
+                        label: optionCount.option,
+                      })),
+                    },
+                  ]}
+                  width={400}
+                  height={200}
+                />
               </div>
             )}
           </div>

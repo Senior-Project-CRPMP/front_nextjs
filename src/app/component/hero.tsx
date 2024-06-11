@@ -8,6 +8,7 @@ import Feature from "./feature";
 import React, { useState, useEffect, useRef, forwardRef} from 'react';
 const Hero = forwardRef((props, ref)=> {
   const [headerBackground, setHeaderBackground] = useState('transparent');
+  //const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,7 +91,7 @@ const Hero = forwardRef((props, ref)=> {
         </div>
       </header>
 
-      <section
+      {/* <section
         className="hero-section relative h-screen bg-cover bg-center"
         style={{ backgroundImage: `url(${HeroImage.src})` }}
       >
@@ -117,7 +118,9 @@ const Hero = forwardRef((props, ref)=> {
             d="M0,288L48,266.7C96,245,192,203,288,181.3C384,160,480,160,576,181.3C672,203,768,245,864,250.7C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           ></path>
         </svg>
+
         <svg className="absolute bottom-0 right-0 w-full h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"></svg>
+        </section> */}
       <section className="hero-section relative h-screen bg-cover bg-center" style={{ backgroundImage: `url(${HeroImage.src})` }}>
       <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/70 to-[#000000]/20"></div>
       <div className="container mx-auto h-full flex flex-col justify-center items-center text-white">
@@ -156,7 +159,7 @@ const Hero = forwardRef((props, ref)=> {
       </svg>
      
       </section>
-    </section>
+    
     
    
 

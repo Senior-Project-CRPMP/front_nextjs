@@ -24,17 +24,16 @@ type FormField = {
 
 const AddForm: React.FC = () => {
   const [formFields, setFormFields] = useState<FormField[]>([]);
+  const projectIdStr =typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    projectId: "",
+    projectId: projectId,
   });
 
   const router = useRouter();
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const projectIdStr =
-  typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
-const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
   const handleAddField = () => {
     setFormFields((prevFields) => [
@@ -119,7 +118,7 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
       }
       return field;
     });
-
+    console.log(formData);
     try {
       const formResponse = await fetch(`${apiBaseUrl}/api/Form/CreateForm`, {
         method: "POST",
@@ -132,6 +131,10 @@ const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
           projectId: projectId,
         }),
       });
+
+      if (formResponse.ok) {
+        console.log('Form Saved Successfully!');
+      }
 
       if (!formResponse.ok) {
         throw new Error("Failed to create form");

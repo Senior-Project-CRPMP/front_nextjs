@@ -12,7 +12,8 @@ const FormList: React.FC = () => {
   const [forms, setForms] = useState<Form[]>([]);
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const projectId = 2;
+  const projectIdStr =typeof window !== "undefined" ? localStorage.getItem("projectId") : null;
+  const projectId = projectIdStr !== null ? parseInt(projectIdStr) : null;
 
   const router = useRouter();
 
