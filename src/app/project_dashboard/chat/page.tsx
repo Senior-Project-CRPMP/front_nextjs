@@ -181,7 +181,7 @@ const Chat: React.FC = () => {
           </div>
         ) : (
           <div className="flex space-x-4 w-full">
-            <div className="h-screen w-1/5 p-4 bg-gray-200">
+            <div className="h-screen w-1/5 p-4 bg-blue-100">
               <h2 className="border-b-2 border-black">Chat Rooms</h2>
               <ul>
                 {chatRooms.map((room) => (
@@ -217,12 +217,12 @@ const Chat: React.FC = () => {
               </Link>
             </div>
             {!currentRoom ? (
-              <div className="h-screen w-4/5 p-4 bg-gray-300"></div>
+              <div className="flex flex-col w-4/5 p-4 bg-blue-50 relative"></div>
             ) : (
-              <div className="h-screen w-4/5 p-4 bg-gray-300">
+              <div className="h-screen w-4/5 p-4 bg-blue-50">
                 {messages.map((msg) => (
                   <div key={msg.id} className="flex flex-col">
-                    <div className="bg-gray-200 flex-1">
+                    <div className="bg-blue-50 flex-1">
                       <div className="px-4 py-2">
                         <div className="flex items-center mb-2">
                           <div className="font-medium">
@@ -239,7 +239,7 @@ const Chat: React.FC = () => {
                     </div>
                   </div>
                 ))}
-                <div className="bg-gray-100 px-4 py-2">
+                <div className="absolute bottom-0 left-80 right-0 bg-blue-50 px-4 py-2">
                   <div className="flex items-center">
                     <input
                       className="w-full border rounded-full py-2 px-4 mr-2"

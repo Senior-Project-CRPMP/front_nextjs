@@ -5,17 +5,17 @@ const Settings = () => {
   const [displayDensity, setDisplayDensity] = useState<string>("comfortable");
   const [notificationsEnabled, setNotificationsEnabled] =
     useState<boolean>(true);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  // const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("color-theme") === "dark" ||
-      (!("color-theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      setIsDarkMode(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     localStorage.getItem("color-theme") === "dark" ||
+  //     (!("color-theme" in localStorage) &&
+  //       window.matchMedia("(prefers-color-scheme: dark)").matches)
+  //   ) {
+  //     setIsDarkMode(true);
+  //   }
+  // }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,20 +23,20 @@ const Settings = () => {
     console.log({
       displayDensity,
       notificationsEnabled,
-      isDarkMode,
+      // isDarkMode,
     });
   };
 
-  const toggleDarkMode = () => {
-    if (isDarkMode) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("color-theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("color-theme", "dark");
-    }
-    setIsDarkMode(!isDarkMode);
-  };
+  // const toggleDarkMode = () => {
+  //   if (isDarkMode) {
+  //     document.documentElement.classList.remove("dark");
+  //     localStorage.setItem("color-theme", "light");
+  //   } else {
+  //     document.documentElement.classList.add("dark");
+  //     localStorage.setItem("color-theme", "dark");
+  //   }
+  //   setIsDarkMode(!isDarkMode);
+  // };
 
   return (
     <div className="container mx-auto">
@@ -78,7 +78,7 @@ const Settings = () => {
         </section>
 
         {/* Dark Mode Section */}
-        <section className="mb-8">
+        {/* <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-black dark:text-white">
             Dark Mode
           </h2>
@@ -93,7 +93,7 @@ const Settings = () => {
               Enable Dark Mode
             </label>
           </div>
-        </section>
+        </section> */}
 
         {/* Notifications Section */}
         <section className="mb-8">

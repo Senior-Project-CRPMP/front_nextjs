@@ -67,16 +67,16 @@ const ProfileDropdown: React.FC = () => {
           }`}
         >
           <div className="flex flex-col items-center space-y-2">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 dark:border-white border-gray-900">
-            <Image
-              src={images.avatar1}
-              alt="Profile"
-              width={48}
-              height={48}
-              className="object-cover w-full h-full"
-            />
-          </div>
-            <div className="font-semibold dark:text-white text-white text-lg">
+            <div className="w-12 h-12 rounded-full overflow-hidden border-2 dark:border-white border-gray-900">
+              <Image
+                src={images.avatar1}
+                alt="Profile"
+                width={48}
+                height={48}
+                className="object-cover"
+              />
+            </div>
+            <div className="font-normal dark:text-white text-white text-sm">
               <div>
                 {user?.firstName} {user?.lastName}
               </div>
