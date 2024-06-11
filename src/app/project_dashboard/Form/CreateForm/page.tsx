@@ -281,10 +281,13 @@ const AddForm: React.FC = () => {
                       />
                       <button
                         type="button"
-                        className="px-2 py-1 text-white bg-red-500 rounded-md"
+                        className="px-2 py-1 text-sm text-red-500 relative group"
                         onClick={() => handleRemoveOption(fieldIndex, optionIndex)}
                       >
-                        Remove
+                        <span className="tooltip-text absolute z-10 bg-blue-300 text-white px-2 py-1 text-sm rounded whitespace-nowrap invisible opacity-0 transition-all duration-300 -bottom-6 left-1/2 -translate-x-1/2 group-hover:visible group-hover:opacity-100">
+                Remove option
+              </span>
+                        Remove option
                       </button>
                     </div>
                   ))}
@@ -297,43 +300,55 @@ const AddForm: React.FC = () => {
                     />
                     <button
                       type="button"
-                      className="px-2 py-1 text-white bg-blue-500 rounded-md"
+                      className="px-2 py-0 text-blue-500 text-sm relative group"
                       onClick={() => handleAddOption(fieldIndex)}
                     >
-                      Add Option
+                      <span className="tooltip-text absolute z-10 bg-blue-300 text-white px-2 py-1 text-sm rounded whitespace-nowrap invisible opacity-0 transition-all duration-300 -bottom-6 left-1/2 -translate-x-1/2 group-hover:visible group-hover:opacity-100">
+                Add option text
+              </span>
+                      Add Option 
                     </button>
                   </div>
                 </div>
               ) : null}
               {/* Additional field properties */}
-              <div className="flex justify-between mt-4">
+              <div className="flex mt-4">
                 <button
                   type="button"
-                  className="px-2 py-1 text-white bg-red-500 rounded-md"
+                  className="px-2 py-1 text-red-500 relative group"
                   onClick={() => handleRemoveField(fieldIndex)}
                 >
+                  <span className="tooltip-text absolute z-10 bg-blue-300 text-white px-2 py-1 text-sm rounded whitespace-nowrap invisible opacity-0 transition-all duration-300 -bottom-6 left-1/2 -translate-x-1/2 group-hover:visible group-hover:opacity-100">
+                Remove previous field
+              </span>
                   Remove Field
                 </button>
                 <button
                   type="button"
-                  className="px-2 py-1 text-white bg-gray-500 rounded-md"
+                  className="py-1 text-gray-500 ml-4  relative group"
                   onClick={() => handleDuplicateField(fieldIndex)}
                 >
+                  <span className="tooltip-text absolute z-10 bg-blue-300  text-white px-2 py-1 text-sm rounded whitespace-nowrap invisible opacity-0 transition-all duration-300 -bottom-6 left-1/2 -translate-x-1/2 group-hover:visible group-hover:opacity-100">
+                Duplicate previous field
+              </span>
                   Duplicate Field
                 </button>
               </div>
             </div>
           ))}
-          <button
-            type="button"
-            className="px-4 py-2 text-white bg-blue-500 rounded-md mr-3"
-            onClick={handleAddField}
-          >
-            Add Field
-          </button>
+              <button
+              type="button"
+              className="px-4 py-1 text-white bg-blue-500 rounded-md mr-3 relative group"
+              onClick={handleAddField}
+            >
+              Add Field
+              <span className="tooltip-text absolute z-10 bg-blue-300 text-white px-2 py-1 text-sm rounded whitespace-nowrap invisible opacity-0 transition-all duration-300 -bottom-6 left-1/2 -translate-x-1/2 group-hover:visible group-hover:opacity-100">
+                Add a new field
+              </span>
+            </button>
           <button
             type="submit"
-            className="px-4 py-2 text-white bg-green-500 rounded-md"
+            className="px-4 py-1 text-white bg-green-500 rounded-md"
           >
             Save Form
           </button>
