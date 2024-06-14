@@ -368,8 +368,8 @@ const getUserRole = ()=>{
               <PageContent currentPage={currentPage} />
               {isMemberListOpen && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                  <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
-                    <div className="flex justify-between items-center mb-4">
+                  <div className="bg-white rounded-lg shadow-lg p-6 w-3/5">
+                    <div className="flex justify-between items-center max-h-100 overflow-y-auto mb-4">
                       <h2 className="text-xl font-bold">Members</h2>
                       <button
                         className="text-gray-500 hover:text-gray-700"
@@ -399,85 +399,73 @@ const getUserRole = ()=>{
                   </div>
                 </div>
               )}
-              {isSearchPopupOpen && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                  <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-bold">
-                        Search To Add Member
-                      </h2>
-                      <button
-                        className="text-gray-500 hover:text-gray-700"
-                        onClick={handleToggleSearchPopup}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      className="border rounded p-2 mb-4 w-full"
-                      placeholder="Search by name or email"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                    />
-                    <ul>
-                      {filteredUsers.map((user) => {
-                        const isMember = members.some(
-                          (member) => member.id === user.id
-                        );
-                        return (
-                          <li
-                            key={user.id}
-                            className="flex items-center mb-2"
-                          >
-                            <div>
-                              <p className="font-bold">
-                                {user.firstName} {user.lastName}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                {user.userName}
-                              </p>
-                            </div>
-                            <div className="flex items-center ml-auto">
-                              {isMember ? (
-                                <span className="text-green-500">✔</span>
-                              ) : (
-                                <>
-                                  <select
-                                    className="mr-2"
-                                    value={selectedRoles[user.id] || ""}
-                                    onChange={(e) =>
-                                      handleRoleChange(
-                                        user.id,
-                                        e.target.value
-                                      )
-                                    }
-                                  >
-                                    <option value="">Select Role</option>
-                                    <option value="supervisor">
-                                      Supervisor
-                                    </option>
-                                    <option value="researcher">
-                                      Researcher
-                                    </option>
-                                  </select>
-                                  {userRole !== "researcher" && (
-                                  <button
-                                    onClick={() => handleAddClick(user)}
-                                  >
-                                    Add
-                                  </button>
-                                  )}
-                                </>
-                              )}
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
+             {isSearchPopupOpen && (
+  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Search To Add Member</h2>
+        <button
+          className="text-gray-500 hover:text-gray-700"
+          onClick={handleToggleSearchPopup}
+        >
+          &times;
+        </button>
+      </div>
+      <input
+        type="text"
+        className="border rounded p-2 mb-4 w-full"
+        placeholder="Search by name or email"
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+      {searchTerm && (
+        <div className="max-h-[calc(100%-8rem)] overflow-y-auto">
+          <ul>
+            {filteredUsers.map((user) => {
+              const isMember = members.some((member) => member.id === user.id);
+              return (
+                <li key={user.id} className="flex items-center mb-2">
+                  <div>
+                    <p className="font-bold">
+                      {user.firstName} {user.lastName}
+                    </p>
+                    <p className="text-sm text-gray-600">{user.userName}</p>
                   </div>
-                </div>
-              )}
+                  <div className="flex items-center ml-auto">
+                    {isMember ? (
+                      <span className="text-green-500">✔</span>
+                    ) : (
+                      <>
+                        <select
+                          className="mr-2"
+                          value={selectedRoles[user.id] || ""}
+                          onChange={(e) =>
+                            handleRoleChange(user.id, e.target.value)
+                          }
+                        >
+                          <option value="">Select Role</option>
+                          <option value="supervisor">Supervisor</option>
+                          <option value="researcher">Researcher</option>
+                        </select>
+                        {userRole !== "researcher" && (
+                          <button onClick={() => handleAddClick(user)}>
+                            Add
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+
             </div>
           :
                 <div className="w-3/5  bg-white rounded-md shadow-2xl p-10">
@@ -516,84 +504,71 @@ const getUserRole = ()=>{
                     </div>
                   )}
                   {isSearchPopupOpen && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                      <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
-                        <div className="flex justify-between items-center mb-4">
-                          <h2 className="text-xl font-bold">
-                            Search To Add Member
-                          </h2>
-                          <button
-                            className="text-gray-500 hover:text-gray-700"
-                            onClick={handleToggleSearchPopup}
-                          >
-                            &times;
+  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-3/5 h-3/5">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Search To Add Member</h2>
+        <button
+          className="text-gray-500 hover:text-gray-700"
+          onClick={handleToggleSearchPopup}
+        >
+          &times;
+        </button>
+      </div>
+      <input
+        type="text"
+        className="border rounded p-2 mb-4 w-full"
+        placeholder="Search by name or email"
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+      {searchTerm && (
+        <div className="max-h-[calc(100%-8rem)] overflow-y-auto">
+          <ul>
+            {filteredUsers.map((user) => {
+              const isMember = members.some((member) => member.id === user.id);
+              return (
+                <li key={user.id} className="flex items-center mb-2">
+                  <div>
+                    <p className="font-bold">
+                      {user.firstName} {user.lastName}
+                    </p>
+                    <p className="text-sm text-gray-600">{user.userName}</p>
+                  </div>
+                  <div className="flex items-center ml-auto">
+                    {isMember ? (
+                      <span className="text-green-500">✔</span>
+                    ) : (
+                      <>
+                        <select
+                          className="mr-2"
+                          value={selectedRoles[user.id] || ""}
+                          onChange={(e) =>
+                            handleRoleChange(user.id, e.target.value)
+                          }
+                        >
+                          <option value="">Select Role</option>
+                          <option value="supervisor">Supervisor</option>
+                          <option value="researcher">Researcher</option>
+                        </select>
+                        {userRole !== "researcher" && (
+                          <button onClick={() => handleAddClick(user)}>
+                            Add
                           </button>
-                        </div>
-                        <input
-                          type="text"
-                          className="border rounded p-2 mb-4 w-full"
-                          placeholder="Search by name or email"
-                          value={searchTerm}
-                          onChange={handleSearchChange}
-                        />
-                        <ul>
-                          {filteredUsers.map((user) => {
-                            const isMember = members.some(
-                              (member) => member.id === user.id
-                            );
-                            return (
-                              <li
-                                key={user.id}
-                                className="flex items-center mb-2"
-                              >
-                                <div>
-                                  <p className="font-bold">
-                                    {user.firstName} {user.lastName}
-                                  </p>
-                                  <p className="text-sm text-gray-600">
-                                    {user.userName}
-                                  </p>
-                                </div>
-                                <div className="flex items-center ml-auto">
-                                  {isMember ? (
-                                    <span className="text-green-500">✔</span>
-                                  ) : (
-                                    <>
-                                      <select
-                                        className="mr-2"
-                                        value={selectedRoles[user.id] || ""}
-                                        onChange={(e) =>
-                                          handleRoleChange(
-                                            user.id,
-                                            e.target.value
-                                          )
-                                        }
-                                      >
-                                        <option value="">Select Role</option>
-                                        <option value="supervisor">
-                                          Supervisor
-                                        </option>
-                                        <option value="researcher">
-                                          Researcher
-                                        </option>
-                                      </select>
-                                      {userRole !== "researcher" && (
-                                  <button
-                                    onClick={() => handleAddClick(user)}
-                                  >
-                                    Add
-                                  </button>
-                                  )}
-                                    </>
-                                  )}
-                                </div>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
+                        )}
+                      </>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
                 </div>}
                 {currentPage === "board" ? <></> : 
                 <div className="w-2/5 bg-white rounded-md shadow-2xl">

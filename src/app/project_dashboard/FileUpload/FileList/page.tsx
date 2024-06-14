@@ -80,9 +80,6 @@ const ProjectFiles = () => {
 
   return (
     <div className="flex">
-      <div className="w-1/5 h-screen bg-white rounded-md my-2">
-        <NavBar />
-      </div>
       <div className="w-full flex-1 flex flex-col h-full items-center  justify-start pt-4" onClick={handleClickOutside}>
         <div className="bg-white p-4 rounded-lg shadow-md w-full mt-20 ">
           <h1 className="text-2xl font-bold mb-4">Files for Project {projectId}</h1>

@@ -106,7 +106,7 @@ export default function Projects() {
             <div
               key={project.id}
               className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-100 hover:border-blue-200 transition-colors duration-300"
-              onClick={()=>{localStorage.setItem('projectId', JSON.stringify(project.id)); router.push('/project_dashboard')}}
+              onClick={()=>{localStorage.setItem('projectId', JSON.stringify(project.id)); router.push('/project_dashboard/addtask')}}
             >
               <h2 className="text-xl font-semibold mb-4">{project.title}</h2>
               <p className="text-gray-700">

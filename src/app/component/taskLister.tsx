@@ -133,7 +133,7 @@ const TaskLister = () => {
             ) : (
               <>
                 <span className="flex-grow">{task.title}</span>
-                <div className="flex space-x-2">
+                {/* <div className="flex space-x-2">
                   <button
                     onClick={() => handleEditTask(task.id)}
                     className="p-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
@@ -146,7 +146,7 @@ const TaskLister = () => {
                   >
                     Delete
                   </button>
-                </div>
+                </div> */}
               </>
             )}
           </li>

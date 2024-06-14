@@ -155,7 +155,7 @@ const Document: React.FC = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Document Title"
             />
-            <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Save</button>
+            <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 m-2 rounded-md">Save</button>
             <button onClick={deleteDocument} className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md">Delete</button>
             <div className="container" ref={wrapperRef}></div>
         </div>
